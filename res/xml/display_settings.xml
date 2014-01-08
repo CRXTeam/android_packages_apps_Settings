@@ -95,4 +95,16 @@
                     android:summary="@string/sunlight_enhancement_summary"
                     android:defaultValue="true" />
         </PreferenceCategory>
+
+        <PreferenceScreen
+                android:persistent="false"
+                android:key="screencolor_settings"
+                android:title="@string/screencolor"
+                android:summary="@string/screencolor_summary">
+            <intent
+                android:action="com.qualcomm.display.PPService"
+                android:targetPackage="com.android.settings"
+                android:targetClass="com.android.settings.ScreenColorSettings" />
+         </PreferenceScreen>
+
 </PreferenceScreen>
