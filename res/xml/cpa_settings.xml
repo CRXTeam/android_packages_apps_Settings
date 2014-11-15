@@ -51,6 +51,15 @@
             android:fragment="com.android.settings.cpa.LockscreenShortcuts"
             />
 
+        <!-- CyanogenMod Privacy Settings -->
+        <!-- This is the 'real' Privacy items and includes Privacy Guard, Blacklist & WhisperPush -->
+        <PreferenceScreen
+            android:id="@+id/privacy_settings_cyanogenmod"
+            android:title="@string/cpa_privacy_settings_title"
+            android:summary="@string/cpa_privacy_settings_summary"
+            android:fragment="com.android.settings.cyanogenmod.PrivacySettings"
+            />
+
         <!-- CPU Time in state -->
         <PreferenceScreen
             android:key="cpustat_menu"
