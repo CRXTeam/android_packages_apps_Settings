@@ -2030,5 +2030,11 @@
             </intent-filter>
         </provider>
 
+        <activity android:name=".crystalroms.ChangeLog" android:label="@string/changelog_title">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
+
     </application>
 </manifest>
