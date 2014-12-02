@@ -37,7 +37,7 @@ import com.android.internal.app.AlertController;
 
 public class ChangeLog extends AlertActivity {
 
-    private static final String CHANGELOG_PATH = "/system/CHANGELOG.txt";
+    private static final String CHANGELOG_PATH = "/system/CHANGELOG_lollipop.txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
