@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-13 The Linux Foundation. All rights reserved
+ * Copyright (c) 2011-14 The Linux Foundation. All rights reserved
  * Not a Contribution.
  * Copyright (C) 2008 The Android Open Source Project
  *
@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.android.settings.deviceinfo.msim;
+package com.android.settings.deviceinfo;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -30,23 +30,23 @@ import android.os.UserHandle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.telephony.CellBroadcastMessage;
-import android.telephony.MSimTelephonyManager;
+import android.telephony.TelephonyManager;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
+import android.telephony.SubscriptionManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.android.internal.telephony.MSimConstants;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
+import com.android.internal.telephony.PhoneFactory;
 
 import com.android.settings.R;
 import com.android.settings.Utils;
 import com.android.settings.SelectSubscription;
-import com.codeaurora.telephony.msim.MSimPhoneFactory;
 
 import java.lang.ref.WeakReference;
 
@@ -64,9 +64,11 @@ import java.lang.ref.WeakReference;
  */
 public class MSimSubscriptionStatus extends PreferenceActivity {
 
+    private static final String KEY_DATA_STATE = "data_state";
     private static final String KEY_SERVICE_STATE = "service_state";
     private static final String KEY_OPERATOR_NAME = "operator_name";
     private static final String KEY_ROAMING_STATE = "roaming_state";
+    private static final String KEY_NETWORK_TYPE = "network_type";
     private static final String KEY_PHONE_NUMBER = "number";
     private static final String KEY_IMEI_SV = "imei_sv";
     private static final String KEY_IMEI = "imei";
@@ -79,9 +81,11 @@ public class MSimSubscriptionStatus extends PreferenceActivity {
     private static final String KEY_LATEST_AREA_INFO = "latest_area_info";
 
     private static final String[] PHONE_RELATED_ENTRIES = {
+        KEY_DATA_STATE,
         KEY_SERVICE_STATE,
         KEY_OPERATOR_NAME,
         KEY_ROAMING_STATE,
+        KEY_NETWORK_TYPE,
         KEY_PHONE_NUMBER,
         KEY_IMEI,
         KEY_IMEI_SV,
@@ -104,16 +108,14 @@ public class MSimSubscriptionStatus extends PreferenceActivity {
     static final String CB_AREA_INFO_SENDER_PERMISSION =
             "android.permission.RECEIVE_EMERGENCY_BROADCAST";
 
-    private MSimTelephonyManager mTelephonyManager;
+    private TelephonyManager mTelephonyManager;
     private Phone mPhone = null;
     private Resources mRes;
     private Preference mSigStrength;
     SignalStrength mSignalStrength;
     ServiceState mServiceState;
-    private int mSub = 0;
     private int mDataState = TelephonyManager.DATA_DISCONNECTED;
     private PhoneStateListener mPhoneStateListener;
-    private boolean mShowLatestAreaInfo;
 
     private static String sUnknown;
 
@@ -140,25 +142,25 @@ public class MSimSubscriptionStatus extends PreferenceActivity {
         super.onCreate(icicle);
         Preference removablePref;
 
-        mTelephonyManager = (MSimTelephonyManager)getSystemService(MSIM_TELEPHONY_SERVICE);
+        mTelephonyManager = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
 
         addPreferencesFromResource(R.xml.device_info_subscription_status);
 
         // getting selected subscription
-        mSub = getIntent().getIntExtra(SelectSubscription.SUBSCRIPTION_KEY, 0);
-        Log.d("Status","OnCreate mSub =" + mSub);
+        int phoneId = getIntent().getIntExtra(PhoneConstants.PHONE_KEY,
+                SubscriptionManager.getPhoneId(SubscriptionManager.getDefaultSubId()));
+        mPhone = PhoneFactory.getPhone(phoneId);
+        Log.d("Status","OnCreate phoneId =" + phoneId);
 
-        mPhoneStateListener = getPhoneStateListener(mSub);
-        mTelephonyManager.listen(mPhoneStateListener,
-                                PhoneStateListener.LISTEN_SERVICE_STATE
-                                | PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+        mPhoneStateListener = getPhoneStateListener(mPhone.getSubId());
+        mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_SERVICE_STATE
+                | PhoneStateListener.LISTEN_SIGNAL_STRENGTHS
+                | PhoneStateListener.LISTEN_DATA_CONNECTION_STATE);
 
         mRes = getResources();
         if (sUnknown == null) {
             sUnknown = mRes.getString(R.string.device_info_default);
         }
-
-        mPhone = MSimPhoneFactory.getPhone(mSub);
         // Note - missing in zaku build, be careful later...
         mSigStrength = findPreference(KEY_SIGNAL_STRENGTH);
 
@@ -209,11 +211,6 @@ public class MSimSubscriptionStatus extends PreferenceActivity {
                 removePreferenceFromScreen(KEY_MEID_NUMBER);
                 removePreferenceFromScreen(KEY_MIN_NUMBER);
                 removePreferenceFromScreen(KEY_ICC_ID);
-
-                // only show area info when SIM country is Brazil
-                if ("br".equals(mTelephonyManager.getSimCountryIso(mSub))) {
-                    mShowLatestAreaInfo = true;
-                }
             }
 
             String rawNumber = mPhone.getLine1Number();  // may be null or empty
@@ -223,12 +220,7 @@ public class MSimSubscriptionStatus extends PreferenceActivity {
             }
             // If formattedNumber is null or empty, it'll display as "Unknown".
             setSummaryText(KEY_PHONE_NUMBER, formattedNumber);
-
-            if (!mShowLatestAreaInfo) {
-                removePreferenceFromScreen(KEY_LATEST_AREA_INFO);
-            }
         }
-
     }
 
     @Override
@@ -236,20 +228,19 @@ public class MSimSubscriptionStatus extends PreferenceActivity {
         super.onResume();
 
         if (!Utils.isWifiOnly(getApplicationContext())) {
-            mTelephonyManager.listen(mPhoneStateListener,
-                                     PhoneStateListener.LISTEN_SERVICE_STATE
-                                     | PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+            mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_SERVICE_STATE
+                    | PhoneStateListener.LISTEN_SIGNAL_STRENGTHS
+                    | PhoneStateListener.LISTEN_DATA_CONNECTION_STATE);
             updateSignalStrength();
             updateServiceState();
-            if (mShowLatestAreaInfo) {
-                registerReceiver(mAreaInfoReceiver, new IntentFilter(CB_AREA_INFO_RECEIVED_ACTION),
-                        CB_AREA_INFO_SENDER_PERMISSION, null);
-                // Ask CellBroadcastReceiver to broadcast the latest area info received
-                Intent getLatestIntent = new Intent(GET_LATEST_CB_AREA_INFO_ACTION);
-                getLatestIntent.putExtra(MSimConstants.SUBSCRIPTION_KEY, mSub);
-                sendBroadcastAsUser(getLatestIntent, UserHandle.ALL,
-                        CB_AREA_INFO_SENDER_PERMISSION);
-            }
+            updateDataState();
+            registerReceiver(mAreaInfoReceiver, new IntentFilter(CB_AREA_INFO_RECEIVED_ACTION),
+                    CB_AREA_INFO_SENDER_PERMISSION, null);
+            // Ask CellBroadcastReceiver to broadcast the latest area info received
+            Intent getLatestIntent = new Intent(GET_LATEST_CB_AREA_INFO_ACTION);
+            getLatestIntent.putExtra(PhoneConstants.PHONE_KEY, mPhone.getPhoneId());
+            sendBroadcastAsUser(getLatestIntent, UserHandle.ALL,
+                    CB_AREA_INFO_SENDER_PERMISSION);
 
         }
     }
@@ -260,8 +251,6 @@ public class MSimSubscriptionStatus extends PreferenceActivity {
 
         if (!Utils.isWifiOnly(getApplicationContext())) {
             mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
-        }
-        if (mShowLatestAreaInfo) {
             unregisterReceiver(mAreaInfoReceiver);
         }
     }
@@ -277,8 +266,8 @@ public class MSimSubscriptionStatus extends PreferenceActivity {
         }
     }
 
-    private PhoneStateListener getPhoneStateListener(int subscription) {
-        PhoneStateListener phoneStateListener = new PhoneStateListener(subscription) {
+    private PhoneStateListener getPhoneStateListener(long subId) {
+        PhoneStateListener phoneStateListener = new PhoneStateListener(subId) {
             @Override
             public void onSignalStrengthsChanged(SignalStrength signalStrength) {
                 mSignalStrength = signalStrength;
@@ -288,6 +277,11 @@ public class MSimSubscriptionStatus extends PreferenceActivity {
             public void onServiceStateChanged(ServiceState state) {
                 mServiceState = state;
                 updateServiceState();
+            }
+            @Override
+            public void onDataConnectionStateChanged(int state) {
+                updateDataState();
+                updateNetworkType();
             }
         };
         return phoneStateListener;
@@ -314,6 +308,39 @@ public class MSimSubscriptionStatus extends PreferenceActivity {
              if (findPreference(preference) != null) {
                  findPreference(preference).setSummary(text);
              }
+    }
+
+    private void updateNetworkType() {
+        // Whether EDGE, UMTS, etc...
+        String networktype = null;
+        int networkType = mTelephonyManager.getNetworkType(mPhone.getSubId());
+        if (TelephonyManager.NETWORK_TYPE_UNKNOWN != networkType) {
+            networktype = mTelephonyManager.getNetworkTypeName(networkType);
+        }
+        setSummaryText(KEY_NETWORK_TYPE, networktype);
+    }
+
+    private void updateDataState() {
+        // FIXME this needs to be sub based ?
+        int state = mTelephonyManager.getDataState();
+        String display = mRes.getString(R.string.radioInfo_unknown);
+
+        switch (state) {
+            case TelephonyManager.DATA_CONNECTED:
+                display = mRes.getString(R.string.radioInfo_data_connected);
+                break;
+            case TelephonyManager.DATA_SUSPENDED:
+                display = mRes.getString(R.string.radioInfo_data_suspended);
+                break;
+            case TelephonyManager.DATA_CONNECTING:
+                display = mRes.getString(R.string.radioInfo_data_connecting);
+                break;
+            case TelephonyManager.DATA_DISCONNECTED:
+                display = mRes.getString(R.string.radioInfo_data_disconnected);
+                break;
+        }
+
+        setSummaryText(KEY_DATA_STATE, display);
     }
 
     private void updateServiceState() {
@@ -353,7 +380,6 @@ public class MSimSubscriptionStatus extends PreferenceActivity {
     }
 
     void updateSignalStrength() {
-
         if (mSignalStrength != null) {
             int state = mServiceState.getState();
             Resources r = getResources();

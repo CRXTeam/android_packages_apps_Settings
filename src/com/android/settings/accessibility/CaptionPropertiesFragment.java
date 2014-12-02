@@ -16,8 +16,6 @@
 
 package com.android.settings.accessibility;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
@@ -29,9 +27,9 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFrameLayout;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.provider.Settings;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnLayoutChangeListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.accessibility.CaptioningManager;
@@ -39,9 +37,12 @@ import android.view.accessibility.CaptioningManager.CaptionStyle;
 
 import com.android.internal.widget.SubtitleView;
 import com.android.settings.R;
+import com.android.settings.SettingsActivity;
 import com.android.settings.SettingsPreferenceFragment;
 import com.android.settings.accessibility.ListDialogPreference.OnValueChangedListener;
-import com.android.settings.accessibility.ToggleSwitch.OnBeforeCheckedChangeListener;
+import com.android.settings.widget.SwitchBar;
+import com.android.settings.widget.ToggleSwitch;
+import com.android.settings.widget.ToggleSwitch.OnBeforeCheckedChangeListener;
 
 import java.util.Locale;
 
@@ -54,6 +55,8 @@ public class CaptionPropertiesFragment extends SettingsPreferenceFragment
     private static final String PREF_BACKGROUND_OPACITY = "captioning_background_opacity";
     private static final String PREF_FOREGROUND_COLOR = "captioning_foreground_color";
     private static final String PREF_FOREGROUND_OPACITY = "captioning_foreground_opacity";
+    private static final String PREF_WINDOW_COLOR = "captioning_window_color";
+    private static final String PREF_WINDOW_OPACITY = "captioning_window_opacity";
     private static final String PREF_EDGE_COLOR = "captioning_edge_color";
     private static final String PREF_EDGE_TYPE = "captioning_edge_type";
     private static final String PREF_FONT_SIZE = "captioning_font_size";
@@ -62,10 +65,15 @@ public class CaptionPropertiesFragment extends SettingsPreferenceFragment
     private static final String PREF_PRESET = "captioning_preset";
     private static final String PREF_CUSTOM = "custom";
 
-    private static final float DEFAULT_FONT_SIZE = 48f;
+    /** WebVtt specifies line height as 5.3% of the viewport height. */
+    private static final float LINE_HEIGHT_RATIO = 0.0533f;
 
     private CaptioningManager mCaptioningManager;
     private SubtitleView mPreviewText;
+    private View mPreviewWindow;
+    private View mPreviewViewport;
+    private SwitchBar mSwitchBar;
+    private ToggleSwitch mToggleSwitch;
 
     // Standard options.
     private LocalePreference mLocale;
@@ -80,6 +88,8 @@ public class CaptionPropertiesFragment extends SettingsPreferenceFragment
     private ColorPreference mEdgeColor;
     private ColorPreference mBackgroundColor;
     private ColorPreference mBackgroundOpacity;
+    private ColorPreference mWindowColor;
+    private ColorPreference mWindowOpacity;
     private PreferenceCategory mCustom;
 
     private boolean mShowingCustom;
@@ -119,10 +129,42 @@ public class CaptionPropertiesFragment extends SettingsPreferenceFragment
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        final boolean enabled = mCaptioningManager.isEnabled();
         mPreviewText = (SubtitleView) view.findViewById(R.id.preview_text);
+        mPreviewText.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
 
-        installActionBarToggleSwitch();
+        mPreviewWindow = view.findViewById(R.id.preview_window);
+        mPreviewViewport = view.findViewById(R.id.preview_viewport);
+        mPreviewViewport.addOnLayoutChangeListener(new OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom,
+                    int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                refreshPreviewText();
+            }
+        });
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        final boolean enabled = mCaptioningManager.isEnabled();
+        SettingsActivity activity = (SettingsActivity) getActivity();
+        mSwitchBar = activity.getSwitchBar();
+        mSwitchBar.setCheckedInternal(enabled);
+        mToggleSwitch = mSwitchBar.getSwitch();
+
+        getPreferenceScreen().setEnabled(enabled);
+
         refreshPreviewText();
+
+        installSwitchBarToggleSwitch();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        removeSwitchBarToggleSwitch();
     }
 
     private void refreshPreviewText() {
@@ -135,7 +177,7 @@ public class CaptionPropertiesFragment extends SettingsPreferenceFragment
         final SubtitleView preview = mPreviewText;
         if (preview != null) {
             final int styleId = mCaptioningManager.getRawUserStyle();
-            applyCaptionProperties(mCaptioningManager, preview, styleId);
+            applyCaptionProperties(mCaptioningManager, preview, mPreviewViewport, styleId);
 
             final Locale locale = mCaptioningManager.getLocale();
             if (locale != null) {
@@ -145,17 +187,34 @@ public class CaptionPropertiesFragment extends SettingsPreferenceFragment
             } else {
                 preview.setText(R.string.captioning_preview_text);
             }
+
+            final CaptionStyle style = mCaptioningManager.getUserStyle();
+            if (style.hasWindowColor()) {
+                mPreviewWindow.setBackgroundColor(style.windowColor);
+            } else {
+                final CaptionStyle defStyle = CaptionStyle.DEFAULT;
+                mPreviewWindow.setBackgroundColor(defStyle.windowColor);
+            }
         }
     }
 
-    public static void applyCaptionProperties(
-            CaptioningManager manager, SubtitleView previewText, int styleId) {
+    public static void applyCaptionProperties(CaptioningManager manager, SubtitleView previewText,
+            View previewWindow, int styleId) {
         previewText.setStyle(styleId);
 
         final Context context = previewText.getContext();
         final ContentResolver cr = context.getContentResolver();
         final float fontScale = manager.getFontScale();
-        previewText.setTextSize(fontScale * DEFAULT_FONT_SIZE);
+        if (previewWindow != null) {
+            // Assume the viewport is clipped with a 16:9 aspect ratio.
+            final float virtualHeight = Math.max(9 * previewWindow.getWidth(),
+                    16 * previewWindow.getHeight()) / 16.0f;
+            previewText.setTextSize(virtualHeight * LINE_HEIGHT_RATIO * fontScale);
+        } else {
+            final float textSize = context.getResources().getDimension(
+                    R.dimen.caption_preview_text_size);
+            previewText.setTextSize(textSize * fontScale);
+        }
 
         final Locale locale = manager.getLocale();
         if (locale != null) {
@@ -167,37 +226,30 @@ public class CaptionPropertiesFragment extends SettingsPreferenceFragment
         }
     }
 
-    private void installActionBarToggleSwitch() {
-        final Activity activity = getActivity();
-        final ToggleSwitch toggleSwitch = new ToggleSwitch(activity);
-
-        final int padding = getResources().getDimensionPixelSize(
-                R.dimen.action_bar_switch_padding);
-        toggleSwitch.setPaddingRelative(0, 0, padding, 0);
-
-        final ActionBar actionBar = activity.getActionBar();
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM, ActionBar.DISPLAY_SHOW_CUSTOM);
-
-        final ActionBar.LayoutParams params = new ActionBar.LayoutParams(
-                ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT,
-                        Gravity.CENTER_VERTICAL | Gravity.END);
-        actionBar.setCustomView(toggleSwitch, params);
-
-        final boolean enabled = mCaptioningManager.isEnabled();
-        getPreferenceScreen().setEnabled(enabled);
-        mPreviewText.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
-        toggleSwitch.setCheckedInternal(enabled);
-        toggleSwitch.setOnBeforeCheckedChangeListener(new OnBeforeCheckedChangeListener() {
+    protected void onInstallSwitchBarToggleSwitch() {
+        mToggleSwitch.setOnBeforeCheckedChangeListener(new OnBeforeCheckedChangeListener() {
             @Override
             public boolean onBeforeCheckedChanged(ToggleSwitch toggleSwitch, boolean checked) {
-                toggleSwitch.setCheckedInternal(checked);
+                mSwitchBar.setCheckedInternal(checked);
                 Settings.Secure.putInt(getActivity().getContentResolver(),
                         Settings.Secure.ACCESSIBILITY_CAPTIONING_ENABLED, checked ? 1 : 0);
                 getPreferenceScreen().setEnabled(checked);
-                mPreviewText.setVisibility(checked ? View.VISIBLE : View.INVISIBLE);
+                if (mPreviewText != null) {
+                    mPreviewText.setVisibility(checked ? View.VISIBLE : View.INVISIBLE);
+                }
                 return false;
             }
         });
+    }
+
+    private void installSwitchBarToggleSwitch() {
+        onInstallSwitchBarToggleSwitch();
+        mSwitchBar.show();
+    }
+
+    private void removeSwitchBarToggleSwitch() {
+        mSwitchBar.hide();
+        mToggleSwitch.setOnBeforeCheckedChangeListener(null);
     }
 
     private void initializeAllPreferences() {
@@ -246,6 +298,14 @@ public class CaptionPropertiesFragment extends SettingsPreferenceFragment
         mBackgroundOpacity.setTitles(opacityTitles);
         mBackgroundOpacity.setValues(opacityValues);
 
+        mWindowColor = (ColorPreference) mCustom.findPreference(PREF_WINDOW_COLOR);
+        mWindowColor.setTitles(bgColorTitles);
+        mWindowColor.setValues(bgColorValues);
+
+        mWindowOpacity = (ColorPreference) mCustom.findPreference(PREF_WINDOW_OPACITY);
+        mWindowOpacity.setTitles(opacityTitles);
+        mWindowOpacity.setValues(opacityValues);
+
         mEdgeType = (EdgeTypePreference) mCustom.findPreference(PREF_EDGE_TYPE);
         mTypeface = (ListPreference) mCustom.findPreference(PREF_TYPEFACE);
     }
@@ -257,6 +317,8 @@ public class CaptionPropertiesFragment extends SettingsPreferenceFragment
         mEdgeColor.setOnValueChangedListener(this);
         mBackgroundColor.setOnValueChangedListener(this);
         mBackgroundOpacity.setOnValueChangedListener(this);
+        mWindowColor.setOnValueChangedListener(this);
+        mWindowOpacity.setOnValueChangedListener(this);
         mEdgeType.setOnValueChangedListener(this);
 
         mTypeface.setOnPreferenceChangeListener(this);
@@ -278,6 +340,7 @@ public class CaptionPropertiesFragment extends SettingsPreferenceFragment
 
         parseColorOpacity(mForegroundColor, mForegroundOpacity, attrs.foregroundColor);
         parseColorOpacity(mBackgroundColor, mBackgroundOpacity, attrs.backgroundColor);
+        parseColorOpacity(mWindowColor, mWindowOpacity, attrs.windowColor);
 
         final String rawTypeface = attrs.mRawTypeface;
         mTypeface.setValue(rawTypeface == null ? "" : rawTypeface);
@@ -305,7 +368,7 @@ public class CaptionPropertiesFragment extends SettingsPreferenceFragment
         final int opacityValue = opacity.getValue();
         final int value;
         if (Color.alpha(colorValue) == 0) {
-            value = Color.alpha(opacityValue);
+            value = colorValue & 0x00FFFF00 | Color.alpha(opacityValue);
         } else {
             value = colorValue & 0x00FFFFFF | opacityValue & 0xFF000000;
         }
@@ -334,6 +397,10 @@ public class CaptionPropertiesFragment extends SettingsPreferenceFragment
             final int merged = mergeColorOpacity(mBackgroundColor, mBackgroundOpacity);
             Settings.Secure.putInt(
                     cr, Settings.Secure.ACCESSIBILITY_CAPTIONING_BACKGROUND_COLOR, merged);
+        } else if (mWindowColor == preference || mWindowOpacity == preference) {
+            final int merged = mergeColorOpacity(mWindowColor, mWindowOpacity);
+            Settings.Secure.putInt(
+                    cr, Settings.Secure.ACCESSIBILITY_CAPTIONING_WINDOW_COLOR, merged);
         } else if (mEdgeColor == preference) {
             Settings.Secure.putInt(cr, Settings.Secure.ACCESSIBILITY_CAPTIONING_EDGE_COLOR, value);
         } else if (mPreset == preference) {

@@ -21,28 +21,29 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
 import android.os.BatteryStats;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Parcel;
-import android.preference.ListPreference;
+import android.os.UserHandle;
+import android.os.UserManager;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceGroup;
 import android.preference.PreferenceScreen;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.SubMenu;
 
+import com.android.internal.os.BatterySipper;
+import com.android.internal.os.BatteryStatsHelper;
 import com.android.internal.os.PowerProfile;
 import com.android.settings.HelpUtils;
 import com.android.settings.R;
+import com.android.settings.SettingsActivity;
 
 import java.util.List;
 
@@ -54,36 +55,30 @@ public class PowerUsageSummary extends PreferenceFragment {
 
     private static final boolean DEBUG = false;
 
-    private static final String TAG = "PowerUsageSummary";
+    static final String TAG = "PowerUsageSummary";
 
     private static final String KEY_APP_LIST = "app_list";
-    private static final String KEY_BATTERY_STATUS = "battery_status";
-    private static final String KEY_BATTERY_SAVER = "pref_battery_saver";
 
-    private static final int MENU_STATS_TYPE                = Menu.FIRST;
-    private static final int MENU_STATS_REFRESH             = Menu.FIRST + 1;
-    private static final int MENU_BATTERY_WARNING           = Menu.FIRST + 2;
-    private static final int MENU_BATTERY_STYLE             = Menu.FIRST + 3;
-    private static final int SUBMENU_WARNING_POPSOUND       = Menu.FIRST + 4;
-    private static final int SUBMENU_WARNING_NOTIFSOUND     = Menu.FIRST + 5;
-    private static final int SUBMENU_WARNING_POPUPDIALOG    = Menu.FIRST + 6;
-    private static final int SUBMENU_WARNING_NOTIF          = Menu.FIRST + 7;
-    private static final int SUBMENU_WARNING_SOUND          = Menu.FIRST + 8;
-    private static final int SUBMENU_BATTERY_BAR            = Menu.FIRST + 9;
-    private static final int SUBMENU_BATTERY_BAR_PERCENT    = Menu.FIRST + 10;
-    private static final int SUBMENU_BATTERY_CIRCLE         = Menu.FIRST + 11;
-    private static final int SUBMENU_BATTERY_CIRCLE_PERCENT = Menu.FIRST + 12;
-    private static final int SUBMENU_BATTERY_HIDDEN         = Menu.FIRST + 13;
-    private static final int MENU_HELP                      = Menu.FIRST + 14;
+    private static final String BATTERY_HISTORY_FILE = "tmp_bat_history.bin";
 
+    private static final int MENU_STATS_TYPE = Menu.FIRST;
+    private static final int MENU_STATS_REFRESH = Menu.FIRST + 1;
+    private static final int MENU_BATTERY_SAVER = Menu.FIRST + 2;
+    private static final int MENU_HELP = Menu.FIRST + 3;
+
+    private UserManager mUm;
+
+    private BatteryHistoryPreference mHistPref;
     private PreferenceGroup mAppListGroup;
-    private Preference mBatteryStatusPref;
-    private PreferenceScreen mBatterySaverPrefs;
+    private String mBatteryLevel;
+    private String mBatteryStatus;
 
     private int mStatsType = BatteryStats.STATS_SINCE_CHARGED;
 
-    private static final int MIN_POWER_THRESHOLD = 5;
-    private static final int MAX_ITEMS_TO_LIST   = 10;
+    private static final int MIN_POWER_THRESHOLD_MILLI_AMP = 5;
+    private static final int MAX_ITEMS_TO_LIST = 10;
+    private static final int MIN_AVERAGE_POWER_THRESHOLD_MILLI_AMP = 10;
+    private static final int SECONDS_IN_HOUR = 60 * 60;
 
     private BatteryStatsHelper mStatsHelper;
 
@@ -92,15 +87,11 @@ public class PowerUsageSummary extends PreferenceFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (Intent.ACTION_BATTERY_CHANGED.equals(action)) {
-                String batteryLevel = com.android.settings.Utils.getBatteryPercentage(intent);
-                String batteryStatus = com.android.settings.Utils.getBatteryStatus(getResources(),
-                        intent);
-                String batterySummary = context.getResources().getString(
-                        R.string.power_usage_level_and_status, batteryLevel, batteryStatus);
-                mBatteryStatusPref.setTitle(batterySummary);
-                mStatsHelper.clearStats();
-                refreshStats();
+            if (Intent.ACTION_BATTERY_CHANGED.equals(action)
+                    && updateBatteryStatus(intent)) {
+                if (!mHandler.hasMessages(MSG_REFRESH_STATS)) {
+                    mHandler.sendEmptyMessageDelayed(MSG_REFRESH_STATS, 500);
+                }
             }
         }
     };
@@ -108,7 +99,8 @@ public class PowerUsageSummary extends PreferenceFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mStatsHelper = new BatteryStatsHelper(activity, mHandler);
+        mUm = (UserManager) activity.getSystemService(Context.USER_SERVICE);
+        mStatsHelper = new BatteryStatsHelper(activity, true);
     }
 
     @Override
@@ -118,114 +110,89 @@ public class PowerUsageSummary extends PreferenceFragment {
 
         addPreferencesFromResource(R.xml.power_usage_summary);
         mAppListGroup = (PreferenceGroup) findPreference(KEY_APP_LIST);
-        mBatteryStatusPref = mAppListGroup.findPreference(KEY_BATTERY_STATUS);
-
-        mBatterySaverPrefs =
-            (PreferenceScreen) mAppListGroup.findPreference(KEY_BATTERY_SAVER);
-
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mStatsHelper.clearStats();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().registerReceiver(mBatteryInfoReceiver,
-                new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        BatteryStatsHelper.dropFile(getActivity(), BATTERY_HISTORY_FILE);
+        updateBatteryStatus(getActivity().registerReceiver(mBatteryInfoReceiver,
+                new IntentFilter(Intent.ACTION_BATTERY_CHANGED)));
+        if (mHandler.hasMessages(MSG_REFRESH_STATS)) {
+            mHandler.removeMessages(MSG_REFRESH_STATS);
+            mStatsHelper.clearStats();
+        }
         refreshStats();
     }
 
     @Override
     public void onPause() {
-        mStatsHelper.pause();
-        mHandler.removeMessages(BatteryStatsHelper.MSG_UPDATE_NAME_ICON);
+        BatteryEntry.stopRequestQueue();
+        mHandler.removeMessages(BatteryEntry.MSG_UPDATE_NAME_ICON);
         getActivity().unregisterReceiver(mBatteryInfoReceiver);
         super.onPause();
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        mHandler.removeMessages(MSG_REFRESH_STATS);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
-        mStatsHelper.destroy();
+        if (getActivity().isChangingConfigurations()) {
+            mStatsHelper.storeState();
+            BatteryEntry.clearUidCache();
+        }
     }
 
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference instanceof BatteryHistoryPreference) {
-            Parcel hist = Parcel.obtain();
-            mStatsHelper.getStats().writeToParcelWithoutUids(hist, 0);
-            byte[] histData = hist.marshall();
+            mStatsHelper.storeStatsHistoryInFile(BATTERY_HISTORY_FILE);
             Bundle args = new Bundle();
-            args.putByteArray(BatteryHistoryDetail.EXTRA_STATS, histData);
-            PreferenceActivity pa = (PreferenceActivity)getActivity();
-            pa.startPreferencePanel(BatteryHistoryDetail.class.getName(), args,
+            args.putString(BatteryHistoryDetail.EXTRA_STATS, BATTERY_HISTORY_FILE);
+            args.putParcelable(BatteryHistoryDetail.EXTRA_BROADCAST,
+                    mStatsHelper.getBatteryBroadcast());
+            SettingsActivity sa = (SettingsActivity) getActivity();
+            sa.startPreferencePanel(BatteryHistoryDetail.class.getName(), args,
                     R.string.history_details_title, null, null, 0);
-            return super.onPreferenceTreeClick(preferenceScreen, preference);
-        }
-        if (preference == mBatterySaverPrefs) {
             return super.onPreferenceTreeClick(preferenceScreen, preference);
         }
         if (!(preference instanceof PowerGaugePreference)) {
             return false;
         }
         PowerGaugePreference pgp = (PowerGaugePreference) preference;
-        BatterySipper sipper = pgp.getInfo();
-        mStatsHelper.startBatteryDetailPage((PreferenceActivity) getActivity(), sipper, true);
+        BatteryEntry entry = pgp.getInfo();
+        PowerUsageDetail.startBatteryDetailPage((SettingsActivity) getActivity(), mStatsHelper,
+                mStatsType, entry, true);
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        int selectedIcon = Settings.System.getInt(getActivity().getContentResolver(),
-                                    Settings.System.STATUS_BAR_BATTERY_STYLE, 0);
-
-        int lowBatteryWarning = Settings.System.getInt(getActivity().getContentResolver(),
-                                    Settings.System.POWER_UI_LOW_BATTERY_WARNING_POLICY, 0);
-
         if (DEBUG) {
             menu.add(0, MENU_STATS_TYPE, 0, R.string.menu_stats_total)
                     .setIcon(com.android.internal.R.drawable.ic_menu_info_details)
                     .setAlphabeticShortcut('t');
         }
         MenuItem refresh = menu.add(0, MENU_STATS_REFRESH, 0, R.string.menu_stats_refresh)
-                .setIcon(R.drawable.ic_action_refresh)
+                .setIcon(com.android.internal.R.drawable.ic_menu_refresh)
                 .setAlphabeticShortcut('r');
-        refresh.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+        refresh.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM |
+                MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
-        SubMenu batteryWarning = menu.addSubMenu(1, MENU_BATTERY_WARNING, 1, R.string.low_battery_warning_policy_title);
-
-        SubMenu batteryStyle = menu.addSubMenu(1, MENU_BATTERY_STYLE, 1, R.string.battery_status_icon_title);
-
-        batteryWarning.add(1, SUBMENU_WARNING_POPSOUND, 1, R.string.low_battery_warning_policy_popup_sound)
-                    .setChecked(lowBatteryWarning == 0);
-        batteryWarning.add(1, SUBMENU_WARNING_NOTIFSOUND, 2, R.string.low_battery_warning_policy_notif_sound)
-                    .setChecked(lowBatteryWarning == 1);
-        batteryWarning.add(1, SUBMENU_WARNING_POPUPDIALOG, 3, R.string.low_battery_warning_policy_popup)
-                    .setChecked(lowBatteryWarning == 2);
-        batteryWarning.add(1, SUBMENU_WARNING_NOTIF, 4, R.string.low_battery_warning_policy_notif)
-                    .setChecked(lowBatteryWarning == 3);
-        batteryWarning.add(1, SUBMENU_WARNING_SOUND, 5, R.string.low_battery_warning_policy_sound)
-                    .setChecked(lowBatteryWarning == 4);
-        batteryWarning.setGroupCheckable(1, true, true);
-
-        batteryStyle.add(1, SUBMENU_BATTERY_BAR, 1, R.string.battery_bar)
-                    .setChecked(selectedIcon == 0);
-        batteryStyle.add(1, SUBMENU_BATTERY_BAR_PERCENT, 2, R.string.battery_bar_percent)
-                    .setChecked(selectedIcon == 1);
-        batteryStyle.add(1, SUBMENU_BATTERY_CIRCLE, 3, R.string.battery_circle)
-                    .setChecked(selectedIcon == 2);
-        batteryStyle.add(1, SUBMENU_BATTERY_CIRCLE_PERCENT, 4, R.string.battery_circle_percent)
-                    .setChecked(selectedIcon == 3);
-        batteryStyle.add(1, SUBMENU_BATTERY_HIDDEN, 5, R.string.battery_hidden)
-                    .setChecked(selectedIcon == 4);
-        batteryStyle.setGroupCheckable(1, true, true);
-
-        MenuItem warningIcon = batteryWarning.getItem();
-        warningIcon.setIcon(R.drawable.ic_action_warning)
-                   .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-
-        MenuItem batteryIcon = batteryStyle.getItem();
-        batteryIcon.setIcon(R.drawable.ic_action_battery_status)
-                   .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+        MenuItem batterySaver = menu.add(0, MENU_BATTERY_SAVER, 0, R.string.battery_saver);
+        batterySaver.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
         String helpUrl;
         if (!TextUtils.isEmpty(helpUrl = getResources().getString(R.string.help_url_battery))) {
@@ -248,56 +215,12 @@ public class PowerUsageSummary extends PreferenceFragment {
             case MENU_STATS_REFRESH:
                 mStatsHelper.clearStats();
                 refreshStats();
+                mHandler.removeMessages(MSG_REFRESH_STATS);
                 return true;
-            case SUBMENU_WARNING_POPSOUND:
-                item.setChecked(true);
-                Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.POWER_UI_LOW_BATTERY_WARNING_POLICY, 0);
-                return true;
-            case SUBMENU_WARNING_NOTIFSOUND:
-                item.setChecked(true);
-                Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.POWER_UI_LOW_BATTERY_WARNING_POLICY, 1);
-                return true;
-            case SUBMENU_WARNING_POPUPDIALOG:
-                item.setChecked(true);
-                Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.POWER_UI_LOW_BATTERY_WARNING_POLICY, 2);
-                return true;
-            case SUBMENU_WARNING_NOTIF:
-                item.setChecked(true);
-                Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.POWER_UI_LOW_BATTERY_WARNING_POLICY, 3);
-                return true;
-            case SUBMENU_WARNING_SOUND:
-                item.setChecked(true);
-                Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.POWER_UI_LOW_BATTERY_WARNING_POLICY, 4);
-                return true;
-            case SUBMENU_BATTERY_BAR:
-                item.setChecked(true);
-                Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.STATUS_BAR_BATTERY_STYLE, 0);
-                return true;
-            case SUBMENU_BATTERY_BAR_PERCENT:
-                item.setChecked(true);
-                Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.STATUS_BAR_BATTERY_STYLE, 1);
-                return true;
-            case SUBMENU_BATTERY_CIRCLE:
-                item.setChecked(true);
-                Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.STATUS_BAR_BATTERY_STYLE, 2);
-                return true;
-            case SUBMENU_BATTERY_CIRCLE_PERCENT:
-                item.setChecked(true);
-                Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.STATUS_BAR_BATTERY_STYLE, 3);
-                return true;
-            case SUBMENU_BATTERY_HIDDEN:
-                item.setChecked(true);
-                Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.STATUS_BAR_BATTERY_STYLE, 4);
+            case MENU_BATTERY_SAVER:
+                final SettingsActivity sa = (SettingsActivity) getActivity();
+                sa.startPreferencePanel(BatterySaverSettings.class.getName(), null,
+                        R.string.battery_saver, null, null, 0);
                 return true;
             default:
                 return false;
@@ -307,70 +230,140 @@ public class PowerUsageSummary extends PreferenceFragment {
     private void addNotAvailableMessage() {
         Preference notAvailable = new Preference(getActivity());
         notAvailable.setTitle(R.string.power_usage_not_available);
+        mHistPref.setHideLabels(true);
         mAppListGroup.addPreference(notAvailable);
+    }
+
+    private boolean updateBatteryStatus(Intent intent) {
+        if (intent != null) {
+            String batteryLevel = com.android.settings.Utils.getBatteryPercentage(intent);
+            String batteryStatus = com.android.settings.Utils.getBatteryStatus(getResources(),
+                    intent);
+            if (!batteryLevel.equals(mBatteryLevel) || !batteryStatus.equals(mBatteryStatus)) {
+                mBatteryLevel = batteryLevel;
+                mBatteryStatus = batteryStatus;
+                return true;
+            }
+        }
+        return false;
     }
 
     private void refreshStats() {
         mAppListGroup.removeAll();
         mAppListGroup.setOrderingAsAdded(false);
-        mBatterySaverPrefs.setOrder(-6);
-        mAppListGroup.addPreference(mBatterySaverPrefs);
-        mBatteryStatusPref.setOrder(-2);
-        mAppListGroup.addPreference(mBatteryStatusPref);
-        BatteryHistoryPreference hist = new BatteryHistoryPreference(
-                getActivity(), mStatsHelper.getStats());
-        hist.setOrder(-1);
-        mAppListGroup.addPreference(hist);
+        mHistPref = new BatteryHistoryPreference(getActivity(), mStatsHelper.getStats(),
+                mStatsHelper.getBatteryBroadcast());
+        mHistPref.setOrder(-1);
+        mAppListGroup.addPreference(mHistPref);
+        boolean addedSome = false;
 
-        if (mStatsHelper.getPowerProfile().getAveragePower(
-                PowerProfile.POWER_SCREEN_FULL) < 10) {
-            addNotAvailableMessage();
-            return;
-        }
-        mStatsHelper.refreshStats(false);
-        List<BatterySipper> usageList = mStatsHelper.getUsageList();
-        for (BatterySipper sipper : usageList) {
-            if (sipper.getSortValue() < MIN_POWER_THRESHOLD) continue;
-            final double percentOfTotal =
-                    ((sipper.getSortValue() / mStatsHelper.getTotalPower()) * 100);
-            if (percentOfTotal < 1) continue;
-            PowerGaugePreference pref =
-                    new PowerGaugePreference(getActivity(), sipper.getIcon(), sipper);
-            final double percentOfMax =
-                    (sipper.getSortValue() * 100) / mStatsHelper.getMaxPower();
-            sipper.percent = percentOfTotal;
-            pref.setTitle(sipper.name);
-            pref.setOrder(Integer.MAX_VALUE - (int) sipper.getSortValue()); // Invert the order
-            pref.setPercent(percentOfMax, percentOfTotal);
-            if (sipper.uidObj != null) {
-                pref.setKey(Integer.toString(sipper.uidObj.getUid()));
+        final PowerProfile powerProfile = mStatsHelper.getPowerProfile();
+        final BatteryStats stats = mStatsHelper.getStats();
+        final double averagePower = powerProfile.getAveragePower(PowerProfile.POWER_SCREEN_FULL);
+        if (averagePower >= MIN_AVERAGE_POWER_THRESHOLD_MILLI_AMP) {
+            final List<UserHandle> profiles = mUm.getUserProfiles();
+
+            mStatsHelper.refreshStats(BatteryStats.STATS_SINCE_CHARGED, profiles);
+
+            final List<BatterySipper> usageList = mStatsHelper.getUsageList();
+
+            final int dischargeAmount = stats != null ? stats.getDischargeAmount(mStatsType) : 0;
+            final int numSippers = usageList.size();
+            for (int i = 0; i < numSippers; i++) {
+                final BatterySipper sipper = usageList.get(i);
+                if ((sipper.value * SECONDS_IN_HOUR) < MIN_POWER_THRESHOLD_MILLI_AMP) {
+                    continue;
+                }
+                final double percentOfTotal =
+                        ((sipper.value / mStatsHelper.getTotalPower()) * dischargeAmount);
+                if (((int) (percentOfTotal + .5)) < 1) {
+                    continue;
+                }
+                if (sipper.drainType == BatterySipper.DrainType.OVERCOUNTED) {
+                    // Don't show over-counted unless it is at least 2/3 the size of
+                    // the largest real entry, and its percent of total is more significant
+                    if (sipper.value < ((mStatsHelper.getMaxRealPower()*2)/3)) {
+                        continue;
+                    }
+                    if (percentOfTotal < 10) {
+                        continue;
+                    }
+                    if ("user".equals(Build.TYPE)) {
+                        continue;
+                    }
+                }
+                if (sipper.drainType == BatterySipper.DrainType.UNACCOUNTED) {
+                    // Don't show over-counted unless it is at least 1/2 the size of
+                    // the largest real entry, and its percent of total is more significant
+                    if (sipper.value < (mStatsHelper.getMaxRealPower()/2)) {
+                        continue;
+                    }
+                    if (percentOfTotal < 5) {
+                        continue;
+                    }
+                    if ("user".equals(Build.TYPE)) {
+                        continue;
+                    }
+                }
+                final UserHandle userHandle = new UserHandle(UserHandle.getUserId(sipper.getUid()));
+                final BatteryEntry entry = new BatteryEntry(getActivity(), mHandler, mUm, sipper);
+                final Drawable badgedIcon = mUm.getBadgedIconForUser(entry.getIcon(),
+                        userHandle);
+                final CharSequence contentDescription = mUm.getBadgedLabelForUser(entry.getLabel(),
+                        userHandle);
+                final PowerGaugePreference pref = new PowerGaugePreference(getActivity(),
+                        badgedIcon, contentDescription, entry);
+
+                final double percentOfMax = (sipper.value * 100) / mStatsHelper.getMaxPower();
+                sipper.percent = percentOfTotal;
+                pref.setTitle(entry.getLabel());
+                pref.setOrder(i + 1);
+                pref.setPercent(percentOfMax, percentOfTotal);
+                if (sipper.uidObj != null) {
+                    pref.setKey(Integer.toString(sipper.uidObj.getUid()));
+                }
+                addedSome = true;
+                mAppListGroup.addPreference(pref);
+                if (mAppListGroup.getPreferenceCount() > (MAX_ITEMS_TO_LIST + 1)) {
+                    break;
+                }
             }
-            mAppListGroup.addPreference(pref);
-            if (mAppListGroup.getPreferenceCount() > (MAX_ITEMS_TO_LIST+1)) break;
         }
+        if (!addedSome) {
+            addNotAvailableMessage();
+        }
+
+        BatteryEntry.startRequestQueue();
     }
+
+    static final int MSG_REFRESH_STATS = 100;
 
     Handler mHandler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case BatteryStatsHelper.MSG_UPDATE_NAME_ICON:
-                    BatterySipper bs = (BatterySipper) msg.obj;
+                case BatteryEntry.MSG_UPDATE_NAME_ICON:
+                    BatteryEntry entry = (BatteryEntry) msg.obj;
                     PowerGaugePreference pgp =
                             (PowerGaugePreference) findPreference(
-                                    Integer.toString(bs.uidObj.getUid()));
+                                    Integer.toString(entry.sipper.uidObj.getUid()));
                     if (pgp != null) {
-                        pgp.setIcon(bs.icon);
-                        pgp.setTitle(bs.name);
+                        final int userId = UserHandle.getUserId(entry.sipper.getUid());
+                        final UserHandle userHandle = new UserHandle(userId);
+                        pgp.setIcon(mUm.getBadgedIconForUser(entry.getIcon(), userHandle));
+                        pgp.setTitle(entry.name);
                     }
                     break;
-                case BatteryStatsHelper.MSG_REPORT_FULLY_DRAWN:
+                case BatteryEntry.MSG_REPORT_FULLY_DRAWN:
                     Activity activity = getActivity();
                     if (activity != null) {
                         activity.reportFullyDrawn();
                     }
                     break;
+                case MSG_REFRESH_STATS:
+                    mStatsHelper.clearStats();
+                    refreshStats();
             }
             super.handleMessage(msg);
         }

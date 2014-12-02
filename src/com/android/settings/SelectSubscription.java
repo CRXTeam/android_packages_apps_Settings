@@ -1,4 +1,4 @@
-/* Copyright (c) 2010-13, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2010-14, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -34,11 +34,13 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
-import android.telephony.MSimTelephonyManager;
-import static android.telephony.TelephonyManager.SIM_STATE_ABSENT;
+import android.telephony.SubInfoRecord;
+import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
+import java.util.List;
 
 public class SelectSubscription extends  TabActivity {
 
@@ -46,6 +48,8 @@ public class SelectSubscription extends  TabActivity {
     public static final String SUBSCRIPTION_KEY = "subscription";
     public static final String PACKAGE = "PACKAGE";
     public static final String TARGET_CLASS = "TARGET_CLASS";
+
+    private String[] tabLabel = {"SUB 1", "SUB 2", "SUB 3"};
 
     private TabSpec subscriptionPref;
 
@@ -70,16 +74,24 @@ public class SelectSubscription extends  TabActivity {
         Intent intent =  getIntent();
         String pkg = intent.getStringExtra(PACKAGE);
         String targetClass = intent.getStringExtra(TARGET_CLASS);
-        MSimTelephonyManager tm = MSimTelephonyManager.getDefault();
 
-        int numPhones = tm.getPhoneCount();
+        int numPhones = TelephonyManager.getDefault().getPhoneCount();
 
         for (int i = 0; i < numPhones; i++) {
-            String label = MSimTelephonyManager.getFormattedSimName(this, i);
-            subscriptionPref = tabHost.newTabSpec(label);
-            subscriptionPref.setIndicator(label);
+            List<SubInfoRecord> sir =
+                    SubscriptionManager.getSubInfoUsingSlotId(i);
+            String displayName =
+                    ((sir != null) && (sir.size() > 0)) ? sir.get(0).displayName : tabLabel[i];
+
+            log("Creating SelectSub activity = " + i + " displayName = " + displayName);
+
+            subscriptionPref = tabHost.newTabSpec(displayName);
+            subscriptionPref.setIndicator(displayName);
+
             intent = new Intent().setClassName(pkg, targetClass)
-                    .setAction(intent.getAction()).putExtra(SUBSCRIPTION_KEY, i);
+                    .setAction(intent.getAction());
+
+            SubscriptionManager.putPhoneIdAndSubIdExtra(intent, i);
             subscriptionPref.setContent(intent);
             tabHost.addTab(subscriptionPref);
         }

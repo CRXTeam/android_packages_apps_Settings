@@ -14,7 +14,8 @@
      limitations under the License.
 -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:title="@string/security_settings_title">
 
     <PreferenceCategory
         android:key="security_category"
@@ -26,30 +27,11 @@
             android:summary="@string/unlock_set_unlock_mode_none"
             android:persistent="false"/>
 
-        <CheckBoxPreference
-            android:key="keyguard_enable_widgets"
-            android:title="@string/security_enable_widgets_title"/>
-
-        <CheckBoxPreference
-            android:key="lockscreen_maximize_widgets"
-            android:title="@string/security_maximize_widgets_title"
-            android:enabled="false"/>
-
         <PreferenceScreen
-            android:key="blacklist"
-            android:title="@string/blacklist_title"
-            android:fragment="com.android.settings.blacklist.BlacklistSettings" />
-
-        <PreferenceScreen
-            android:fragment="com.android.settings.OwnerInfoSettings"
             android:key="owner_info_settings"
+            android:fragment="com.android.settings.OwnerInfoSettings"
             android:title="@string/owner_info_settings_title"
             android:summary="@string/owner_info_settings_summary"/>
-
-        <!-- <CheckBoxPreference
-            android:key="see_through"
-            android:title="@string/see_through_title"
-            android:summary="@string/see_through_summary" /> -->
 
     </PreferenceCategory>
 

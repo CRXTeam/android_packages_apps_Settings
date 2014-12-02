@@ -15,16 +15,29 @@
 -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:settings="http://schemas.android.com/apk/res/com.android.settings"
         android:title="@string/display_settings"
-        xmlns:settings="http://schemas.android.com/apk/res/com.android.settings">
+        settings:keywords="@string/keywords_display">
 
-        <com.android.settings.BrightnessPreference
+        <PreferenceScreen
+                android:key="brightness"
                 android:title="@string/brightness"
-                android:persistent="false"/>
+                settings:keywords="@string/keywords_display_brightness_level">
+            <intent android:action="android.intent.action.SHOW_BRIGHTNESS_DIALOG" />
+        </PreferenceScreen>
 
-        <CheckBoxPreference
-            android:key="accelerometer"
-            android:title="@string/accelerometer_title"/>
+        <SwitchPreference
+                android:key="auto_brightness"
+                android:title="@string/auto_brightness_title"
+                settings:keywords="@string/keywords_display_auto_brightness"
+                android:summary="@string/auto_brightness_summary"
+                android:persistent="false" />
+
+        <PreferenceScreen
+                android:key="wallpaper"
+                android:title="@string/wallpaper_settings_title"
+                settings:keywords="@string/keywords_display_wallpaper"
+                android:fragment="com.android.settings.WallpaperTypeSettings" />
 
         <ListPreference
                 android:key="screen_timeout"
@@ -39,74 +52,47 @@
                 android:title="@string/screensaver_settings_title"
                 android:fragment="com.android.settings.DreamSettings" />
 
-        <com.android.settings.FontDialogPreference
+        <SwitchPreference
+                android:key="lift_to_wake"
+                android:title="@string/lift_to_wake_title"
+                android:persistent="false" />
+
+        <SwitchPreference
+                android:key="doze"
+                android:title="@string/doze_title"
+                android:summary="@string/doze_summary"
+                android:persistent="false" />
+
+        <com.android.settings.WarnedListPreference
                 android:key="font_size"
                 android:title="@string/title_font_size"
+                settings:keywords="@string/keywords_display_font_size"
                 android:summary="@string/summary_font_size"
+                android:entries="@array/entries_font_size"
+                android:entryValues="@array/entryvalues_font_size"
                 android:dialogTitle="@string/dialog_title_font_size" />
+
+        <com.android.settings.notification.DropDownPreference
+                android:key="auto_rotate"
+                android:title="@string/display_auto_rotate_title" />
 
         <PreferenceScreen
                 android:key="wifi_display"
                 android:title="@string/wifi_display_settings_title"
+                settings:keywords="@string/keywords_display_cast_screen"
                 android:fragment="com.android.settings.wfd.WifiDisplaySettings" />
-
-        <CheckBoxPreference
-                android:key="proximity_on_wake"
-                android:title="@string/proximity_wake_title"
-                android:summary="@string/proximity_wake_summary"
-                android:defaultValue="true" />
-
-        <com.android.settings.cyanogenmod.SystemSettingCheckBoxPreference
-                android:key="status_bar_brightness_control"
-                android:title="@string/status_bar_toggle_brightness"
-                android:summary="@string/status_bar_toggle_brightness_summary"
-                android:defaultValue="false" />
-
-        <!-- Dynamic system bars -->
         <PreferenceCategory
-            android:key="dynamic_system_bars_category"
-            android:title="@string/dynamic_system_bars_category_title"/>
+                android:key="advanced_display_prefs"
+                android:title="@string/advanced_settings">
 
-        <CheckBoxPreference
-            android:key="dynamic_status_bar"
-            android:title="@string/dynamic_status_bar_title"
-            android:summary="@string/dynamic_status_bar_summary" />
+                <SwitchPreference
+                    android:key="double_tap_wake_gesture"
+                    android:title="@string/double_tap_to_wake_title" />
 
-        <CheckBoxPreference
-            android:key="dynamic_navigation_bar"
-            android:title="@string/dynamic_navigation_bar_title"
-            android:summary="@string/dynamic_navigation_bar_summary" />
-
-        <CheckBoxPreference
-            android:key="dynamic_system_bars_gradient"
-            android:title="@string/dynamic_system_bars_gradient_title"
-            android:summary="@string/dynamic_system_bars_gradient_summary" />
-
-        <CheckBoxPreference
-            android:key="dynamic_status_bar_filter"
-            android:title="@string/dynamic_status_bar_filter_title"
-            android:summary="@string/dynamic_status_bar_filter_summary" />
-
-        <!-- Notifications -->
-        <PreferenceCategory
-            android:key="notification_category"
-            android:title="@string/notification_category"/>
-
-        <CheckBoxPreference
-            android:key="notification_peek"
-            android:title="@string/notification_peek_title"
-            android:summary="@string/notification_peek_summary" />
-
-        <PreferenceScreen
-                android:fragment="com.android.settings.notificationlight.NotificationLightSettings"
-                android:key="notification_pulse"
-                android:title="@string/notification_led_category_title" />
-
-
-        <PreferenceScreen
-                android:key="battery_light"
-                android:title="@string/battery_light_title"
-                android:fragment="com.android.settings.notificationlight.BatteryLightSettings" />
-
+                <SwitchPreference
+                    android:key="proximity_on_wake"
+                    android:title="@string/proximity_wake_title"
+                    android:summary="@string/proximity_wake_summary"
+                    android:defaultValue="true" />
+        </PreferenceCategory>
 </PreferenceScreen>
-

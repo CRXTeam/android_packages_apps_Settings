@@ -17,8 +17,11 @@
 package com.android.settings;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -29,23 +32,36 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
+import android.content.pm.UserInfo;
 import android.graphics.ColorFilter;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.UserManager;
 import android.preference.Preference;
 import android.preference.PreferenceGroup;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import com.android.settings.search.BaseSearchIndexProvider;
+import com.android.settings.search.Index;
+import com.android.settings.search.Indexable;
+import com.android.settings.search.SearchIndexableRaw;
 
-public class HomeSettings extends SettingsPreferenceFragment {
+public class HomeSettings extends SettingsPreferenceFragment implements Indexable {
     static final String TAG = "HomeSettings";
+
+    // Boolean extra, indicates only launchers that support managed profiles should be shown.
+    // Note: must match the constant defined in ManagedProvisioning
+    private static final String EXTRA_SUPPORT_MANAGED_PROFILES = "support_managed_profiles";
 
     static final int REQUESTING_UNINSTALL = 10;
 
@@ -54,14 +70,23 @@ public class HomeSettings extends SettingsPreferenceFragment {
 
     public static final String HOME_SHOW_NOTICE = "show";
 
-    PreferenceGroup mPrefGroup;
+    private class HomePackageReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            buildHomeActivitiesList();
+            Index.getInstance(context).updateFromClassNameResource(
+                    HomeSettings.class.getName(), true, true);
+        }
+    }
 
-    PackageManager mPm;
-    ComponentName[] mHomeComponentSet;
-    ArrayList<HomeAppPreference> mPrefs;
-    HomeAppPreference mCurrentHome = null;
-    final IntentFilter mHomeFilter;
-    boolean mShowNotice;
+    private PreferenceGroup mPrefGroup;
+    private PackageManager mPm;
+    private ComponentName[] mHomeComponentSet;
+    private ArrayList<HomeAppPreference> mPrefs;
+    private HomeAppPreference mCurrentHome = null;
+    private final IntentFilter mHomeFilter;
+    private boolean mShowNotice;
+    private HomePackageReceiver mHomePackageReceiver = new HomePackageReceiver();
 
     public HomeSettings() {
         mHomeFilter = new IntentFilter(Intent.ACTION_MAIN);
@@ -97,6 +122,8 @@ public class HomeSettings extends SettingsPreferenceFragment {
 
         mPm.replacePreferredActivity(mHomeFilter, IntentFilter.MATCH_CATEGORY_EMPTY,
                 mHomeComponentSet, newHome.activityName);
+
+        getActivity().setResult(Activity.RESULT_OK);
     }
 
     void uninstallApp(HomeAppPreference pref) {
@@ -138,13 +165,13 @@ public class HomeSettings extends SettingsPreferenceFragment {
         if (mPrefs.size() < 2) {
             if (mShowNotice) {
                 mShowNotice = false;
-                Settings.requestHomeNotice();
+                SettingsActivity.requestHomeNotice();
             }
             finishFragment();
         }
     }
 
-    void buildHomeActivitiesList() {
+    private void buildHomeActivitiesList() {
         ArrayList<ResolveInfo> homeActivities = new ArrayList<ResolveInfo>();
         ComponentName currentDefaultHome  = mPm.getHomeActivities(homeActivities);
 
@@ -154,6 +181,10 @@ public class HomeSettings extends SettingsPreferenceFragment {
         mPrefs = new ArrayList<HomeAppPreference>();
         mHomeComponentSet = new ComponentName[homeActivities.size()];
         int prefIndex = 0;
+        boolean supportManagedProfilesExtra =
+                getActivity().getIntent().getBooleanExtra(EXTRA_SUPPORT_MANAGED_PROFILES, false);
+        boolean mustSupportManagedProfile = hasManagedProfile()
+                || supportManagedProfilesExtra;
         for (int i = 0; i < homeActivities.size(); i++) {
             final ResolveInfo candidate = homeActivities.get(i);
             final ActivityInfo info = candidate.activityInfo;
@@ -162,11 +193,19 @@ public class HomeSettings extends SettingsPreferenceFragment {
             try {
                 Drawable icon = info.loadIcon(mPm);
                 CharSequence name = info.loadLabel(mPm);
-                HomeAppPreference pref = new HomeAppPreference(context, activityName, prefIndex,
-                        icon, name, this, info);
+                HomeAppPreference pref;
+
+                if (mustSupportManagedProfile && !launcherHasManagedProfilesFeature(candidate)) {
+                    pref = new HomeAppPreference(context, activityName, prefIndex,
+                            icon, name, this, info, false /* not enabled */,
+                            getResources().getString(R.string.home_work_profile_not_supported));
+                } else  {
+                    pref = new HomeAppPreference(context, activityName, prefIndex,
+                            icon, name, this, info, true /* enabled */, null);
+                }
+
                 mPrefs.add(pref);
                 mPrefGroup.addPreference(pref);
-                pref.setEnabled(true);
                 if (activityName.equals(currentDefaultHome)) {
                     mCurrentHome = pref;
                 }
@@ -177,12 +216,40 @@ public class HomeSettings extends SettingsPreferenceFragment {
         }
 
         if (mCurrentHome != null) {
+            if (mCurrentHome.isEnabled()) {
+                getActivity().setResult(Activity.RESULT_OK);
+            }
+
             new Handler().post(new Runnable() {
                public void run() {
                    mCurrentHome.setChecked(true);
                }
             });
         }
+    }
+
+    private boolean hasManagedProfile() {
+        Context context = getActivity();
+        UserManager userManager = (UserManager) getSystemService(Context.USER_SERVICE);
+        List<UserInfo> profiles = userManager.getProfiles(context.getUserId());
+        for (UserInfo userInfo : profiles) {
+            if (userInfo.isManagedProfile()) return true;
+        }
+        return false;
+    }
+
+    private boolean launcherHasManagedProfilesFeature(ResolveInfo resolveInfo) {
+        try {
+            ApplicationInfo appInfo = getPackageManager().getApplicationInfo(
+                    resolveInfo.activityInfo.packageName, 0 /* default flags */);
+            return versionNumberAtLeastL(appInfo.targetSdkVersion);
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+    private boolean versionNumberAtLeastL(int versionNumber) {
+        return versionNumber >= Build.VERSION_CODES.LOLLIPOP;
     }
 
     @Override
@@ -200,10 +267,24 @@ public class HomeSettings extends SettingsPreferenceFragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        final IntentFilter filter = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);
+        filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        filter.addAction(Intent.ACTION_PACKAGE_CHANGED);
+        filter.addAction(Intent.ACTION_PACKAGE_REPLACED);
+        filter.addDataScheme("package");
+        getActivity().registerReceiver(mHomePackageReceiver, filter);
+
         buildHomeActivitiesList();
     }
 
-    class HomeAppPreference extends Preference {
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(mHomePackageReceiver);
+    }
+
+    private class HomeAppPreference extends Preference {
         ComponentName activityName;
         int index;
         HomeSettings fragment;
@@ -214,12 +295,14 @@ public class HomeSettings extends SettingsPreferenceFragment {
         String uninstallTarget;
 
         public HomeAppPreference(Context context, ComponentName activity,
-                int i, Drawable icon, CharSequence title,
-                HomeSettings parent, ActivityInfo info) {
+                int i, Drawable icon, CharSequence title, HomeSettings parent, ActivityInfo info,
+                boolean enabled, CharSequence summary) {
             super(context);
             setLayoutResource(R.layout.preference_home_app);
             setIcon(icon);
             setTitle(title);
+            setEnabled(enabled);
+            setSummary(summary);
             activityName = activity;
             fragment = parent;
             index = i;
@@ -274,13 +357,15 @@ public class HomeSettings extends SettingsPreferenceFragment {
                 icon.setEnabled(false);
                 icon.setColorFilter(grayscaleFilter);
             } else {
+                icon.setEnabled(true);
                 icon.setOnClickListener(mDeleteClickListener);
                 icon.setTag(indexObj);
             }
 
             View v = view.findViewById(R.id.home_app_pref);
-            v.setOnClickListener(mHomeClickListener);
             v.setTag(indexObj);
+
+            v.setOnClickListener(mHomeClickListener);
         }
 
         void setChecked(boolean state) {
@@ -290,4 +375,59 @@ public class HomeSettings extends SettingsPreferenceFragment {
             }
         }
     }
+
+    /**
+     * For search
+     */
+    public static final SearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
+        new BaseSearchIndexProvider() {
+            @Override
+            public List<SearchIndexableRaw> getRawDataToIndex(Context context, boolean enabled) {
+                final List<SearchIndexableRaw> result = new ArrayList<SearchIndexableRaw>();
+
+                final PackageManager pm = context.getPackageManager();
+                final ArrayList<ResolveInfo> homeActivities = new ArrayList<ResolveInfo>();
+                pm.getHomeActivities(homeActivities);
+
+                final SharedPreferences sp = context.getSharedPreferences(
+                        HomeSettings.HOME_PREFS, Context.MODE_PRIVATE);
+                final boolean doShowHome = sp.getBoolean(HomeSettings.HOME_PREFS_DO_SHOW, false);
+
+                // We index Home Launchers only if there are more than one or if we are showing the
+                // Home tile into the Dashboard
+                if (homeActivities.size() > 1 || doShowHome) {
+                    final Resources res = context.getResources();
+
+                    // Add fragment title
+                    SearchIndexableRaw data = new SearchIndexableRaw(context);
+                    data.title = res.getString(R.string.home_settings);
+                    data.screenTitle = res.getString(R.string.home_settings);
+                    data.keywords = res.getString(R.string.keywords_home);
+                    result.add(data);
+
+                    for (int i = 0; i < homeActivities.size(); i++) {
+                        final ResolveInfo resolveInfo = homeActivities.get(i);
+                        final ActivityInfo activityInfo = resolveInfo.activityInfo;
+
+                        CharSequence name;
+                        try {
+                            name = activityInfo.loadLabel(pm);
+                            if (TextUtils.isEmpty(name)) {
+                                continue;
+                            }
+                        } catch (Exception e) {
+                            Log.v(TAG, "Problem dealing with Home " + activityInfo.name, e);
+                            continue;
+                        }
+
+                        data = new SearchIndexableRaw(context);
+                        data.title = name.toString();
+                        data.screenTitle = res.getString(R.string.home_settings);
+                        result.add(data);
+                    }
+                }
+
+                return result;
+            }
+        };
 }

@@ -29,8 +29,9 @@ import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.os.BatteryManager;
 import android.os.Bundle;
+import android.os.SystemProperties;
+import android.os.storage.StorageManager;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,10 +42,6 @@ public class CryptKeeperSettings extends Fragment {
     private static final String TAG = "CryptKeeper";
 
     private static final int KEYGUARD_REQUEST = 55;
-
-    // This is the minimum acceptable password quality.  If the current password quality is
-    // lower than this, encryption should not be activated.
-    static final int MIN_PASSWORD_QUALITY = DevicePolicyManager.PASSWORD_QUALITY_NUMERIC;
 
     // Minimum battery charge level (in percent) to launch encryption.  If the battery charge is
     // lower than this, encryption should not be activated.
@@ -65,14 +62,15 @@ public class CryptKeeperSettings extends Fragment {
                 final int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0);
                 final int invalidCharger = intent.getIntExtra(
                     BatteryManager.EXTRA_INVALID_CHARGER, 0);
-
+                final String pfeState = SystemProperties.get("vold.pfe");
+                final boolean pfeActivated = "activated".equals(pfeState);
                 final boolean levelOk = level >= MIN_BATTERY_LEVEL;
                 final boolean pluggedOk =
                     ((plugged & BatteryManager.BATTERY_PLUGGED_ANY) != 0) &&
                      invalidCharger == 0;
 
                 // Update UI elements based on power/battery status
-                mInitiateButton.setEnabled(levelOk && pluggedOk);
+                mInitiateButton.setEnabled(levelOk && pluggedOk && !pfeActivated);
                 mPowerWarning.setVisibility(pluggedOk ? View.GONE : View.VISIBLE );
                 mBatteryWarning.setVisibility(levelOk ? View.GONE : View.VISIBLE);
             }
@@ -91,7 +89,6 @@ public class CryptKeeperSettings extends Fragment {
                 // TODO replace (or follow) this dialog with an explicit launch into password UI
                 new AlertDialog.Builder(getActivity())
                     .setTitle(R.string.crypt_keeper_dialog_need_password_title)
-                    .setIconAttribute(android.R.attr.alertDialogIcon)
                     .setMessage(R.string.crypt_keeper_dialog_need_password_message)
                     .setPositiveButton(android.R.string.ok, null)
                     .create()
@@ -158,24 +155,19 @@ public class CryptKeeperSettings extends Fragment {
      * @return true if confirmation launched
      */
     private boolean runKeyguardConfirmation(int request) {
-        // 1.  Confirm that we have a sufficient PIN/Password to continue
-        LockPatternUtils lockPatternUtils = new LockPatternUtils(getActivity());
-        int quality = lockPatternUtils.getActivePasswordQuality();
-        if (quality == DevicePolicyManager.PASSWORD_QUALITY_BIOMETRIC_WEAK
-            && lockPatternUtils.isLockPasswordEnabled()) {
-            // Use the alternate as the quality. We expect this to be
-            // PASSWORD_QUALITY_SOMETHING(pattern) or PASSWORD_QUALITY_NUMERIC(PIN).
-            quality = lockPatternUtils.getKeyguardStoredPasswordQuality();
-        }
-        if (quality < MIN_PASSWORD_QUALITY) {
-            return false;
-        }
-        // 2.  Ask the user to confirm the current PIN/Password
         Resources res = getActivity().getResources();
-        return new ChooseLockSettingsHelper(getActivity(), this)
-                .launchConfirmationActivity(request,
-                        res.getText(R.string.master_clear_gesture_prompt),
-                        res.getText(R.string.master_clear_gesture_explanation));
+        ChooseLockSettingsHelper helper = new ChooseLockSettingsHelper(getActivity(), this);
+
+        if (helper.utils().getKeyguardStoredPasswordQuality()
+                == DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED) {
+            showFinalConfirmation(StorageManager.CRYPT_TYPE_DEFAULT, "");
+            return true;
+        }
+
+        return helper.launchConfirmationActivity(request,
+                res.getText(R.string.master_clear_gesture_prompt),
+                res.getText(R.string.crypt_keeper_confirm_encrypt),
+                true);
     }
 
     @Override
@@ -189,18 +181,20 @@ public class CryptKeeperSettings extends Fragment {
         // If the user entered a valid keyguard trace, present the final
         // confirmation prompt; otherwise, go back to the initial state.
         if (resultCode == Activity.RESULT_OK && data != null) {
+            int type = data.getIntExtra(ChooseLockSettingsHelper.EXTRA_KEY_TYPE, -1);
             String password = data.getStringExtra(ChooseLockSettingsHelper.EXTRA_KEY_PASSWORD);
             if (!TextUtils.isEmpty(password)) {
-                showFinalConfirmation(password);
+                showFinalConfirmation(type, password);
             }
         }
     }
 
-    private void showFinalConfirmation(String password) {
+    private void showFinalConfirmation(int type, String password) {
         Preference preference = new Preference(getActivity());
         preference.setFragment(CryptKeeperConfirm.class.getName());
         preference.setTitle(R.string.crypt_keeper_confirm_title);
+        preference.getExtras().putInt("type", type);
         preference.getExtras().putString("password", password);
-        ((PreferenceActivity) getActivity()).onPreferenceStartFragment(null, preference);
+        ((SettingsActivity) getActivity()).onPreferenceStartFragment(null, preference);
     }
 }
