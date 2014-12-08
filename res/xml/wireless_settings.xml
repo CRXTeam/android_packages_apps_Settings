@@ -14,63 +14,87 @@
      limitations under the License.
 -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:settings="http://schemas.android.com/apk/res/com.android.settings"
+        android:title="@string/radio_controls_title">
 
-            <PreferenceCategory
-                android:title="@string/radio_controls_title">
+    <SwitchPreference
+        android:key="toggle_airplane"
+        android:title="@string/airplane_mode"
+        android:persistent="false"
+        android:disableDependentsState="true" />
 
-                <!-- Programmatically will have dynamic summary, but we provide the fallback summary. -->
-                <CheckBoxPreference
-                    android:key="toggle_wifi"
-                    android:title="@string/wifi_quick_toggle_title"
-                    android:summary="@string/wifi_quick_toggle_summary"
-                    android:persistent="false"
-                    android:dependency="toggle_airplane" />
+    <com.android.settings.AppListPreference
+        android:key="sms_application"
+        android:title="@string/sms_application_title"
+        settings:keywords="@string/keywords_more_default_sms_app"
+        android:summary="%s"
+        android:persistent="false" />
 
-                <PreferenceScreen
-                    android:title="@string/wifi_settings"
-                    android:summary="@string/wifi_settings_summary"
-                    android:dependency="toggle_airplane">
-                    <intent
-                        android:action="android.intent.action.MAIN"
-                        android:targetPackage="com.android.settings"
-                        android:targetClass="com.android.settings.wifi.WifiSettings" />
-                </PreferenceScreen>
+    <SwitchPreference
+        android:key="toggle_nfc"
+        android:title="@string/nfc_quick_toggle_title"
+        android:summary="@string/nfc_quick_toggle_summary"
+        android:persistent="false" />
 
-                <CheckBoxPreference
-                    android:key="toggle_bluetooth"
-                    android:title="@string/bluetooth_quick_toggle_title"
-                    android:summary="@string/bluetooth_quick_toggle_summary"
-                    android:persistent="false"
-                    android:dependency="toggle_airplane" />
+    <PreferenceScreen
+        android:fragment="com.android.settings.nfc.AndroidBeam"
+        android:key="android_beam_settings"
+        android:title="@string/android_beam_settings_title" />
 
-                <PreferenceScreen
-                    android:title="@string/bluetooth_settings_title"
-                    android:summary="@string/bluetooth_settings_summary"
-                    android:dependency="toggle_airplane">
-                    <intent
-                        android:action="android.intent.action.MAIN"
-                        android:targetPackage="com.android.settings"
-                        android:targetClass="com.android.settings.BluetoothSettings" />
-                </PreferenceScreen>
+    <PreferenceScreen
+        android:fragment="com.android.settings.TetherSettings"
+        android:key="tether_settings"
+        android:title="@string/tether_settings_title_all" />
 
-                <CheckBoxPreference
-                    android:key="toggle_airplane"
-                    android:title="@string/airplane_mode"
-                    android:summary="@string/airplane_mode_summary"
-                    android:persistent="false"
-                    android:disableDependentsState="true" />
+    <PreferenceScreen
+        android:fragment="com.android.settings.vpn2.VpnSettings"
+        android:key="vpn_settings"
+        android:title="@string/vpn_settings_title" />
 
-                <PreferenceScreen
-                    android:title="@string/network_settings_title"
-                    android:summary="@string/network_settings_summary"
-                    android:dependency="toggle_airplane">
-                    <intent
-                        android:action="android.intent.action.MAIN"
-                        android:targetPackage="com.android.phone"
-                        android:targetClass="com.android.phone.Settings" />
-                </PreferenceScreen>
+    <PreferenceScreen
+        android:key="mobile_network_settings"
+        android:title="@string/network_settings_title"
+        settings:keywords="@string/keywords_more_mobile_networks"
+        android:dependency="toggle_airplane">
+        <intent
+            android:action="android.intent.action.MAIN"
+            android:targetPackage="com.android.phone"
+            android:targetClass="com.android.phone.MobileNetworkSettings" />
+    </PreferenceScreen>
 
-            </PreferenceCategory>
+    <Preference
+        android:key="manage_mobile_plan"
+        android:title="@string/manage_mobile_plan_title"
+        android:persistent="false" />
+
+    <PreferenceScreen
+        android:key="wimax_settings"
+        android:title="@string/wimax_settings" >
+        <intent
+            android:action="android.intent.action.MAIN"
+            android:targetPackage="com.android.settings.wimax"
+            android:targetClass="com.android.settings.wimax.WimaxSettings" />
+    </PreferenceScreen>
+
+    <CheckBoxPreference
+        android:key="toggle_nsd"
+        android:title="@string/nsd_quick_toggle_title"
+        android:summary="@string/nsd_quick_toggle_summary"
+        android:persistent="false" />
+
+    <PreferenceScreen
+        android:fragment="com.android.settings.ProxySelector"
+        android:key="proxy_settings"
+        android:title="@string/proxy_settings_title" />
+
+    <PreferenceScreen
+        android:key="cell_broadcast_settings"
+        android:title="@string/cell_broadcast_settings" >
+        <intent
+            android:action="android.intent.action.MAIN"
+            android:targetPackage="com.android.cellbroadcastreceiver"
+            android:targetClass="com.android.cellbroadcastreceiver.CellBroadcastSettings" />
+    </PreferenceScreen>
 
 </PreferenceScreen>

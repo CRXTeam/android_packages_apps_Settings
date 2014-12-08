@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 The Android Open Source Project
+ * Copyright (C) 2010 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,119 +16,102 @@
 
 package com.android.settings;
 
-import android.app.ActivityManagerNative;
-import android.app.IActivityManager;
-import android.app.ListActivity;
-import android.content.res.Configuration;
+import android.app.Dialog;
 import android.os.Bundle;
-import android.os.RemoteException;
-import android.os.SystemProperties;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.ViewGroup;
 import android.widget.ListView;
+import android.content.Context;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.util.Arrays;
+import com.android.settings.SettingsPreferenceFragment.SettingsDialogFragment;
+import com.android.settings.DevelopmentSettings;
+
 import java.util.Locale;
 
-public class LocalePicker extends ListActivity {
+public class LocalePicker extends com.android.internal.app.LocalePicker
+        implements com.android.internal.app.LocalePicker.LocaleSelectionListener,
+        DialogCreatable {
+
     private static final String TAG = "LocalePicker";
 
-    Loc[] mLocales;
+    private SettingsDialogFragment mDialogFragment;
+    private static final int DLG_SHOW_GLOBAL_WARNING = 1;
+    private static final String SAVE_TARGET_LOCALE = "locale";
 
-    private static class Loc {
-        String label;
-        Locale locale;
+    private Locale mTargetLocale;
 
-        public Loc(String label, Locale locale) {
-            this.label = label;
-            this.locale = locale;
-        }
-
-        @Override
-        public String toString() {
-            return this.label;
-        }
-    }
-
-    int getContentView() {
-        return R.layout.locale_picker;
-    }
-    
-    @Override
-    public void onCreate(Bundle icicle) {
-        super.onCreate(icicle);
-        setContentView(getContentView());
-
-        String[] locales = getAssets().getLocales();
-        final int N = locales.length;
-        mLocales = new Loc[N];
-        for (int i = 0; i < N; i++) {
-            Locale locale = null;
-            String s = locales[i];
-            int len = s.length();
-            if (len == 0) {
-                locale = new Locale("en", "US");
-            } else if (len == 2) {
-                locale = new Locale(s);
-            } else if (len == 5) {
-                locale = new Locale(s.substring(0, 2), s.substring(3, 5));
-            }
-            String displayName = "";
-            if (locale != null) {
-                displayName = locale.getDisplayName();
-            }
-            if ("zz_ZZ".equals(s)) {
-                displayName = "Pseudo...";
-            }
-
-            mLocales[i] = new Loc(displayName, locale);
-        }
-
-        int layoutId = R.layout.locale_picker_item;
-        int fieldId = R.id.locale;
-        ArrayAdapter<Loc> adapter = new ArrayAdapter<Loc>(this, layoutId, fieldId, mLocales);
-        getListView().setAdapter(adapter);
+    public LocalePicker() {
+        super();
+        setLocaleSelectionListener(this);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        getListView().requestFocus();
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null && savedInstanceState.containsKey(SAVE_TARGET_LOCALE)) {
+            mTargetLocale = new Locale(savedInstanceState.getString(SAVE_TARGET_LOCALE));
+        }
     }
 
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        try {
-            IActivityManager am = ActivityManagerNative.getDefault();
-            Configuration config = am.getConfiguration();
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View view = super.onCreateView(inflater, container, savedInstanceState);
+        final ListView list = (ListView) view.findViewById(android.R.id.list);
+        Utils.forcePrepareCustomPreferencesList(container, view, list, false);
+        return view;
+    }
 
-            Loc loc = mLocales[position];
-            config.locale = loc.locale;
-            final String language = loc.locale.getLanguage();
-            final String region = loc.locale.getCountry();
-
-            am.updateConfiguration(config);
-            
-            // Update the System properties
-            SystemProperties.set("user.language", language);
-            SystemProperties.set("user.region", region);
-            // Write to file for persistence across reboots
-            try {
-                BufferedWriter bw = new BufferedWriter(new java.io.FileWriter(
-                        System.getenv("ANDROID_DATA") + "/locale"));
-                bw.write(language + "_" + region);
-                bw.close();
-            } catch (java.io.IOException ioe) {
-                Log.e(TAG, 
-                        "Unable to persist locale. Error writing to locale file." 
-                        + ioe);
-            }    
-        } catch (RemoteException e) {
-            // Intentionally left blank
+    @Override
+    public void onLocaleSelected(final Locale locale) {
+        if (Utils.hasMultipleUsers(getActivity())) {
+            mTargetLocale = locale;
+            showDialog(DLG_SHOW_GLOBAL_WARNING);
+        } else {
+            getActivity().onBackPressed();
+            LocalePicker.updateLocale(locale);
         }
-        finish();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (mTargetLocale != null) {
+            outState.putString(SAVE_TARGET_LOCALE, mTargetLocale.toString());
+        }
+    }
+
+    protected void showDialog(int dialogId) {
+        if (mDialogFragment != null) {
+            Log.e(TAG, "Old dialog fragment not null!");
+        }
+        mDialogFragment = new SettingsDialogFragment(this, dialogId);
+        mDialogFragment.show(getActivity().getFragmentManager(), Integer.toString(dialogId));
+    }
+
+    public Dialog onCreateDialog(final int dialogId) {
+        return Utils.buildGlobalChangeWarningDialog(getActivity(),
+                R.string.global_locale_change_title,
+                new Runnable() {
+                    public void run() {
+                        removeDialog(dialogId);
+                        getActivity().onBackPressed();
+                        LocalePicker.updateLocale(mTargetLocale);
+                    }
+                }
+        );
+    }
+
+    protected void removeDialog(int dialogId) {
+        // mDialogFragment may not be visible yet in parent fragment's onResume().
+        // To be able to dismiss dialog at that time, don't check
+        // mDialogFragment.isVisible().
+        if (mDialogFragment != null && mDialogFragment.getDialogId() == dialogId) {
+            mDialogFragment.dismiss();
+        }
+        mDialogFragment = null;
     }
 }

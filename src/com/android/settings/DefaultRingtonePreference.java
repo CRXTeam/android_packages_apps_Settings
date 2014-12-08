@@ -23,7 +23,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.preference.RingtonePreference;
 import android.util.AttributeSet;
-import android.util.Config;
 import android.util.Log;
 
 public class DefaultRingtonePreference extends RingtonePreference {
@@ -42,11 +41,6 @@ public class DefaultRingtonePreference extends RingtonePreference {
          * doesn't make sense to show a 'Default' item.
          */
         ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, false);
-        
-        /*
-         * Similarly, 'Silent' shouldn't be shown here. 
-         */
-        ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
     }
 
     @Override

@@ -16,76 +16,122 @@
 
 package com.android.settings;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
 
-public class ApplicationSettings extends PreferenceActivity implements
-        DialogInterface.OnClickListener {
+public class ApplicationSettings extends SettingsPreferenceFragment {
     
-    private static final String KEY_TOGGLE_INSTALL_APPLICATIONS = "toggle_install_applications";
+    private static final String KEY_TOGGLE_ADVANCED_SETTINGS = "toggle_advanced_settings";
+    private static final String KEY_APP_INSTALL_LOCATION = "app_install_location";
 
-    private CheckBoxPreference mToggleAppInstallation;
+    // App installation location. Default is ask the user.
+    private static final int APP_INSTALL_AUTO = 0;
+    private static final int APP_INSTALL_DEVICE = 1;
+    private static final int APP_INSTALL_SDCARD = 2;
     
-    private DialogInterface mWarnInstallApps;
+    private static final String APP_INSTALL_DEVICE_ID = "device";
+    private static final String APP_INSTALL_SDCARD_ID = "sdcard";
+    private static final String APP_INSTALL_AUTO_ID = "auto";
     
+    private CheckBoxPreference mToggleAdvancedSettings;
+    private ListPreference mInstallLocation;
+
     @Override
-    protected void onCreate(Bundle icicle) {
+    public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
 
         addPreferencesFromResource(R.xml.application_settings);
 
-        mToggleAppInstallation = (CheckBoxPreference) findPreference(KEY_TOGGLE_INSTALL_APPLICATIONS);
-        mToggleAppInstallation.setChecked(isNonMarketAppsAllowed());
-        
+        mToggleAdvancedSettings = (CheckBoxPreference)findPreference(
+                KEY_TOGGLE_ADVANCED_SETTINGS);
+        mToggleAdvancedSettings.setChecked(isAdvancedSettingsEnabled());
+        getPreferenceScreen().removePreference(mToggleAdvancedSettings);
+
+        // not ready for prime time yet
+        if (false) {
+            getPreferenceScreen().removePreference(mInstallLocation);
+        }
+
+        mInstallLocation = (ListPreference) findPreference(KEY_APP_INSTALL_LOCATION);
+        // Is app default install location set?
+        boolean userSetInstLocation = (Settings.Global.getInt(getContentResolver(),
+                Settings.Global.SET_INSTALL_LOCATION, 0) != 0);
+        if (!userSetInstLocation) {
+            getPreferenceScreen().removePreference(mInstallLocation);
+        } else {
+            mInstallLocation.setValue(getAppInstallLocation());
+            mInstallLocation.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    String value = (String) newValue;
+                    handleUpdateAppInstallLocation(value);
+                    return false;
+                }
+            });
+        }
+    }
+
+    protected void handleUpdateAppInstallLocation(final String value) {
+        if(APP_INSTALL_DEVICE_ID.equals(value)) {
+            Settings.Global.putInt(getContentResolver(),
+                    Settings.Global.DEFAULT_INSTALL_LOCATION, APP_INSTALL_DEVICE);
+        } else if (APP_INSTALL_SDCARD_ID.equals(value)) {
+            Settings.Global.putInt(getContentResolver(),
+                    Settings.Global.DEFAULT_INSTALL_LOCATION, APP_INSTALL_SDCARD);
+        } else if (APP_INSTALL_AUTO_ID.equals(value)) {
+            Settings.Global.putInt(getContentResolver(),
+                    Settings.Global.DEFAULT_INSTALL_LOCATION, APP_INSTALL_AUTO);
+        } else {
+            // Should not happen, default to prompt...
+            Settings.Global.putInt(getContentResolver(),
+                    Settings.Global.DEFAULT_INSTALL_LOCATION, APP_INSTALL_AUTO);
+        }
+        mInstallLocation.setValue(value);
     }
 
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-        if (preference == mToggleAppInstallation) {
-            if (mToggleAppInstallation.isChecked()) {
-                mToggleAppInstallation.setChecked(false);
-                warnAppInstallation();
-            } else {
-                setNonMarketAppsAllowed(false);
-            }
+        if (preference == mToggleAdvancedSettings) {
+            boolean value = mToggleAdvancedSettings.isChecked();
+            setAdvancedSettingsEnabled(value);
         }
-        
+
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
-    public void onClick(DialogInterface dialog, int which) {
-        if (dialog == mWarnInstallApps && which == DialogInterface.BUTTON1) {
-            setNonMarketAppsAllowed(true);
-            mToggleAppInstallation.setChecked(true);
+    private boolean isAdvancedSettingsEnabled() {
+        return Settings.System.getInt(getContentResolver(), 
+                                      Settings.System.ADVANCED_SETTINGS,
+                                      Settings.System.ADVANCED_SETTINGS_DEFAULT) > 0;
+    }
+
+    private void setAdvancedSettingsEnabled(boolean enabled) {
+        int value = enabled ? 1 : 0;
+        // Change the system setting
+        Settings.Secure.putInt(getContentResolver(), Settings.System.ADVANCED_SETTINGS, value);
+        // TODO: the settings thing should broadcast this for thread safety purposes.
+        Intent intent = new Intent(Intent.ACTION_ADVANCED_SETTINGS_CHANGED);
+        intent.putExtra("state", value);
+        getActivity().sendBroadcast(intent);
+    }
+
+    private String getAppInstallLocation() {
+        int selectedLocation = Settings.Global.getInt(getContentResolver(),
+                Settings.Global.DEFAULT_INSTALL_LOCATION, APP_INSTALL_AUTO);
+        if (selectedLocation == APP_INSTALL_DEVICE) {
+            return APP_INSTALL_DEVICE_ID;
+        } else if (selectedLocation == APP_INSTALL_SDCARD) {
+            return APP_INSTALL_SDCARD_ID;
+        } else  if (selectedLocation == APP_INSTALL_AUTO) {
+            return APP_INSTALL_AUTO_ID;
+        } else {
+            // Default value, should not happen.
+            return APP_INSTALL_AUTO_ID;
         }
     }
-
-    private void setNonMarketAppsAllowed(boolean enabled) {
-        // Change the system setting
-        Settings.System.putInt(getContentResolver(), Settings.System.INSTALL_NON_MARKET_APPS, 
-                                enabled ? 1 : 0);
-    }
-    
-    private boolean isNonMarketAppsAllowed() {
-            return Settings.System.getInt(getContentResolver(), 
-                                           Settings.System.INSTALL_NON_MARKET_APPS, 0) > 0;
-    }
-
-    private void warnAppInstallation() {
-        mWarnInstallApps = new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.error_title))
-                .setIcon(com.android.internal.R.drawable.ic_dialog_alert)
-                .setMessage(getResources().getString(R.string.install_all_warning))
-                .setPositiveButton(android.R.string.yes, this)
-                .setNegativeButton(android.R.string.no, null)
-                .show();
-    }
-    
-    
 }

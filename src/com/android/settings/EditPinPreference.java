@@ -16,23 +16,19 @@
 
 package com.android.settings;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.preference.EditTextPreference;
-import android.text.method.DigitsKeyListener;
-import android.text.method.PasswordTransformationMethod;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
-
-import java.util.Map;
 
 /**
  * TODO: Add a soft dialpad for PIN entry.
  */
 class EditPinPreference extends EditTextPreference {
 
-    private boolean mDialogOpen;
-    
     interface OnPinEnteredListener {
         void onPinEntered(EditPinPreference preference, boolean positiveResult);
     }
@@ -50,35 +46,36 @@ class EditPinPreference extends EditTextPreference {
     public void setOnPinEnteredListener(OnPinEnteredListener listener) {
         mPinListener = listener;
     }
-    
+
     @Override
     protected void onBindDialogView(View view) {
         super.onBindDialogView(view);
-        
-        final EditText editText = (EditText) view.findViewById(android.R.id.edit);
-        
+
+        final EditText editText = getEditText();
+
         if (editText != null) {
-            editText.setSingleLine(true);
-            editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
-            editText.setKeyListener(DigitsKeyListener.getInstance());
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER |
+                InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         }
     }
 
     public boolean isDialogOpen() {
-        return mDialogOpen;
+        Dialog dialog = getDialog();
+        return dialog != null && dialog.isShowing();
     }
-    
+
     @Override
     protected void onDialogClosed(boolean positiveResult) {
         super.onDialogClosed(positiveResult);
-        mDialogOpen = false;
         if (mPinListener != null) {
             mPinListener.onPinEntered(this, positiveResult);
         }
     }
-    
+
     public void showPinDialog() {
-        mDialogOpen = true;
-        showDialog(null);
+        Dialog dialog = getDialog();
+        if (dialog == null || !dialog.isShowing()) {
+            showDialog(null);
+        }
     }
 }

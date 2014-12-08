@@ -14,43 +14,64 @@
      limitations under the License.
 -->
 
+<!--
+
+      This code is deprecated. This screen is no longer used in Settings.
+      The ApplicationSettings class is kept in case an external app references it directly.
+
+-->
+
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
         android:title="@string/applications_settings"
         android:summary="@string/applications_settings_summary"
         android:key="applications_settings">
 
-    <PreferenceCategory
-            android:title="@string/applications_settings_header"/>
-        
-    <CheckBoxPreference
-            android:key="toggle_install_applications"
-            android:title="@string/install_applications"
-            android:summaryOff="@string/install_unknown_applications"
-            android:summaryOn="@string/install_unknown_applications"
-            android:persistent="false" />
-        
     <PreferenceScreen
+            android:fragment="com.android.settings.applications.ManageApplications"
+            android:title="@string/manageapplications_settings_title"
+            android:summary="@string/manageapplications_settings_summary">
+    </PreferenceScreen>
+
+    <PreferenceScreen
+            android:fragment="com.android.settings.applications.ManageApplications"
+            android:title="@string/runningservices_settings_title"
+            android:summary="@string/runningservices_settings_summary">
+        <extra android:name="classname" android:value="com.android.settings.Settings$RunningServicesActivity" />
+    </PreferenceScreen>
+
+    <PreferenceScreen
+            android:fragment="com.android.settings.applications.ManageApplications"
+            android:title="@string/storageuse_settings_title"
+            android:summary="@string/storageuse_settings_summary">
+        <extra android:name="classname"
+                android:value="com.android.settings.Settings$StorageUseActivity" />
+    </PreferenceScreen>
+
+    <CheckBoxPreference
+            android:key="toggle_advanced_settings"
+            android:title="@string/advanced_settings"
+            android:summaryOff="@string/advanced_settings_summary"
+            android:summaryOn="@string/advanced_settings_summary"
+            android:persistent="false" />
+
+    <ListPreference
+        android:key="app_install_location"
+        android:title="@string/app_install_location_title"
+        android:summary="@string/app_install_location_summary"
+        android:persistent="false"
+        android:entries="@array/app_install_location_entries"
+        android:entryValues="@array/app_install_location_values"/>
+
+    <!-- Disabled quick launch settings pending UI redesign.
+    <PreferenceScreen
+            android:key="quick_launch"
             android:title="@string/quick_launch_title"
             android:summary="@string/quick_launch_summary">
         <intent android:action="android.intent.action.MAIN"
                 android:targetPackage="com.android.settings"
                 android:targetClass="com.android.settings.quicklaunch.QuickLaunchSettings" />
     </PreferenceScreen>
-        
-    <PreferenceScreen
-            android:title="@string/manage_applications_title">
-        <intent android:action="android.intent.action.MAIN"
-                android:targetPackage="com.android.settings"
-                android:targetClass="com.android.settings.ManageApplications" />
-    </PreferenceScreen>
+    -->
 
-    <PreferenceScreen 
-            android:title="@string/development_settings_title" 
-            android:summary="@string/development_settings_summary">
-        <intent android:action="android.intent.action.MAIN"
-                android:targetPackage="com.android.settings"
-                android:targetClass="com.android.settings.DevelopmentSettings" />
-    </PreferenceScreen>
-    
 </PreferenceScreen>
 

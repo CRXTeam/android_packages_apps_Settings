@@ -17,39 +17,73 @@
 package com.android.settings;
 
 import android.content.Context;
-import android.preference.PreferenceCategory;
+import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
 
-import java.util.Map;
+/**
+ * A category with a progress spinner
+ */
+public class ProgressCategory extends ProgressCategoryBase {
 
-public class ProgressCategory extends PreferenceCategory {
-
+    private int mEmptyTextRes;
     private boolean mProgress = false;
-    
+    private Preference mNoDeviceFoundPreference;
+    private boolean mNoDeviceFoundAdded;
+
+    public ProgressCategory(Context context) {
+        this(context, null);
+    }
+
     public ProgressCategory(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        super(context, attrs, 0);
+    }
+
+    public ProgressCategory(Context context, AttributeSet attrs,
+            int defStyleAttr) {
+        this(context, attrs, defStyleAttr, 0);
+    }
+
+    public ProgressCategory(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
         setLayoutResource(R.layout.preference_progress_category);
     }
-    
+
+    public void setEmptyTextRes(int emptyTextRes) {
+        mEmptyTextRes = emptyTextRes;
+    }
+
     @Override
     public void onBindView(View view) {
         super.onBindView(view);
-        View textView = view.findViewById(R.id.scanning_text);
-        View progressBar = view.findViewById(R.id.scanning_progress);
+        final View progressBar = view.findViewById(R.id.scanning_progress);
 
-        int visibility = mProgress ? View.VISIBLE : View.INVISIBLE;
-        textView.setVisibility(visibility);
-        progressBar.setVisibility(visibility);
+        boolean noDeviceFound = (getPreferenceCount() == 0 ||
+                (getPreferenceCount() == 1 && getPreference(0) == mNoDeviceFoundPreference));
+        progressBar.setVisibility(mProgress ? View.VISIBLE : View.GONE);
+
+        if (mProgress || !noDeviceFound) {
+            if (mNoDeviceFoundAdded) {
+                removePreference(mNoDeviceFoundPreference);
+                mNoDeviceFoundAdded = false;
+            }
+        } else {
+            if (!mNoDeviceFoundAdded) {
+                if (mNoDeviceFoundPreference == null) {
+                    mNoDeviceFoundPreference = new Preference(getContext());
+                    mNoDeviceFoundPreference.setLayoutResource(R.layout.preference_empty_list);
+                    mNoDeviceFoundPreference.setTitle(mEmptyTextRes);
+                    mNoDeviceFoundPreference.setSelectable(false);
+                }
+                addPreference(mNoDeviceFoundPreference);
+                mNoDeviceFoundAdded = true;
+            }
+        }
     }
-    
-    /**
-     * Turn on/off the progress indicator and text on the right.
-     * @param progressOn whether or not the progress should be displayed 
-     */
+
+    @Override
     public void setProgress(boolean progressOn) {
         mProgress = progressOn;
         notifyChanged();
     }
 }
-

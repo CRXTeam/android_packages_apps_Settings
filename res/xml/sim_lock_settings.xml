@@ -15,16 +15,15 @@
 -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:settings="http://schemas.android.com/apk/res/com.android.settings">
-    
-    <PreferenceCategory
-        android:title="@string/sim_lock_settings"/>
+        xmlns:settings="http://schemas.android.com/apk/res/com.android.settings"
+        android:title="@string/sim_lock_settings">
     
     <CheckBoxPreference
             android:key="sim_toggle"
             android:title="@string/sim_pin_toggle"
             android:summaryOn="@string/sim_lock_on"
             android:summaryOff="@string/sim_lock_off"/>
+
     <com.android.settings.EditPinPreference
             android:key="sim_pin"
             android:title="@string/sim_pin_change"
@@ -32,4 +31,5 @@
             android:dialogMessage="@string/sim_enter_old"
             android:positiveButtonText="@string/sim_enter_ok"
             android:negativeButtonText="@string/sim_enter_cancel"/>
-</PreferenceScreen>   
+
+</PreferenceScreen>

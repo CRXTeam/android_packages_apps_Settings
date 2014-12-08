@@ -1,12 +1,11 @@
 package com.android.settings;
 
 import android.provider.Telephony;
-import static android.provider.Telephony.Intents.SECRET_CODE_ACTION;
+import static com.android.internal.telephony.TelephonyIntents.SECRET_CODE_ACTION;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.BroadcastReceiver;
-import android.util.Config;
 import android.util.Log;
 import android.view.KeyEvent;
 
