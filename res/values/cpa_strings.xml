@@ -263,4 +263,8 @@
     <string name="saturation_str">Saturation: <xliff:g id="saturation_value">%1$s</xliff:g></string>
     <string name="contrast_str">Contrast: <xliff:g id="contrast_value">%1$s</xliff:g></string>
     <string name="intensity_str">Intensity: <xliff:g id="intensity_str_value">%1$s</xliff:g></string>
+	
+	<string name="app_ops_summaries_su">Superuser</string>
+	<string name="app_ops_labels_su">Root access</string>
+	<string name="app_ops_categories_su">Superuser</string>
 </resources>

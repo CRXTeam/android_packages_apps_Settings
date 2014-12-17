@@ -226,5 +226,19 @@
         <item>Vivid</item>
         <item>Custom</item>
     </string-array>
+
+    <!-- App ops, extension of AOSP app_ops_summaries and app_ops_labels -->
+    <string-array name="app_ops_summaries_cm" translatable="false">
+         <item>@string/app_ops_summaries_su</item>
+    </string-array>
+
+	<string-array name="app_ops_labels_cm" translatable="false">
+        <item>@string/app_ops_labels_su</item>
+    </string-array>
+	
+    <!-- Names of categories of app ops tabs -->
+    <string-array name="app_ops_categories_cm" translatable="false">
+        <item>@string/app_ops_categories_su</item>
+    </string-array>
 </resources>
 
