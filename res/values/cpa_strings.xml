@@ -318,4 +318,11 @@
     <string name="total_state_time">TOTAL STATE TIME</string>
     <string name="no_states_file_found">No states file found. Are you sure your phone is compatible?\n\nIf you are running a custom ROM or kernel, try contacting its developer to inform him that the states file is not readable.</string>
     <string name="deep_sleep">"Deep Sleep"</string> 
+
+    <!-- Lockscreen shortcuts -->
+    <string name="lockscreen_settings_title">Lock screen</string>
+    <string name="lockscreen_targets_message">Lockscreen shortcuts</string>
+    <string name="lockscreen_default_target">Default</string>
+    <string name="lockscreen_message">Tap an icon on the left or right to reassign a lock screen shortcut.</string>
+    <string name="lockscreen_choose_action_title">Choose action</string>
 </resources>

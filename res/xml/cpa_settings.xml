@@ -43,6 +43,14 @@
             android:fragment="com.android.settings.cpa.NotificationDrawer"
             />
 
+        <!-- Lockscreen shortcuts -->
+        <PreferenceScreen
+            android:key="lockscreen_shortcuts_settings"
+            android:title="@string/cpa_lockscreen_shortcuts_title"
+            android:summary="@string/cpa_lockscreen_shortcuts_summary"
+            android:fragment="com.android.settings.cpa.LockscreenShortcuts"
+            />
+
         <!-- CPU Time in state -->
         <PreferenceScreen
             android:key="cpustat_menu"
