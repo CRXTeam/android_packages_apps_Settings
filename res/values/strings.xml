@@ -6098,4 +6098,8 @@
     <string name="usb_sdcard_title">Mount SD card</string>
     <string name="external_storage_turn_on">External storage has been turned on</string>
     <string name="external_storage_turn_off">External storage has been turned off</string>
+
+    <!-- Themes Settings -->
+    <!-- Settings main menu entry -->
+    <string name="themes_settings_title">Themes</string>
 </resources>
