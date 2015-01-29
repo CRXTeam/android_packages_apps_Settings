@@ -81,7 +81,7 @@
                 android:id="@+id/cpa"
                 android:fragment="com.android.settings.cpa.CPA"
                 android:title="@string/cpa_title"
-                android:icon="@drawable/ic_settings_cpa"
+                android:icon="@drawable/ic_settings_more"
                 />
 
         <!-- Performance -->
