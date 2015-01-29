@@ -71,6 +71,21 @@
 
     </dashboard-category>
 
+    <!-- CrystalPA2 -->
+    <dashboard-category
+            android:id="@+id/crystal_rom"
+            android:title="@string/cpa2_title" >
+
+        <!-- CPA2 Settings -->
+        <dashboard-tile
+                android:id="@+id/cpa"
+                android:fragment="com.android.settings.cpa.CPA"
+                android:title="@string/cpa_title"
+                android:icon="@drawable/ic_settings_cpa"
+                />
+
+    </dashboard-category>
+
     <!-- DEVICE -->
     <dashboard-category
             android:id="@+id/device_section"
