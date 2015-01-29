@@ -24,12 +24,12 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.Handler;
-import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.preference.SwitchPreference;
 import android.provider.Settings;
 
 import android.util.Log;
@@ -95,7 +95,7 @@ public class ButtonSettings extends SettingsPreferenceFragment implements
     private PreferenceCategory mNavigationPreferencesCat;
 
     private Handler mHandler;
-    private CheckBoxPreference mDisableNavigationKeys;
+    private SwitchPreference mDisableNavigationKeys;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,7 +124,7 @@ public class ButtonSettings extends SettingsPreferenceFragment implements
         mHandler = new Handler();
 
         // Force Navigation bar related options
-        mDisableNavigationKeys = (CheckBoxPreference) findPreference(DISABLE_NAV_KEYS);
+        mDisableNavigationKeys = (SwitchPreference) findPreference(DISABLE_NAV_KEYS);
 
         // Only visible on devices that does not have a navigation bar already,
         // and don't even try unless the existing keys can be disabled
@@ -251,10 +251,12 @@ public class ButtonSettings extends SettingsPreferenceFragment implements
             Settings.System.putInt(context.getContentResolver(),
                     Settings.System.BUTTON_BRIGHTNESS, 0);
         } else {
-            Settings.System.putInt(context.getContentResolver(),
-                    Settings.System.BUTTON_BRIGHTNESS,
-                    prefs.getInt("pre_navbar_button_backlight", defaultBrightness));
-            editor.remove("pre_navbar_button_backlight");
+            int oldBright = prefs.getInt("pre_navbar_button_backlight", -1);
+            if (oldBright != -1) {
+                Settings.System.putInt(context.getContentResolver(),
+                        Settings.System.BUTTON_BRIGHTNESS, oldBright);
+                editor.remove("pre_navbar_button_backlight");
+            }
         }
         editor.commit();
     }
@@ -305,8 +307,15 @@ public class ButtonSettings extends SettingsPreferenceFragment implements
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference == mDisableNavigationKeys) {
+            mDisableNavigationKeys.setEnabled(false);
             writeDisableNavkeysOption(getActivity(), mDisableNavigationKeys.isChecked());
             updateDisableNavkeysOption();
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mDisableNavigationKeys.setEnabled(true);
+                }
+            }, 1000);
         }
 
         return super.onPreferenceTreeClick(preferenceScreen, preference);

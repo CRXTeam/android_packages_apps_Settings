@@ -33,12 +33,6 @@
                 android:summary="@string/auto_brightness_summary"
                 android:persistent="false" />
 
-        <PreferenceScreen
-                android:key="wallpaper"
-                android:title="@string/wallpaper_settings_title"
-                settings:keywords="@string/keywords_display_wallpaper"
-                android:fragment="com.android.settings.WallpaperTypeSettings" />
-
         <ListPreference
                 android:key="screen_timeout"
                 android:title="@string/screen_timeout"
@@ -91,6 +85,18 @@
                     android:key="proximity_on_wake"
                     android:title="@string/proximity_wake_title"
                     android:summary="@string/proximity_wake_summary"
+                    android:defaultValue="true" />
+
+                <SwitchPreference
+                    android:key="adaptive_backlight"
+                    android:title="@string/adaptive_backlight_title"
+                    android:summary="@string/adaptive_backlight_summary"
+                    android:defaultValue="true" />
+
+               <SwitchPreference
+                    android:key="sunlight_enhancement"
+                    android:title="@string/sunlight_enhancement_title"
+                    android:summary="@string/sunlight_enhancement_summary"
                     android:defaultValue="true" />
         </PreferenceCategory>
 </PreferenceScreen>

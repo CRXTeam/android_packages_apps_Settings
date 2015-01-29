@@ -386,7 +386,7 @@ public class SimSettings extends RestrictedSettingsFragment implements Indexable
         for (int i = 0; i < subAvailableSize; ++i) {
             final SubInfoRecord sir = mAvailableSubInfos.get(i);
             if(sir != null){
-                simPref.addItem(sir.displayName, sir);
+                simPref.addItem(sir.displayName + " - " + Integer.toString(i+1), sir);
             }
         }
 
@@ -482,7 +482,16 @@ public class SimSettings extends RestrictedSettingsFragment implements Indexable
             numberView.setText(mSubInfoRecord.number);
 
             TextView carrierView = (TextView)dialogLayout.findViewById(R.id.carrier);
-            carrierView.setText(mSubInfoRecord.displayName);
+            TelephonyManager tm = (TelephonyManager)
+                    getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+            String spn = tm.getSimOperatorName(mSubInfoRecord.subId);
+            if (TextUtils.isEmpty(spn) && !tm.isNetworkRoaming(mSubInfoRecord.subId)) {
+                // Operator did not write the SPN inside the SIM, so set
+                // the current network operator as the SIM name, but only if
+                // we're not roaming.
+                spn = tm.getNetworkOperatorName(mSubInfoRecord.subId);
+            }
+            carrierView.setText(spn);
 
             builder.setTitle(R.string.sim_editor_title);
 
@@ -500,7 +509,7 @@ public class SimSettings extends RestrictedSettingsFragment implements Indexable
 
                     mSubInfoRecord.displayName = nameText.getText().toString();
                     SubscriptionManager.setDisplayName(mSubInfoRecord.displayName,
-                        mSubInfoRecord.subId);
+                        mSubInfoRecord.subId, SubscriptionManager.NAME_SOURCE_USER_INPUT);
 
                     updateAllOptions();
                     update();

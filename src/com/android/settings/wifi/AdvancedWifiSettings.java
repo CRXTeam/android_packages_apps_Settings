@@ -58,8 +58,8 @@ public class AdvancedWifiSettings extends SettingsPreferenceFragment
     private static final String KEY_FREQUENCY_BAND = "frequency_band";
     private static final String KEY_NOTIFY_OPEN_NETWORKS = "notify_open_networks";
     private static final String KEY_SLEEP_POLICY = "sleep_policy";
+    private static final String KEY_POOR_NETWORK_DETECTION = "wifi_poor_network_detection";
     private static final String KEY_SCAN_ALWAYS_AVAILABLE = "wifi_scan_always_available";
-    private static final String KEY_WIFI_RSSI_THRESHOLD_CHECK = "wifi_rssi_threshold_check";
     private static final String KEY_INSTALL_CREDENTIALS = "install_credentials";
     private static final String KEY_WIFI_ASSISTANT = "wifi_assistant";
     private static final String KEY_WIFI_DIRECT = "wifi_direct";
@@ -132,15 +132,23 @@ public class AdvancedWifiSettings extends SettingsPreferenceFragment
                 Settings.Global.WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON, 0) == 1);
         notifyOpenNetworks.setEnabled(mWifiManager.isWifiEnabled());
 
+        SwitchPreference poorNetworkDetection =
+            (SwitchPreference) findPreference(KEY_POOR_NETWORK_DETECTION);
+        if (poorNetworkDetection != null) {
+            if (Utils.isWifiOnly(getActivity())) {
+                getPreferenceScreen().removePreference(poorNetworkDetection);
+            } else {
+                poorNetworkDetection.setChecked(Settings.Global.getInt(getContentResolver(),
+                        Settings.Global.WIFI_WATCHDOG_POOR_NETWORK_TEST_ENABLED,
+                        WifiManager.DEFAULT_POOR_NETWORK_AVOIDANCE_ENABLED ?
+                        1 : 0) == 1);
+            }
+        }
+
         SwitchPreference scanAlwaysAvailable =
             (SwitchPreference) findPreference(KEY_SCAN_ALWAYS_AVAILABLE);
         scanAlwaysAvailable.setChecked(Global.getInt(getContentResolver(),
                     Global.WIFI_SCAN_ALWAYS_AVAILABLE, 0) == 1);
-
-        CheckBoxPreference wifiRssiThresholdCheck =
-            (CheckBoxPreference) findPreference(KEY_WIFI_RSSI_THRESHOLD_CHECK);
-        wifiRssiThresholdCheck.setChecked(Global.getInt(getContentResolver(),
-                    Global.WIFI_RSSI_THRESHOLD, 0) == 1);
 
         Intent intent = new Intent(Credentials.INSTALL_AS_USER_ACTION);
         intent.setClassName("com.android.certinstaller",
@@ -253,15 +261,14 @@ public class AdvancedWifiSettings extends SettingsPreferenceFragment
             Global.putInt(getContentResolver(),
                     Settings.Global.WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON,
                     ((SwitchPreference) preference).isChecked() ? 1 : 0);
+        } else if (KEY_POOR_NETWORK_DETECTION.equals(key)) {
+            Global.putInt(getContentResolver(),
+                    Global.WIFI_WATCHDOG_POOR_NETWORK_TEST_ENABLED,
+                    ((SwitchPreference) preference).isChecked() ? 1 : 0);
         } else if (KEY_SCAN_ALWAYS_AVAILABLE.equals(key)) {
             Global.putInt(getContentResolver(),
                     Global.WIFI_SCAN_ALWAYS_AVAILABLE,
                     ((SwitchPreference) preference).isChecked() ? 1 : 0);
-        } else if (KEY_WIFI_RSSI_THRESHOLD_CHECK.equals(key)) {
-            Global.putInt(getContentResolver(),
-                    Global.WIFI_RSSI_THRESHOLD,
-                    ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
-            mWifiManager.enableRssiThreshold(((CheckBoxPreference) preference).isChecked() ? 1 : 0);
         } else {
             return super.onPreferenceTreeClick(screen, preference);
         }
