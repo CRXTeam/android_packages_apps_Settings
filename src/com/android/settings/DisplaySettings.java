@@ -61,7 +61,6 @@ import java.util.List;
 
 import org.cyanogenmod.hardware.AdaptiveBacklight;
 import org.cyanogenmod.hardware.SunlightEnhancement;
-import org.cyanogenmod.hardware.TapToWake;
 
 public class DisplaySettings extends SettingsPreferenceFragment implements
         Preference.OnPreferenceChangeListener, OnPreferenceClickListener, Indexable {
@@ -79,7 +78,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private static final String KEY_AUTO_ROTATE = "auto_rotate";
     private static final String KEY_ADAPTIVE_BACKLIGHT = "adaptive_backlight";
     private static final String KEY_SUNLIGHT_ENHANCEMENT = "sunlight_enhancement";
-    private static final String KEY_TAP_TO_WAKE = "double_tap_wake_gesture";
     private static final String KEY_PROXIMITY_WAKE = "proximity_on_wake";
 
     private static final String CATEGORY_ADVANCED = "advanced_display_prefs";
@@ -95,7 +93,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private SwitchPreference mLiftToWakePreference;
     private SwitchPreference mDozePreference;
     private SwitchPreference mAutoBrightnessPreference;
-    private SwitchPreference mTapToWake;
     private SwitchPreference mAdaptiveBacklight;
     private SwitchPreference mSunlightEnhancement;
 
@@ -194,12 +191,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
             });
         } else {
             removePreference(KEY_AUTO_ROTATE);
-        }
-
-        mTapToWake = (SwitchPreference) findPreference(KEY_TAP_TO_WAKE);
-        if (!isTapToWakeSupported()) {
-            advancedPrefs.removePreference(mTapToWake);
-            mTapToWake = null;
         }
 
         boolean proximityCheckOnWait = getResources().getBoolean(
@@ -317,10 +308,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
             }
         }
 
-        if (mTapToWake != null) {
-            mTapToWake.setChecked(TapToWake.isEnabled());
-        }
-
         updateState();
     }
 
@@ -369,15 +356,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         }
     }
 
-    private static boolean isTapToWakeSupported() {
-        try {
-            return TapToWake.isSupported();
-        } catch (NoClassDefFoundError e) {
-            // Hardware abstraction framework not installed
-            return false;
-        }
-    }
-
     /**
      * Reads the current font size and sets the value in the summary text
      */
@@ -405,9 +383,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
 
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-        if (preference == mTapToWake) {
-            return TapToWake.setEnabled(mTapToWake.isChecked());
-        } else if (preference == mAdaptiveBacklight) {
+        if (preference == mAdaptiveBacklight) {
             if (mSunlightEnhancement != null &&
                     SunlightEnhancement.isAdaptiveBacklightRequired()) {
                 mSunlightEnhancement.setEnabled(mAdaptiveBacklight.isChecked());
@@ -471,17 +447,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
      */
     public static void restore(Context ctx) {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-
-        if (isTapToWakeSupported()) {
-            final boolean enabled = prefs.getBoolean(KEY_TAP_TO_WAKE,
-                TapToWake.isEnabled());
-            if (!TapToWake.setEnabled(enabled)) {
-                Log.e(TAG, "Failed to restore tap-to-wake settings.");
-            } else {
-                Log.d(TAG, "Tap-to-wake settings restored.");
-            }
-        }
-
         if (isAdaptiveBacklightSupported()) {
             final boolean enabled = prefs.getBoolean(KEY_ADAPTIVE_BACKLIGHT,
                     AdaptiveBacklight.isEnabled());

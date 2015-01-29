@@ -99,19 +99,20 @@
             android:id="@+id/device_section"
             android:title="@string/header_category_device" >
 
-        <dashboard-tile
-                android:id="@+id/button_settings"
-                android:title="@string/button_pref_title"
-                android:fragment="com.android.settings.ButtonSettings"
-                android:icon="@drawable/ic_settings_buttons"
-                />
-
         <!-- Home -->
         <dashboard-tile
                 android:id="@+id/home_settings"
                 android:title="@string/home_settings"
                 android:fragment="com.android.settings.HomeSettings"
                 android:icon="@drawable/ic_settings_home"
+                />
+
+        <!-- Gestures -->
+        <dashboard-tile
+                android:id="@+id/gesture_settings"
+                android:title="@string/gesture_title"
+                android:fragment="com.android.settings.paranoid.GestureSettings"
+                android:icon="@drawable/ic_settings_gestures"
                 />
 
         <!-- Display -->
@@ -128,6 +129,14 @@
                 android:title="@string/notification_settings"
                 android:fragment="com.android.settings.notification.NotificationSettings"
                 android:icon="@drawable/ic_settings_notifications"
+                />
+
+        <!-- Buttons -->
+        <dashboard-tile
+                android:id="@+id/button_settings"
+                android:title="@string/button_pref_title"
+                android:fragment="com.android.settings.ButtonSettings"
+                android:icon="@drawable/ic_settings_buttons"
                 />
 
         <!-- Storage -->
