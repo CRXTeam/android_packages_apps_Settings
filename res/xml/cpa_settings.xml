@@ -7,7 +7,7 @@
 
     <PreferenceCategory
         android:key="cpa2"
-        android:title="@string/crystal_title" >
+        android:title="@string/cpa_title" >
 
     </PreferenceCategory>
 

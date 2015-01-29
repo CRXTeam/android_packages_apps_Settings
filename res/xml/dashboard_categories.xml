@@ -73,8 +73,8 @@
 
     <!-- CrystalPA2 -->
     <dashboard-category
-            android:id="@+id/crystal_rom"
-            android:title="@string/cpa2_title" >
+            android:id="@+id/cpa"
+            android:title="@string/cpa_title" >
 
         <!-- CPA2 Settings -->
         <dashboard-tile
