@@ -1972,6 +1972,9 @@
 
         <activity android:name=".cyanogenmod.PerformanceSettings" />
 
+        <!-- CPA -->
+        <activity android:name=".cpa.CPA" />
+
         <receiver android:name=".widget.SettingsAppWidgetProvider"
                 android:label="@string/gadget_title"
                 android:exported="false"
