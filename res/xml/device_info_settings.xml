@@ -115,6 +115,12 @@
                 android:title="@string/pa_version"
                 android:summary="@string/pa_version_default" />
 
+        <!-- Device CPA version -->
+        <Preference android:key="cpa_version"
+                style="?android:preferenceInformationStyle"
+                android:title="@string/cpa_version"
+                android:summary="@string/cpa_version_default" />
+
         <!-- Device FCC equipment id -->
         <Preference android:key="fcc_equipment_id"
                 style="?android:preferenceInformationStyle"
