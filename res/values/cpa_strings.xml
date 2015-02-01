@@ -20,6 +20,8 @@
     <string name="cpa_title">CPA2 Settings</string>
     <string name="cpa_status_bar_title">Status bar Settings</string>
     <string name="cpa_battery_icon_title">Battery icon options</string>
+    <string name="cpa_qs_title">Quick Settings</string>
+    <string name="cpa_notification_drawer_title">Notification drawer</string>
     <!-- CPA Version -->
     <string name="cpa_version">CrystalPA2 version</string>
     <string name="cpa_version_default">Unknown</string>
@@ -38,5 +40,31 @@
     <string name="status_bar_battery_percentage_default">Hidden (default)</string>
     <string name="status_bar_battery_percentage_text_inside">Inside the icon</string>
     <string name="status_bar_battery_percentage_text_next">Next to the icon</string>
+
+    <!-- Notification drawer -->
+    <string name="qs_brightness_slider_title">Show brightness slider</string>
+    <string name="qs_order_title">Select and order tiles</string>
+    <string name="add_qs">Add new tile</string>
+
+    <string name="qs_action_delete">Delete</string>
+    <string name="qs_action_add">Add</string>
+    <string name="qs_action_no_more_tiles">No more tiles available</string>
+
+    <string name="qs_tile_wifi">Wi\u2011Fi</string>
+    <string name="qs_tile_bluetooth">Bluetooth</string>
+    <string name="qs_tile_display_inversion">Color inversion</string>
+    <string name="qs_tile_cellular_data">Data connection</string>
+    <string name="qs_tile_airplane_mode">Airplane mode</string>
+    <string name="qs_tile_display_rotation">Rotation</string>
+    <string name="qs_tile_flashlight">Flashlight</string>
+    <string name="qs_tile_location">Location</string>
+    <string name="qs_tile_cast_screen">Cast screen</string>
+    <string name="qs_tile_hotspot">Hotspot</string>
+    <string name="qs_tile_performance">Performance</string>
+    <string name="qs_tile_compass">Compass</string>
+    <string name="qs_tile_lockscreen">Lockscreen</string>
+    <string name="qs_main_tiles_title">Enlarge first row</string>
+    <string name="qs_main_tiles_summary_on">Two main tiles on the first row</string>
+    <string name="qs_main_tiles_summary_off">Three tiles on each row</string>
 </resources>
 
