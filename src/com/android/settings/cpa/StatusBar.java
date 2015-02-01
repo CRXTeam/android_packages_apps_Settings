@@ -16,30 +16,48 @@
 
 package com.android.settings.cpa;
 
+import java.io.IOException;
+
 import android.content.ContentResolver;
-import android.content.pm.PackageManager;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.app.AlertDialog;
+import android.app.ActivityManager;
+import android.app.ActivityManagerNative;
+import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.os.RemoteException;
+import android.os.ServiceManager;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
-import android.preference.SwitchPreference;
-import android.provider.Settings;
-import android.provider.Settings.SettingNotFoundException;
+import android.os.Handler;
 import android.util.Log;
+import android.net.Uri;
+import android.preference.Preference.OnPreferenceClickListener;
+import android.view.IWindowManager;
+import android.os.ServiceManager;
+import android.os.IBinder;
+import android.os.IPowerManager;
+import android.view.WindowManagerGlobal;
 
+import android.provider.Settings;
+import android.os.SystemProperties;
 import com.android.settings.R;
-import com.android.settings.slim.qs.QSTiles;
 import com.android.settings.SettingsPreferenceFragment;
+import com.android.settings.Utils;
+
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import android.database.ContentObserver;
 import android.net.Uri;
-import android.os.Handler;
-import android.preference.PreferenceScreen;
 import android.provider.Settings.SettingNotFoundException;
-import com.android.settings.Utils;
 
 public class StatusBar extends SettingsPreferenceFragment implements Preference.OnPreferenceChangeListener {
 
@@ -59,7 +77,6 @@ public class StatusBar extends SettingsPreferenceFragment implements Preference.
     private int mbatteryStyle;
     private int mbatteryShowPercent;
 
-    Preference mQSTiles;
     private Context mContext;
 
     @Override
@@ -86,9 +103,6 @@ public class StatusBar extends SettingsPreferenceFragment implements Preference.
         mStatusBarBatteryShowPercent.setSummary(mStatusBarBatteryShowPercent.getEntry());
         mStatusBarBatteryShowPercent.setOnPreferenceChangeListener(this);
         enableStatusBarBatteryDependents(String.valueOf(mbatteryStyle));
-
-        // QS
-        mQSTiles = findPreference("qs_order");
     }
 
     public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -115,16 +129,7 @@ public class StatusBar extends SettingsPreferenceFragment implements Preference.
     @Override
     public void onResume() {
         super.onResume();
-
-        int qsTileCount = QSTiles.determineTileCount(getActivity());
-        mQSTiles.setSummary(getResources().getQuantityString(R.plurals.qs_tiles_summary,
-                    qsTileCount, qsTileCount));
         enableStatusBarBatteryDependents(String.valueOf(mbatteryStyle));
-    }
-
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-        return false;
     }
 
     private void enableStatusBarBatteryDependents(String value) {
@@ -133,5 +138,3 @@ public class StatusBar extends SettingsPreferenceFragment implements Preference.
         mStatusBarBatteryShowPercent.setEnabled(enabled);
     }
 }
-
-
