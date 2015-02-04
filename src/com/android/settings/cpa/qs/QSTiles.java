@@ -50,6 +50,7 @@ public class QSTiles extends Fragment implements
     private View mAddDeleteTile;
     private boolean mDraggingActive;
     private Context mSystemUiContext;
+	private Resources mSystemUIResources;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
