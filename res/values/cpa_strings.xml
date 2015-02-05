@@ -18,12 +18,17 @@
 
     <!-- CPA Titles -->
     <string name="cpa_title">CPA2 Settings</string>
-    <string name="cpa_status_bar_title">Status bar Settings</string>
+    <string name="cpa_status_bar_title">Status bar</string>
     <string name="cpa_battery_icon_title">Battery icon options</string>
     <string name="cpa_qs_title">Quick Settings</string>
     <string name="cpa_notification_drawer_title">Notification drawer</string>
     <string name="cpa_animation_title">Animations</string>
     <string name="cpa_lockscreen_shortcuts_title">Shortcuts</string>
+    <!-- CPA Summary -->
+    <string name="cpa_animation_summary">Animations control</string>
+    <string name="cpa_status_bar_summary">Status bar settings</string>
+    <string name="cpa_notification_drawer_summary">Notification drawer options</string>
+    <string name="cpa_lockscreen_shortcuts_summary">Configurable lockscreen shortcuts</string>
     <!-- CPA Version -->
     <string name="cpa_version">CrystalPA2 version</string>
     <string name="cpa_version_default">Unknown</string>

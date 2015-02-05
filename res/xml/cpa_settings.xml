@@ -23,28 +23,32 @@
 	<PreferenceScreen
             android:key="animation"
             android:title="@string/cpa_animation_title"
+            android:summary="@string/cpa_animation_summary"
             android:fragment="com.android.settings.cpa.Animation"
-            android:icon="@drawable/ic_settings_animations" />
-		
+            />
+
         <!-- Status Bar -->
         <PreferenceScreen
             android:key="status_bar"
             android:title="@string/cpa_status_bar_title"
+            android:summary="@string/cpa_status_bar_summary"
             android:fragment="com.android.settings.cpa.StatusBar"
-            android:icon="@drawable/ic_settings_storage" />
+            />
 
         <!-- Notification drawer -->
         <PreferenceScreen
             android:key="notification_drawer"
             android:title="@string/cpa_notification_drawer_title"
+            android:summary="@string/cpa_notification_drawer_summary"
             android:fragment="com.android.settings.cpa.NotificationDrawer"
-            android:icon="@drawable/ic_settings_notification_drawer" />
+            />
 
         <!-- Lockscreen Shortcuts -->
         <PreferenceScreen
                  android:key="lockscreen_shortcuts"
                  android:fragment="com.android.settings.cpa.dslv.ActionListViewSettings"
-                 android:title="@string/cpa_lockscreen_shortcuts_title">
+                 android:title="@string/cpa_lockscreen_shortcuts_title"
+                 android:summary="@string/cpa_lockscreen_shortcuts_summary">
              <extra android:name="actionMode" android:value="4" />
              <extra android:name="maxAllowedActions" android:value="5" />
              <extra android:name="disableLongpress" android:value="true" />
