@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.android.internal.util.cpa.LockscreenShortcutsHelper;
 import com.android.settings.R;
+import com.android.settings.cpa.utils.ShortcutPickHelper;
 
 import java.util.ArrayList;
 import java.util.List;
