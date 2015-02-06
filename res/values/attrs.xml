@@ -116,5 +116,4 @@
         <attr name="defaultValue" format="float" />
         <attr name="digits" format="integer" />
     </declare-styleable>
-
 </resources>
