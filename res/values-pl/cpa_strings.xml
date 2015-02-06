@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2014-2015 The CPA2 Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- CPA Titles -->
+    <string name="cpa_title">Ustawienia CPA2</string>
+    <string name="cpa_status_bar_title">Pasek stanu</string>
+    <string name="cpa_battery_icon_title">Opcje ikony baterii</string>
+    <string name="cpa_qs_title">Szybkie ustawienia</string>
+    <string name="cpa_notification_drawer_title">Powiadomienia</string>
+    <string name="cpa_animation_title">Animacje</string>
+    <string name="cpa_lockscreen_shortcuts_title">Skróty</string>
+    
+    <!-- CPA Summary -->
+    <string name="cpa_animation_summary">Kontrola animacji</string>
+    <string name="cpa_status_bar_summary">Ustawienia paska stanu</string>
+    <string name="cpa_notification_drawer_summary">Ustawienia powiadomień</string>
+    <string name="cpa_lockscreen_shortcuts_summary">Konfigurowalne skróty ekranu blokady</string>
+    
+    <!-- CPA Version -->
+    <string name="cpa_version">Wersja CrystalPA2</string>
+    <string name="cpa_version_default">???</string>
+
+    <!-- Status bar - Battery Style -->
+    <string name="status_bar_battery_style_title">Styl wskaźnika baterii</string>
+    <string name="status_bar_battery_style_circle">Okrąg</string>
+    <string name="status_bar_battery_style_text">Tekst</string>
+    <string name="status_bar_battery_style_hidden">Ukryte</string>
+    <string name="status_bar_battery_style_icon_portrait">Pionowo</string>
+    <string name="status_bar_battery_style_icon_landscape">Poziomo</string>
+
+    <!-- Status bar - Battery percentage -->
+    <string name="status_bar_battery_percentage_title">Pokaż procent naładowania baterii</string>
+    <string name="status_bar_battery_percentage_dialog_title">Procent naładowania baterii</string>
+    <string name="status_bar_battery_percentage_default">Ukryte</string>
+    <string name="status_bar_battery_percentage_text_inside">W środku ikony</string>
+    <string name="status_bar_battery_percentage_text_next">Obok ikony</string>
+
+    <!-- Notification drawer -->
+    <string name="qs_brightness_slider_title">Pokaż pasek jasności ekranu</string>
+    <string name="qs_order_title">Wybierz i dodaj płytki</string>
+    <string name="add_qs">Dodaj nową płytkę</string>
+
+    <string name="qs_action_delete">Usuń</string>
+    <string name="qs_action_add">Dodaj</string>
+    <string name="qs_action_no_more_tiles">Nie ma więcej płytek</string>
+
+    <string name="qs_tile_wifi">Wi\u2011Fi</string>
+    <string name="qs_tile_bluetooth">Bluetooth</string>
+    <string name="qs_tile_display_inversion">Odwrócenie kolorów</string>
+    <string name="qs_tile_cellular_data">Sieć</string>
+    <string name="qs_tile_airplane_mode">Tryb samolotowy</string>
+    <string name="qs_tile_display_rotation">Obracanie ekranu</string>
+    <string name="qs_tile_flashlight">Latarka</string>
+    <string name="qs_tile_location">Lokalizacja</string>
+    <string name="qs_tile_cast_screen">Cast screen</string>
+    <string name="qs_tile_hotspot">Punkt dostępu WiFi</string>
+    <string name="qs_tile_performance">Wydajność</string>
+    <string name="qs_tile_compass">Kompas</string>
+    <string name="qs_tile_lockscreen">Ekran blokady</string>
+    <string name="qs_main_tiles_title">Powiększ pierwszy wiersz</string>
+    <string name="qs_main_tiles_summary_on">Dwie płytki w pierwszym wierszu</string>
+    <string name="qs_main_tiles_summary_off">Trzy płytki w pierwszym wierszu</string>
+	
+	<!-- Animation Controls -->
+    <string name="animation_settings_reset_message">Czy chcesz zresetować wszystkie ustawienia animacji do domyślnych?</string>
+    <string name="activity_open_title">Open In-App Activity Animation</string>
+    <string name="activity_close_title">Close In-App Activity Animation</string>
+    <string name="task_open_title">Launch From In App Animation</string>
+    <string name="task_close_title">Return To Previous Animation</string>
+    <string name="task_move_to_front_title">Move To Front Animation</string>
+    <string name="task_move_to_back_title">Move To Back Animation</string>
+    <string name="wallpaper_open_title">Return To Homescreen Animation</string>
+    <string name="wallpaper_close_title">Launch From Homescreen Animation</string>
+    <string name="wallpaper_intra_open_title">Recents Page Open Animation</string>
+    <string name="wallpaper_intra_close_title">Recents Page Close Animation</string>
+    <string name="animation_duration_title">Animation Duration</string>
+    <string name="animation_no_override_title">Prevent App Overrides</string>
+    <string name="animation_no_override_summary_on">Prevent apps from overriding transitions.</string>
+    <string name="animation_no_override_summary_off">Apps can overriding transitions.</string>
+
+    <!-- Animation Strings -->
+    <string name="animation_default">Default</string>
+    <string name="animation_fade">Fade</string>
+    <string name="animation_slide_right">Slide in right</string>
+    <string name="animation_slide_left">Slide in left</string>
+    <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
+    <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
+    <string name="animation_slide_up">Slide in bottom</string>
+    <string name="animation_slide_down">Slide in top</string>
+    <string name="animation_translucent">Translucent</string>
+    <string name="animation_grow_shrink">Grow in (Top)</string>
+    <string name="animation_grow_shrink_center">Grow in (Center)</string>
+    <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
+    <string name="animation_grow_shrink_left">Grow in (Left)</string>
+    <string name="animation_grow_shrink_right">Grow in (Right)</string>
+    <string name="animation_random">Random</string>
+
+	<!-- IME Animation Controls -->
+    <string name="ime_animation_title">Keyboard</string>
+    <string name="ime_animation_test_title">Test IME Animation Here</string>
+    <string name="ime_enter_animation_title">Enter Animation</string>
+    <string name="ime_exit_animation_title">Exit Animation</string>
+    <string name="ime_interpolator_title">Interpolator</string>
+    <string name="ime_duration_title">IME Duration</string>
+	
+    <!-- ListView animation -->
+    <string name="bars_and_menus_category_system_title">System</string>
+    <string name="listview_title">ListView</string>
+    <string name="listview_animation_title">ListView Animation</string>
+    <string name="listview_off">Off</string>
+    <string name="listview_wave_left">Wave (Left)</string>
+    <string name="listview_wave_right">Wave (Right)</string>
+    <string name="listview_alpha">Alpha</string>
+    <string name="listview_scale">Scale</string>
+    <string name="listview_stack_top">Stack (Top)</string>
+    <string name="listview_stack_bottom">Stack (Bottom)</string>
+    <string name="listview_unfold">Unfold</string>
+    <string name="listview_fold">Fold</string>
+    <string name="listview_translate_left">Translate (Left)</string>
+    <string name="listview_translate_right">Translate (Right)</string>
+    <string name="listview_duration_title">ListView Duration</string>
+    <string name="listview_cache_title">ListView Persistent Cache</string>
+    <string name="listview_cache_none">No Cache</string>
+    <string name="listview_cache_anim">Animation Cache</string>
+    <string name="listview_cache_scroll">Scrolling Cache</string>
+    <string name="listview_cache_all">Animation &amp; Scrolling</string>
+    <string name="listview_blacklist_title">Excluded applications</string>
+    <string name="listview_blacklist_summary">Prevent Apps from animating</string>
+    <string name="listview_test">Test ListView</string>
+    <string name="listview_test_summary">Open Test Dialog with a ListView</string>
+    <string name="listview_test_instructions">Scroll to see changes</string>
+    <string name="listview_test_item">ListView Item</string>
+
+    <!-- ListView interpolator -->
+    <string name="listview_interpolator_title">ListView Interpolator</string>
+    <string name="listview_accelerate_interpolator">Accelerate</string>
+    <string name="listview_decelerate_interpolator">Decelerate</string>
+    <string name="listview_accelerate_decelerate_interpolator">Accelerate and Decelerate</string>
+    <string name="listview_anticipate_interpolator">Anticipate</string>
+    <string name="listview_overshoot_interpolator">Overshoot</string>
+    <string name="listview_anticipate_overshoot_interpolator">Anticipate and Overshoot</string>
+    <string name="listview_bounce_interpolator">Bounce</string>
+    <string name="listview_cycle_interpolator">Cycle</string>
+    <string name="listview_linear_interpolator">Linear</string>
+
+    <!-- Scrolling Animation Controls -->
+    <string name="scrolling_title">Scrolling</string>
+    <string name="animation_fling_velocity_title">Fling Velocity</string>
+    <string name="animation_scroll_friction_title">Scroll Friction</string>
+    <string name="animation_overscroll_distance_title">Overscroll Distance</string>
+    <string name="animation_overfling_distance_title">Overfling Distance</string>
+    <string name="animation_duration_summary">Set duration</string>
+    <string name="animation_no_scroll_title">Customizing scroll</string>
+    <string name="animation_no_scroll_summary_on">Enabled</string>
+    <string name="animation_no_scroll_summary_off">Disabled</string>	
+	
+	<!-- Shortcut picker -->
+    <string name="use_custom_app_title">Use custom application</string>
+    <string name="use_custom_app_summary">Use custom application instead of the recent applications dialog</string>
+    <string name="select_custom_app_title">Select custom application</string>
+    <string name="group_applications">Applications</string>
+
+	<!-- Toast Animations -->
+    <string name="toast_animation_title">Toast Animation</string>
+    <string name="toast_choose_animation">Choose Animation</string>
+    <string name="toast_none_animation">None</string>
+    <string name="toast_default_animation">Default</string>
+    <string name="toast_fade_animation">Fade</string>
+    <string name="toast_SlideRight_animation">Slide-Right</string>
+    <string name="toast_SlideLeft_animation">Slide-Left</string>
+    <string name="toast_Xylon_animation">Xylon</string>
+    <string name="toast_Toko_animation">Toko</string>
+    <string name="toast_Tn_animation">Tn</string>
+    <string name="toast_Honami_animation">Honami</string>
+    <string name="toast_FastFade_animation">Fast-Fade</string>
+    <string name="toast_GrowFade_animation">Grow-Fade</string>
+    <string name="toast_GrowFadeCenter_animation">Grow-Fade-Center</string>
+    <string name="toast_GrowFadeBottom_animation">Grow-Fade-Bottom</string>
+    <string name="toast_Translucent_animation">Translucent</string>
+    <string name="toast_Random_animation">Random</string>
+    <string name="toast_test_animation">Test toast animation</string>
+
+    <!-- General -->
+    <string name="ok">OK</string>
+    <string name="help">Help</string>
+    <string name="reset">Reset</string>
+    <string name="reset_message">Reset all entries to default?</string>
+
+    <!-- DSLV -->
+    <string name="shortcut_action_none">None</string>
+    <string name="shortcut_action_longpress">Longpress:</string>
+    <string name="shortcut_action_select_action_longpress">Choose longpress action:</string>
+    <string name="shortcut_action_select_action">Choose action:</string>
+    <string name="shortcut_action_select_action_newaction">Choose new action:</string>
+    <string name="shortcut_action_reset">Reset</string>
+    <string name="shortcut_action_add">Add</string>
+    <string name="shortcut_action_reset_message">Reset all entries to default?</string>
+    <string name="shortcut_action_max">Maximum entries size has been reached</string>
+    <string name="shortcut_action_warning">Warning</string>
+    <string name="shortcut_action_warning_message">It is not possible to delete last entry</string>
+    <string name="shortcut_action_disable_message">Disabled\nAdd an entry to enable this feature</string>
+    <string name="shortcut_image_not_valid">The chosen app did not return a valid icon or does not support image cropping. Use another app.</string>
+    <string name="shortcut_duplicate_entry">The chosen action cannot be added twice</string>
+    <string name="shortcut_action_help_shortcut">shortcut</string>
+    <string name="shortcut_action_help_button">button</string>
+    <string name="shortcut_action_help_app">app</string>
+    <string name="shortcut_action_help_icon">, while selecting the icon will bring up customization options</string>
+    <string name="shortcut_action_help_main">To add a %1$s, select the Add icon. Once a %1$s is added, selecting the row will change the target%2$s\n\nTo remove a %1$s, swipe the row horizontally left or right. Re-order a %1$s in the list by vertically dragging the anchor on the left.\n\nTo clear or reset to defaults, select the Reset icon.</string>
+    <string name="shortcut_action_help_delete_last_entry">Removing every %1$s in the list will disable the feature entirely.</string>
+    <string name="shortcut_action_help_pie_second_layer_delete_last_entry">Removing every %1$s in the list will disable the second pie layer entirely.</string>
+
+
+    <string name="shortcuts_applications">Applications</string>
+    <string name="shortcuts_select_custom_app_title">Select custom application</string>
+    <string name="shortcuts_icon_picker_type">Select icon type:</string>
+    <string name="shortcuts_icon_default">Default</string>
+    <string name="shortcuts_icon_presets">System icons</string>
+    <string name="shortcuts_icon_custom">Gallery</string>
+    <string name="shortcuts_icon_picker_choose_icon_title">Choose icon</string>
+
+    <string name="shortcuts_icon_picker_alarm">Alarm</string>
+    <string name="shortcuts_icon_picker_andy">Andy</string>
+    <string name="shortcuts_icon_picker_battery">Battery</string>
+    <string name="shortcuts_icon_picker_browser">Browser</string>
+    <string name="shortcuts_icon_picker_calendar">Calendar</string>
+    <string name="shortcuts_icon_picker_camera">Camera</string>
+    <string name="shortcuts_icon_picker_cloud">Cloud</string>
+    <string name="shortcuts_icon_picker_contact">Contact</string>
+    <string name="shortcuts_icon_picker_directdial">Direct Dial</string>
+    <string name="shortcuts_icon_picker_directmessage">Direct Message</string>
+    <string name="shortcuts_icon_picker_drive">Drive</string>
+    <string name="shortcuts_icon_picker_dropbox">Dropbox</string>
+    <string name="shortcuts_icon_picker_email">Email</string>
+    <string name="shortcuts_icon_picker_email2">Email Alternate</string>
+    <string name="shortcuts_icon_picker_evernote">Evernote</string>
+    <string name="shortcuts_icon_picker_facebook">Facebook</string>
+    <string name="shortcuts_icon_picker_favorite">Favorite</string>
+    <string name="shortcuts_icon_picker_file_browser">File Browser</string>
+    <string name="shortcuts_icon_picker_file_browser2">File Browser Alternate</string>
+    <string name="shortcuts_icon_picker_fitness">Fitness</string>
+    <string name="shortcuts_icon_picker_gallery">Gallery</string>
+    <string name="shortcuts_icon_picker_gears">Gears</string>
+    <string name="shortcuts_icon_picker_google_small">Google</string>
+    <string name="shortcuts_icon_picker_gplus">Google Plus</string>
+    <string name="shortcuts_icon_picker_gtalk">Hangouts</string>
+    <string name="shortcuts_icon_picker_help">Help</string>
+    <string name="shortcuts_icon_picker_joystick">Joystick</string>
+    <string name="shortcuts_icon_picker_key">Keys/Accounts</string>
+    <string name="shortcuts_icon_picker_laptop">Laptop</string>
+    <string name="shortcuts_icon_picker_notes">Notes</string>
+    <string name="shortcuts_icon_picker_luggage">Travel</string>
+    <string name="shortcuts_icon_picker_maps">Maps</string>
+    <string name="shortcuts_icon_picker_market">Market</string>
+    <string name="shortcuts_icon_picker_movie">Movies</string>
+    <string name="shortcuts_icon_picker_music">Music</string>
+    <string name="shortcuts_icon_picker_nav">Navigation</string>
+    <string name="shortcuts_icon_picker_phone">Phone</string>
+    <string name="shortcuts_icon_picker_package">Package</string>
+    <string name="shortcuts_icon_picker_pinterest">Pinterest</string>
+    <string name="shortcuts_icon_picker_play">Play</string>
+    <string name="shortcuts_icon_picker_pocket">Pocket</string>
+    <string name="shortcuts_icon_picker_quicksettings">Quick Settings</string>
+    <string name="shortcuts_icon_picker_rss">RSS Feed</string>
+    <string name="shortcuts_icon_picker_sdcard">SDCard</string>
+    <string name="shortcuts_icon_picker_search">Search</string>
+    <string name="shortcuts_icon_picker_sms">Messaging</string>
+    <string name="shortcuts_icon_picker_tasks">Tasks</string>
+    <string name="shortcuts_icon_picker_terminal">Terminal</string>
+    <string name="shortcuts_icon_picker_transit">Transit</string>
+    <string name="shortcuts_icon_picker_tv">TV</string>
+    <string name="shortcuts_icon_picker_twitter">Twitter</string>
+    <string name="shortcuts_icon_picker_unlock">Unlock</string>
+
+    <!-- Lockscreen Shortcuts -->
+    <string name="lockscreen_shorcuts_longpress_title">Shortcuts longpress</string>
+    <string name="lockscreen_shorcuts_longpress_summary">Open custom lock screen shortcuts on longpress</string>
+
+    <!-- Setting checkbox title for root access -->
+    <string name="root_access">Root access</string>
+    <string name="root_access_warning_title">Allow root access?</string>
+    <string name="root_access_warning_message">Allowing applications to request root access is very dangerous and could compromise the security of your system!</string>
+    <string name="root_access_none">Disabled</string>
+    <string name="root_access_apps">Apps only</string>
+    <string name="root_access_adb">ADB only</string>
+    <string name="root_access_all">Apps and ADB</string>
+
+</resources>
