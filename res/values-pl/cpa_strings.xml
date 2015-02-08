@@ -24,15 +24,15 @@
     <string name="cpa_notification_drawer_title">Powiadomienia</string>
     <string name="cpa_animation_title">Animacje</string>
     <string name="cpa_lockscreen_shortcuts_title">Skróty</string>
-    <string name="cpa_clock_title">Clock settings</string>
-    <string name="cpa_cpustates_title">CPU Time in state</string>
+    <string name="cpa_clock_title">Ustawienia zegara</string>
+    <string name="cpa_cpustates_title">Użycie stanów procesora</string>
     
     <!-- CPA Summary -->
     <string name="cpa_animation_summary">Kontrola animacji</string>
     <string name="cpa_status_bar_summary">Ustawienia paska stanu</string>
     <string name="cpa_notification_drawer_summary">Ustawienia powiadomień</string>
     <string name="cpa_lockscreen_shortcuts_summary">Konfigurowalne skróty ekranu blokady</string>
-    <string name="cpa_cpustates_summary">CPU States</string>
+    <string name="cpa_cpustates_summary">Statystyki CPU</string>
     
     <!-- CPA Version -->
     <string name="cpa_version">Wersja CrystalPA2</string>
@@ -83,15 +83,15 @@
     <string name="animation_settings_reset_message">Czy chcesz zresetować wszystkie ustawienia animacji do domyślnych?</string>
     <string name="activity_open_title">Open In-App Activity Animation</string>
     <string name="activity_close_title">Close In-App Activity Animation</string>
-    <string name="task_open_title">Launch From In App Animation</string>
-    <string name="task_close_title">Return To Previous Animation</string>
-    <string name="task_move_to_front_title">Move To Front Animation</string>
+    <string name="task_open_title">Uruchom z aplikacji animacji</string>
+    <string name="task_close_title">Powrót do poprzedniej animacji</string>
+    <string name="task_move_to_front_title">Przenieś do frontowej animacji</string>
     <string name="task_move_to_back_title">Move To Back Animation</string>
     <string name="wallpaper_open_title">Return To Homescreen Animation</string>
     <string name="wallpaper_close_title">Launch From Homescreen Animation</string>
     <string name="wallpaper_intra_open_title">Recents Page Open Animation</string>
     <string name="wallpaper_intra_close_title">Recents Page Close Animation</string>
-    <string name="animation_duration_title">Animation Duration</string>
+    <string name="animation_duration_title">Czas trwania animacji</string>
     <string name="animation_no_override_title">Prevent App Overrides</string>
     <string name="animation_no_override_summary_on">Prevent apps from overriding transitions.</string>
     <string name="animation_no_override_summary_off">Apps can overriding transitions.</string>
@@ -137,115 +137,115 @@
     <string name="listview_translate_left">Przejście (lewo)</string>
     <string name="listview_translate_right">Przejście (prawo)</string>
     <string name="listview_duration_title">Czas trwania ListView</string>
-    <string name="listview_cache_title">ListView Persistent Cache</string>
-    <string name="listview_cache_none">No Cache</string>
-    <string name="listview_cache_anim">Animation Cache</string>
-    <string name="listview_cache_scroll">Scrolling Cache</string>
-    <string name="listview_cache_all">Animation &amp; Scrolling</string>
-    <string name="listview_blacklist_title">Excluded applications</string>
-    <string name="listview_blacklist_summary">Prevent Apps from animating</string>
-    <string name="listview_test">Test ListView</string>
-    <string name="listview_test_summary">Open Test Dialog with a ListView</string>
-    <string name="listview_test_instructions">Scroll to see changes</string>
-    <string name="listview_test_item">ListView Item</string>
+    <string name="listview_cache_title">Trwała pamięć podręczna w ListView</string>
+    <string name="listview_cache_none">Brak pamięci podręcznej</string>
+    <string name="listview_cache_anim">Animacja pamięci podręcznej</string>
+    <string name="listview_cache_scroll">Przewijanie</string>
+    <string name="listview_cache_all">Animacja &amp; Przewijanie</string>
+    <string name="listview_blacklist_title">Wykluczone aplikacje</string>
+    <string name="listview_blacklist_summary">Zapobiega animowaniu w aplikacji</string>
+    <string name="listview_test">Testuj ListView</string>
+    <string name="listview_test_summary">Otwórz testowe okno dialogowe z ListView</string>
+    <string name="listview_test_instructions">Przewijaj, aby zobaczyć zmiany.</string>
+    <string name="listview_test_item">ListView</string>
 
     <!-- ListView interpolator -->
     <string name="listview_interpolator_title">ListView Interpolator</string>
-    <string name="listview_accelerate_interpolator">Accelerate</string>
-    <string name="listview_decelerate_interpolator">Decelerate</string>
-    <string name="listview_accelerate_decelerate_interpolator">Accelerate and Decelerate</string>
-    <string name="listview_anticipate_interpolator">Anticipate</string>
-    <string name="listview_overshoot_interpolator">Overshoot</string>
-    <string name="listview_anticipate_overshoot_interpolator">Anticipate and Overshoot</string>
-    <string name="listview_bounce_interpolator">Bounce</string>
-    <string name="listview_cycle_interpolator">Cycle</string>
-    <string name="listview_linear_interpolator">Linear</string>
+    <string name="listview_accelerate_interpolator">Przyśpieszenie</string>
+    <string name="listview_decelerate_interpolator">Zwolnienie</string>
+    <string name="listview_accelerate_decelerate_interpolator">Przyśpieszenie i zwolnienie</string>
+    <string name="listview_anticipate_interpolator">Przewidywanie</string>
+    <string name="listview_overshoot_interpolator">Przekroczenie</string>
+    <string name="listview_anticipate_overshoot_interpolator">Przewidywanie i przekroczenie</string>
+    <string name="listview_bounce_interpolator">Skok</string>
+    <string name="listview_cycle_interpolator">Cykl</string>
+    <string name="listview_linear_interpolator">Linia</string>
 
     <!-- Scrolling Animation Controls -->
-    <string name="scrolling_title">Scrolling</string>
+    <string name="scrolling_title">Przewijanie</string>
     <string name="animation_fling_velocity_title">Fling Velocity</string>
     <string name="animation_scroll_friction_title">Scroll Friction</string>
     <string name="animation_overscroll_distance_title">Overscroll Distance</string>
     <string name="animation_overfling_distance_title">Overfling Distance</string>
-    <string name="animation_duration_summary">Set duration</string>
-    <string name="animation_no_scroll_title">Customizing scroll</string>
-    <string name="animation_no_scroll_summary_on">Enabled</string>
-    <string name="animation_no_scroll_summary_off">Disabled</string>	
+    <string name="animation_duration_summary">Ustaw czas trwania</string>
+    <string name="animation_no_scroll_title">Dostosowywanie przewijania</string>
+    <string name="animation_no_scroll_summary_on">Włączone</string>
+    <string name="animation_no_scroll_summary_off">Wyłączone</string>	
 	
 	<!-- Shortcut picker -->
-    <string name="use_custom_app_title">Use custom application</string>
-    <string name="use_custom_app_summary">Use custom application instead of the recent applications dialog</string>
-    <string name="select_custom_app_title">Select custom application</string>
-    <string name="group_applications">Applications</string>
+    <string name="use_custom_app_title">Użyj niestandardowej aplikacji</string>
+    <string name="use_custom_app_summary">Użyj niestandardowej aplikacji, zamiast okna dialogowego ostatnich aplikacji</string>
+    <string name="select_custom_app_title">Wybierz niestandarową aplikację</string>
+    <string name="group_applications">Aplikacje</string>
 
 	<!-- Toast Animations -->
-    <string name="toast_animation_title">Toast Animation</string>
-    <string name="toast_choose_animation">Choose Animation</string>
-    <string name="toast_none_animation">None</string>
-    <string name="toast_default_animation">Default</string>
-    <string name="toast_fade_animation">Fade</string>
-    <string name="toast_SlideRight_animation">Slide-Right</string>
-    <string name="toast_SlideLeft_animation">Slide-Left</string>
-    <string name="toast_Xylon_animation">Xylon</string>
-    <string name="toast_Toko_animation">Toko</string>
-    <string name="toast_Tn_animation">Tn</string>
-    <string name="toast_Honami_animation">Honami</string>
-    <string name="toast_FastFade_animation">Fast-Fade</string>
-    <string name="toast_GrowFade_animation">Grow-Fade</string>
-    <string name="toast_GrowFadeCenter_animation">Grow-Fade-Center</string>
-    <string name="toast_GrowFadeBottom_animation">Grow-Fade-Bottom</string>
-    <string name="toast_Translucent_animation">Translucent</string>
-    <string name="toast_Random_animation">Random</string>
-    <string name="toast_test_animation">Test toast animation</string>
+    <string name="toast_animation_title">Animacje Toast</string>
+    <string name="toast_choose_animation">Wybierz animację</string>
+    <string name="toast_none_animation">Brak</string>
+    <string name="toast_default_animation">Domyślne</string>
+    <string name="toast_fade_animation">Animacja Fade</string>
+    <string name="toast_SlideRight_animation">Animacja Slide-Right</string>
+    <string name="toast_SlideLeft_animation">Animacja Slide-Left</string>
+    <string name="toast_Xylon_animation">Animacja Xylon</string>
+    <string name="toast_Toko_animation">Animacja Toko</string>
+    <string name="toast_Tn_animation">Animacja Tn</string>
+    <string name="toast_Honami_animation">Animacja Honami</string>
+    <string name="toast_FastFade_animation">Animacja Fast-Fade</string>
+    <string name="toast_GrowFade_animation">Animacja Grow-Fade</string>
+    <string name="toast_GrowFadeCenter_animation">Animacja Grow-Fade-Center</string>
+    <string name="toast_GrowFadeBottom_animation">Animacja Grow-Fade-Bottom</string>
+    <string name="toast_Translucent_animation">Animacja Translucent</string>
+    <string name="toast_Random_animation">Losowo</string>
+    <string name="toast_test_animation">Testuj animacje Toast</string>
 
     <!-- General -->
     <string name="ok">OK</string>
-    <string name="help">Help</string>
+    <string name="help">Pomoc</string>
     <string name="reset">Reset</string>
-    <string name="reset_message">Reset all entries to default?</string>
+    <string name="reset_message">Czy zresetować wszystko do domyślnych ustawień?</string>
 
     <!-- Setting checkbox title for root access -->
-    <string name="root_access">Root access</string>
-    <string name="root_access_warning_title">Allow root access?</string>
-    <string name="root_access_warning_message">Allowing applications to request root access is very dangerous and could compromise the security of your system!</string>
-    <string name="root_access_none">Disabled</string>
-    <string name="root_access_apps">Apps only</string>
-    <string name="root_access_adb">ADB only</string>
-    <string name="root_access_all">Apps and ADB</string>
+    <string name="root_access">Uprawnienia roota</string>
+    <string name="root_access_warning_title">Zezwalać na dostęp do roota?</string>
+    <string name="root_access_warning_message">Zezwalanie aplikacją dostępu do roota jest bardzo niebezpieczne i może zagrozić bezpieczeństwu systemu!</string>
+    <string name="root_access_none">Wyłączone</string>
+    <string name="root_access_apps">Tylko aplikacje</string>
+    <string name="root_access_adb">Tylko ADB</string>
+    <string name="root_access_all">Aplikacje i ADB</string>
 
     <!-- Status bar - Clock -->
-    <string name="status_bar_clock_style_title">Clock style</string>
-    <string name="status_bar_clock_style_right">Right</string>
-    <string name="status_bar_clock_style_left">Left</string>
-    <string name="status_bar_clock_style_center">Center</string>
-    <string name="status_bar_clock_style_hidden">Hidden</string>
+    <string name="status_bar_clock_style_title">Styl zegara</string>
+    <string name="status_bar_clock_style_right">Zegar na prawo</string>
+    <string name="status_bar_clock_style_left">Zegar na lewo</string>
+    <string name="status_bar_clock_style_center">Zegar na środku</string>
+    <string name="status_bar_clock_style_hidden">Ukryty</string>
 
-    <string name="status_bar_am_pm_title">AM/PM style</string>
-    <string name="status_bar_am_pm_info">24-hour clock is enabled</string>
-    <string name="status_bar_am_pm_normal">Normal</string>
-    <string name="status_bar_am_pm_small">Small</string>
-    <string name="status_bar_am_pm_hidden">Hidden (default)</string>
+    <string name="status_bar_am_pm_title">AM/PM</string>
+    <string name="status_bar_am_pm_info">24-godzinny zegar włączony</string>
+    <string name="status_bar_am_pm_normal">Normalna wielkość czcionki</string>
+    <string name="status_bar_am_pm_small">Mała wielkość czcionki</string>
+    <string name="status_bar_am_pm_hidden">Ukryty (domyślny)</string>
 
     <!-- CPU Time in States -->
-    <string name="mt_refresh">Refresh</string>
+    <string name="mt_refresh">Odśwież</string>
     <string name="mt_reset">Reset</string>
-    <string name="mt_restore">Restore</string>
-    <string name="time_in_state">TIME IN STATE</string>
-    <string name="unused_cpu_states">UNUSED CPU STATES</string>
-    <string name="total_state_time">TOTAL STATE TIME</string>
-    <string name="no_states_file_found">No states file found. Are you sure your phone is compatible?\n\nIf you are running a custom ROM or kernel, try contacting its developer to inform him that the states file is not readable.</string>
-    <string name="deep_sleep">"Deep Sleep"</string> 
+    <string name="mt_restore">Przywróć</string>
+    <string name="time_in_state">UŻYCIE STANÓW W CZASIE</string>
+    <string name="unused_cpu_states">NIEUŻYWANE STANY CPU</string>
+    <string name="total_state_time">CAŁKOWITY CZAS UŻYWANIA CPU</string>
+    <string name="no_states_file_found">Brak pliku stanu. Na pewno używasz kompatybilnego urządzenia?\n\nJeśli używasz custom ROM lub kernel, spróbuj skontaktować się z CRXTeam.</string>
+    <string name="deep_sleep">"Głębokie uśpienie"</string> 
     
     <!-- Lockscreen shortcuts -->
-    <string name="lockscreen_settings_title">Lock screen</string>
-    <string name="lockscreen_targets_message">Lockscreen shortcuts</string>
-    <string name="lockscreen_default_target">Default</string>
-    <string name="lockscreen_message">Tap an icon on the left or right to reassign a lock screen shortcut.</string>
-    <string name="lockscreen_choose_action_title">Choose action</string>
+    <string name="lockscreen_settings_title">Ekran blokady</string>
+    <string name="lockscreen_targets_message">Skróty na ekranie blokady</string>
+    <string name="lockscreen_default_target">Domyślne</string>
+    <string name="lockscreen_message">Dotknij ikonę na lewo lub prawo, aby przypisać skrót na blokadzie ekranu.</string>
+    <string name="lockscreen_choose_action_title">Wybierz akcję</string>
 
     <!-- Picker -->
-    <string name="picker_activities">Activities</string>
-    <string name="select_custom_app_title">Select custom app</string>
-    <string name="select_custom_activity_title">Select custom activity</string>
-    <string name="profile_applist_title">Profile applist</string>
+    <string name="picker_activities">Aktywności</string>
+    <string name="select_custom_app_title">Wybierz niestandardową aplikację</string>
+    <string name="select_custom_activity_title">Wybierz niestandardową aktywność</string>
+    <string name="profile_applist_title">Profil applist</string>
 </resources>
