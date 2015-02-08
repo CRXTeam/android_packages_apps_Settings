@@ -26,17 +26,15 @@
     <string name="cpa_lockscreen_shortcuts_title">Skróty</string>
     <string name="cpa_clock_title">Ustawienia zegara</string>
     <string name="cpa_cpustates_title">Użycie stanów procesora</string>
-    
     <!-- CPA Summary -->
     <string name="cpa_animation_summary">Kontrola animacji</string>
     <string name="cpa_status_bar_summary">Ustawienia paska stanu</string>
     <string name="cpa_notification_drawer_summary">Ustawienia powiadomień</string>
     <string name="cpa_lockscreen_shortcuts_summary">Konfigurowalne skróty ekranu blokady</string>
     <string name="cpa_cpustates_summary">Statystyki CPU</string>
-    
     <!-- CPA Version -->
     <string name="cpa_version">Wersja CrystalPA2</string>
-    <string name="cpa_version_default">???</string>
+    <string name="cpa_version_default">Nie znana</string>
 
     <!-- Status bar - Battery Style -->
     <string name="status_bar_battery_style_title">Styl wskaźnika baterii</string>
