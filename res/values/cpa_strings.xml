@@ -24,11 +24,16 @@
     <string name="cpa_notification_drawer_title">Notification drawer</string>
     <string name="cpa_animation_title">Animations</string>
     <string name="cpa_lockscreen_shortcuts_title">Shortcuts</string>
+    <string name="cpa_clock_title">Clock settings</string>
+    <string name="cpa_cpustates_title">CPU Time in state</string>
+    
     <!-- CPA Summary -->
     <string name="cpa_animation_summary">Animations control</string>
     <string name="cpa_status_bar_summary">Status bar settings</string>
     <string name="cpa_notification_drawer_summary">Notification drawer options</string>
     <string name="cpa_lockscreen_shortcuts_summary">Configurable lockscreen shortcuts</string>
+    <string name="cpa_cpustates_summary">CPU States</string>
+    
     <!-- CPA Version -->
     <string name="cpa_version">CrystalPA2 version</string>
     <string name="cpa_version_default">Unknown</string>
@@ -74,7 +79,7 @@
     <string name="qs_main_tiles_summary_on">Two main tiles on the first row</string>
     <string name="qs_main_tiles_summary_off">Three tiles on each row</string>
 	
-	<!-- Animation Controls -->
+    <!-- Animation Controls -->
     <string name="animation_settings_reset_message">Reset all animation settings to default?</string>
     <string name="activity_open_title">Open In-App Activity Animation</string>
     <string name="activity_close_title">Close In-App Activity Animation</string>
@@ -108,7 +113,7 @@
     <string name="animation_grow_shrink_right">Grow in (Right)</string>
     <string name="animation_random">Random</string>
 
-	<!-- IME Animation Controls -->
+    <!-- IME Animation Controls -->
     <string name="ime_animation_title">Keyboard</string>
     <string name="ime_animation_test_title">Test IME Animation Here</string>
     <string name="ime_enter_animation_title">Enter Animation</string>
@@ -167,13 +172,13 @@
     <string name="animation_no_scroll_summary_on">Enabled</string>
     <string name="animation_no_scroll_summary_off">Disabled</string>	
 	
-	<!-- Shortcut picker -->
+    <!-- Shortcut picker -->
     <string name="use_custom_app_title">Use custom application</string>
     <string name="use_custom_app_summary">Use custom application instead of the recent applications dialog</string>
     <string name="select_custom_app_title">Select custom application</string>
     <string name="group_applications">Applications</string>
 
-	<!-- Toast Animations -->
+    <!-- Toast Animations -->
     <string name="toast_animation_title">Toast Animation</string>
     <string name="toast_choose_animation">Choose Animation</string>
     <string name="toast_none_animation">None</string>
@@ -199,95 +204,6 @@
     <string name="reset">Reset</string>
     <string name="reset_message">Reset all entries to default?</string>
 
-    <!-- DSLV -->
-    <string name="shortcut_action_none">None</string>
-    <string name="shortcut_action_longpress">Longpress:</string>
-    <string name="shortcut_action_select_action_longpress">Choose longpress action:</string>
-    <string name="shortcut_action_select_action">Choose action:</string>
-    <string name="shortcut_action_select_action_newaction">Choose new action:</string>
-    <string name="shortcut_action_reset">Reset</string>
-    <string name="shortcut_action_add">Add</string>
-    <string name="shortcut_action_reset_message">Reset all entries to default?</string>
-    <string name="shortcut_action_max">Maximum entries size has been reached</string>
-    <string name="shortcut_action_warning">Warning</string>
-    <string name="shortcut_action_warning_message">It is not possible to delete last entry</string>
-    <string name="shortcut_action_disable_message">Disabled\nAdd an entry to enable this feature</string>
-    <string name="shortcut_image_not_valid">The chosen app did not return a valid icon or does not support image cropping. Use another app.</string>
-    <string name="shortcut_duplicate_entry">The chosen action cannot be added twice</string>
-    <string name="shortcut_action_help_shortcut">shortcut</string>
-    <string name="shortcut_action_help_button">button</string>
-    <string name="shortcut_action_help_app">app</string>
-    <string name="shortcut_action_help_icon">, while selecting the icon will bring up customization options</string>
-    <string name="shortcut_action_help_main">To add a %1$s, select the Add icon. Once a %1$s is added, selecting the row will change the target%2$s\n\nTo remove a %1$s, swipe the row horizontally left or right. Re-order a %1$s in the list by vertically dragging the anchor on the left.\n\nTo clear or reset to defaults, select the Reset icon.</string>
-    <string name="shortcut_action_help_delete_last_entry">Removing every %1$s in the list will disable the feature entirely.</string>
-    <string name="shortcut_action_help_pie_second_layer_delete_last_entry">Removing every %1$s in the list will disable the second pie layer entirely.</string>
-
-
-    <string name="shortcuts_applications">Applications</string>
-    <string name="shortcuts_select_custom_app_title">Select custom application</string>
-    <string name="shortcuts_icon_picker_type">Select icon type:</string>
-    <string name="shortcuts_icon_default">Default</string>
-    <string name="shortcuts_icon_presets">System icons</string>
-    <string name="shortcuts_icon_custom">Gallery</string>
-    <string name="shortcuts_icon_picker_choose_icon_title">Choose icon</string>
-
-    <string name="shortcuts_icon_picker_alarm">Alarm</string>
-    <string name="shortcuts_icon_picker_andy">Andy</string>
-    <string name="shortcuts_icon_picker_battery">Battery</string>
-    <string name="shortcuts_icon_picker_browser">Browser</string>
-    <string name="shortcuts_icon_picker_calendar">Calendar</string>
-    <string name="shortcuts_icon_picker_camera">Camera</string>
-    <string name="shortcuts_icon_picker_cloud">Cloud</string>
-    <string name="shortcuts_icon_picker_contact">Contact</string>
-    <string name="shortcuts_icon_picker_directdial">Direct Dial</string>
-    <string name="shortcuts_icon_picker_directmessage">Direct Message</string>
-    <string name="shortcuts_icon_picker_drive">Drive</string>
-    <string name="shortcuts_icon_picker_dropbox">Dropbox</string>
-    <string name="shortcuts_icon_picker_email">Email</string>
-    <string name="shortcuts_icon_picker_email2">Email Alternate</string>
-    <string name="shortcuts_icon_picker_evernote">Evernote</string>
-    <string name="shortcuts_icon_picker_facebook">Facebook</string>
-    <string name="shortcuts_icon_picker_favorite">Favorite</string>
-    <string name="shortcuts_icon_picker_file_browser">File Browser</string>
-    <string name="shortcuts_icon_picker_file_browser2">File Browser Alternate</string>
-    <string name="shortcuts_icon_picker_fitness">Fitness</string>
-    <string name="shortcuts_icon_picker_gallery">Gallery</string>
-    <string name="shortcuts_icon_picker_gears">Gears</string>
-    <string name="shortcuts_icon_picker_google_small">Google</string>
-    <string name="shortcuts_icon_picker_gplus">Google Plus</string>
-    <string name="shortcuts_icon_picker_gtalk">Hangouts</string>
-    <string name="shortcuts_icon_picker_help">Help</string>
-    <string name="shortcuts_icon_picker_joystick">Joystick</string>
-    <string name="shortcuts_icon_picker_key">Keys/Accounts</string>
-    <string name="shortcuts_icon_picker_laptop">Laptop</string>
-    <string name="shortcuts_icon_picker_notes">Notes</string>
-    <string name="shortcuts_icon_picker_luggage">Travel</string>
-    <string name="shortcuts_icon_picker_maps">Maps</string>
-    <string name="shortcuts_icon_picker_market">Market</string>
-    <string name="shortcuts_icon_picker_movie">Movies</string>
-    <string name="shortcuts_icon_picker_music">Music</string>
-    <string name="shortcuts_icon_picker_nav">Navigation</string>
-    <string name="shortcuts_icon_picker_phone">Phone</string>
-    <string name="shortcuts_icon_picker_package">Package</string>
-    <string name="shortcuts_icon_picker_pinterest">Pinterest</string>
-    <string name="shortcuts_icon_picker_play">Play</string>
-    <string name="shortcuts_icon_picker_pocket">Pocket</string>
-    <string name="shortcuts_icon_picker_quicksettings">Quick Settings</string>
-    <string name="shortcuts_icon_picker_rss">RSS Feed</string>
-    <string name="shortcuts_icon_picker_sdcard">SDCard</string>
-    <string name="shortcuts_icon_picker_search">Search</string>
-    <string name="shortcuts_icon_picker_sms">Messaging</string>
-    <string name="shortcuts_icon_picker_tasks">Tasks</string>
-    <string name="shortcuts_icon_picker_terminal">Terminal</string>
-    <string name="shortcuts_icon_picker_transit">Transit</string>
-    <string name="shortcuts_icon_picker_tv">TV</string>
-    <string name="shortcuts_icon_picker_twitter">Twitter</string>
-    <string name="shortcuts_icon_picker_unlock">Unlock</string>
-
-    <!-- Lockscreen Shortcuts -->
-    <string name="lockscreen_shorcuts_longpress_title">Shortcuts longpress</string>
-    <string name="lockscreen_shorcuts_longpress_summary">Open custom lock screen shortcuts on longpress</string>
-
     <!-- Setting checkbox title for root access -->
     <string name="root_access">Root access</string>
     <string name="root_access_warning_title">Allow root access?</string>
@@ -297,4 +213,39 @@
     <string name="root_access_adb">ADB only</string>
     <string name="root_access_all">Apps and ADB</string>
 
+    <!-- Status bar - Clock -->
+    <string name="status_bar_clock_style_title">Clock style</string>
+    <string name="status_bar_clock_style_right">Right</string>
+    <string name="status_bar_clock_style_left">Left</string>
+    <string name="status_bar_clock_style_center">Center</string>
+    <string name="status_bar_clock_style_hidden">Hidden</string>
+
+    <string name="status_bar_am_pm_title">AM/PM style</string>
+    <string name="status_bar_am_pm_info">24-hour clock is enabled</string>
+    <string name="status_bar_am_pm_normal">Normal</string>
+    <string name="status_bar_am_pm_small">Small</string>
+    <string name="status_bar_am_pm_hidden">Hidden (default)</string>
+
+    <!-- CPU Time in States -->
+    <string name="mt_refresh">Refresh</string>
+    <string name="mt_reset">Reset</string>
+    <string name="mt_restore">Restore</string>
+    <string name="time_in_state">TIME IN STATE</string>
+    <string name="unused_cpu_states">UNUSED CPU STATES</string>
+    <string name="total_state_time">TOTAL STATE TIME</string>
+    <string name="no_states_file_found">No states file found. Are you sure your phone is compatible?\n\nIf you are running a custom ROM or kernel, try contacting its developer to inform him that the states file is not readable.</string>
+    <string name="deep_sleep">"Deep Sleep"</string> 
+
+    <!-- Lockscreen shortcuts -->
+    <string name="lockscreen_settings_title">Lock screen</string>
+    <string name="lockscreen_targets_message">Lockscreen shortcuts</string>
+    <string name="lockscreen_default_target">Default</string>
+    <string name="lockscreen_message">Tap an icon on the left or right to reassign a lock screen shortcut.</string>
+    <string name="lockscreen_choose_action_title">Choose action</string>
+    
+    <!-- Picker -->
+    <string name="picker_activities">Activities</string>
+    <string name="select_custom_app_title">Select custom app</string>
+    <string name="select_custom_activity_title">Select custom activity</string>
+    <string name="profile_applist_title">Profile applist</string>
 </resources>
