@@ -77,7 +77,7 @@
     <string name="qs_main_tiles_summary_on">Two main tiles on the first row</string>
     <string name="qs_main_tiles_summary_off">Three tiles on each row</string>
 	
-	<!-- Animation Controls -->
+    <!-- Animation Controls -->
     <string name="animation_settings_reset_message">Reset all animation settings to default?</string>
     <string name="activity_open_title">Open In-App Activity Animation</string>
     <string name="activity_close_title">Close In-App Activity Animation</string>
@@ -111,7 +111,7 @@
     <string name="animation_grow_shrink_right">Grow in (Right)</string>
     <string name="animation_random">Random</string>
 
-	<!-- IME Animation Controls -->
+    <!-- IME Animation Controls -->
     <string name="ime_animation_title">Keyboard</string>
     <string name="ime_animation_test_title">Test IME Animation Here</string>
     <string name="ime_enter_animation_title">Enter Animation</string>
@@ -170,13 +170,13 @@
     <string name="animation_no_scroll_summary_on">Enabled</string>
     <string name="animation_no_scroll_summary_off">Disabled</string>	
 	
-	<!-- Shortcut picker -->
+    <!-- Shortcut picker -->
     <string name="use_custom_app_title">Use custom application</string>
     <string name="use_custom_app_summary">Use custom application instead of the recent applications dialog</string>
     <string name="select_custom_app_title">Select custom application</string>
     <string name="group_applications">Applications</string>
 
-	<!-- Toast Animations -->
+    <!-- Toast Animations -->
     <string name="toast_animation_title">Toast Animation</string>
     <string name="toast_choose_animation">Choose Animation</string>
     <string name="toast_none_animation">None</string>
@@ -240,6 +240,7 @@
     <string name="lockscreen_default_target">Default</string>
     <string name="lockscreen_message">Tap an icon on the left or right to reassign a lock screen shortcut.</string>
     <string name="lockscreen_choose_action_title">Choose action</string>
+
     <!-- Picker -->
     <string name="picker_activities">Activities</string>
     <string name="select_custom_app_title">Select custom app</string>
