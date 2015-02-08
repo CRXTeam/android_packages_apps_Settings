@@ -34,7 +34,7 @@
     <string name="cpa_cpustates_summary">Statystyki CPU</string>
     <!-- CPA Version -->
     <string name="cpa_version">Wersja CrystalPA2</string>
-    <string name="cpa_version_default">Nie znana</string>
+    <string name="cpa_version_default">Nieznana</string>
 
     <!-- Status bar - Battery Style -->
     <string name="status_bar_battery_style_title">Styl wskaźnika baterii</string>
