@@ -26,12 +26,14 @@
     <string name="cpa_lockscreen_shortcuts_title">Shortcuts</string>
     <string name="cpa_clock_title">Clock settings</string>
     <string name="cpa_cpustates_title">CPU Time in state</string>
+    <string name="cpa_superuser_title">Superuser</string>
     <!-- CPA Summary -->
     <string name="cpa_animation_summary">Animations control</string>
     <string name="cpa_status_bar_summary">Status bar settings</string>
     <string name="cpa_notification_drawer_summary">Notification drawer options</string>
     <string name="cpa_lockscreen_shortcuts_summary">Configurable lockscreen shortcuts</string>
     <string name="cpa_cpustates_summary">CPU States</string>
+    <string name="cpa_superuser_summary">Superuser app</string>
     <!-- CPA Version -->
     <string name="cpa_version">CrystalPA2 version</string>
     <string name="cpa_version_default">Unknown</string>

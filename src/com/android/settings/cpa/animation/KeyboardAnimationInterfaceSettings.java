@@ -107,7 +107,7 @@ public class KeyboardAnimationInterfaceSettings extends SettingsPreferenceFragme
         }
         mAnimationImeInterpolator.setOnPreferenceChangeListener(this);
 
-        int imeDuration = Settings.PAC.getInt(mResolver,
+        int imeDuration = Settings.CPA.getInt(mResolver,
                 Settings.CPA.ANIMATION_IME_DURATION, 0);
         mAnimationImeDuration = (SeekBarPreferenceCham) prefSet.findPreference(IME_ANIM_DURATION);
         mAnimationImeDuration.setValue(imeDuration);
@@ -175,24 +175,24 @@ public class KeyboardAnimationInterfaceSettings extends SettingsPreferenceFragme
     public boolean onPreferenceChange(Preference preference, Object objValue) {
         if (preference == mAnimationImeDuration) {
             int val = ((Integer)objValue).intValue();
-            Settings.PAC.putInt(mResolver,
+            Settings.CPA.putInt(mResolver,
                     Settings.CPA.ANIMATION_IME_DURATION,
                     val);
         } else if (preference == mAnimationImeEnter) {
             int val = Integer.parseInt((String) objValue);
-            Settings.PAC.putInt(mResolver,
+            Settings.CPA.putInt(mResolver,
                     Settings.CPA.ANIMATION_IME_ENTER,
                     val);
             mAnimationImeEnter.setSummary(getProperSummary(mAnimationImeEnter));
         } else if (preference == mAnimationImeExit) {
             int val = Integer.parseInt((String) objValue);
-            Settings.PAC.putInt(mResolver,
+            Settings.CPA.putInt(mResolver,
                     Settings.CPA.ANIMATION_IME_EXIT,
                     val);
             mAnimationImeExit.setSummary(getProperSummary(mAnimationImeExit));
         } else if (preference == mAnimationImeInterpolator) {
             int val = Integer.parseInt((String) objValue);
-            Settings.PAC.putInt(mResolver,
+            Settings.CPA.putInt(mResolver,
                     Settings.CPA.ANIMATION_IME_INTERPOLATOR,
                     val);
             mAnimationImeInterpolator.setSummary(getListInterpolatorName(val));
@@ -214,7 +214,7 @@ public class KeyboardAnimationInterfaceSettings extends SettingsPreferenceFragme
             mString = Settings.CPA.ANIMATION_IME_DURATION;
         }
 
-        Settings.PAC.putInt(mResolver, mString, val);
+        Settings.CPA.putInt(mResolver, mString, val);
     }
 
     private String getProperSummary(Preference preference) {
@@ -225,7 +225,7 @@ public class KeyboardAnimationInterfaceSettings extends SettingsPreferenceFragme
             mString = Settings.CPA.ANIMATION_IME_EXIT;
         }
 
-        String mNum = Settings.PAC.getString(mResolver, mString);
+        String mNum = Settings.CPA.getString(mResolver, mString);
         return AwesomeAnimationHelper.getProperName(mContext.getResources(), Integer.valueOf(mNum));
     }
 
@@ -239,7 +239,7 @@ public class KeyboardAnimationInterfaceSettings extends SettingsPreferenceFragme
             mString = Settings.CPA.ANIMATION_IME_INTERPOLATOR;
         }
 
-        return Settings.PAC.getString(mResolver, mString);
+        return Settings.CPA.getString(mResolver, mString);
     }
 
     private String getListInterpolatorName(int index) {

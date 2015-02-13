@@ -98,7 +98,7 @@ public class StatusBar extends SettingsPreferenceFragment implements Preference.
         mStatusBarClock = (ListPreference) findPreference(STATUS_BAR_CLOCK_STYLE);
         mStatusBarAmPm = (ListPreference) findPreference(STATUS_BAR_AM_PM);
 
-        int clockStyle = Settings.PAC.getInt(resolver,
+        int clockStyle = Settings.CPA.getInt(resolver,
                 Settings.CPA.STATUS_BAR_CLOCK, 1);
         mStatusBarClock.setValue(String.valueOf(clockStyle));
         mStatusBarClock.setSummary(mStatusBarClock.getEntry());
@@ -108,7 +108,7 @@ public class StatusBar extends SettingsPreferenceFragment implements Preference.
             mStatusBarAmPm.setEnabled(false);
             mStatusBarAmPm.setSummary(R.string.status_bar_am_pm_info);
         } else {
-            int statusBarAmPm = Settings.PAC.getInt(resolver,
+            int statusBarAmPm = Settings.CPA.getInt(resolver,
                     Settings.CPA.STATUS_BAR_AM_PM, 2);
             mStatusBarAmPm.setValue(String.valueOf(statusBarAmPm));
             mStatusBarAmPm.setSummary(mStatusBarAmPm.getEntry());
@@ -151,7 +151,7 @@ public class StatusBar extends SettingsPreferenceFragment implements Preference.
         if (preference == mStatusBarClock) {
             int clockStyle = Integer.parseInt((String) newValue);
             int index = mStatusBarClock.findIndexOfValue((String) newValue);
-            Settings.PAC.putInt(
+            Settings.CPA.putInt(
                     resolver, STATUS_BAR_CLOCK_STYLE, clockStyle);
             mStatusBarClock.setSummary(mStatusBarClock.getEntries()[index]);
             Helpers.restartSystemUI();
@@ -159,7 +159,7 @@ public class StatusBar extends SettingsPreferenceFragment implements Preference.
         } else if (preference == mStatusBarAmPm) {
             int statusBarAmPm = Integer.valueOf((String) newValue);
             int index = mStatusBarAmPm.findIndexOfValue((String) newValue);
-            Settings.PAC.putInt(
+            Settings.CPA.putInt(
                     resolver, STATUS_BAR_AM_PM, statusBarAmPm);
             mStatusBarAmPm.setSummary(mStatusBarAmPm.getEntries()[index]);
             return true;

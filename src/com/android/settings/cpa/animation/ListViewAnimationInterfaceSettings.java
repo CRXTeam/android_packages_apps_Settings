@@ -97,7 +97,7 @@ public class ListViewAnimationInterfaceSettings extends SettingsPreferenceFragme
         }
         mListViewInterpolator.setOnPreferenceChangeListener(this);
 
-        int listviewDuration = Settings.PAC.getInt(mResolver,
+        int listviewDuration = Settings.CPA.getInt(mResolver,
                 Settings.CPA.LISTVIEW_DURATION, 0);
         mListViewDuration = (SeekBarPreferenceCham) prefSet.findPreference(LISTVIEW_ANIM_DURATION);
         mListViewDuration.setValue(listviewDuration);
@@ -159,7 +159,7 @@ public class ListViewAnimationInterfaceSettings extends SettingsPreferenceFragme
         mListViewInterpolator.setSummary(getListInterpolatorName(0));
         setProperVal(mListViewCache, 0);
         mListViewCache.setSummary(getListCacheName(0));
-        Settings.PAC.putString(getContentResolver(),
+        Settings.CPA.putString(getContentResolver(),
                 Settings.CPA.LISTVIEW_ANIMATION_EXCLUDED_APPS, "");
         mExcludedAppsPref.setClearValues();
     }
@@ -173,21 +173,21 @@ public class ListViewAnimationInterfaceSettings extends SettingsPreferenceFragme
     public boolean onPreferenceChange(Preference preference, Object objValue) {
         if (preference == mListViewAnimation) {
             int val = Integer.parseInt((String) objValue);
-            Settings.PAC.putInt(mResolver, Settings.CPA.LISTVIEW_ANIMATION, val);
+            Settings.CPA.putInt(mResolver, Settings.CPA.LISTVIEW_ANIMATION, val);
             mListViewAnimation.setSummary(getListAnimationName(val));
         } else if (preference == mListViewCache) {
             int val = Integer.parseInt((String) objValue);
-            Settings.PAC.putInt(mResolver, Settings.CPA.LISTVIEW_ANIMATION_CACHE, val);
+            Settings.CPA.putInt(mResolver, Settings.CPA.LISTVIEW_ANIMATION_CACHE, val);
             mListViewCache.setSummary(getListCacheName(val));
         } else if (preference == mListViewInterpolator) {
             int val = Integer.parseInt((String) objValue);
-            Settings.PAC.putInt(mResolver, Settings.CPA.LISTVIEW_INTERPOLATOR, val);
+            Settings.CPA.putInt(mResolver, Settings.CPA.LISTVIEW_INTERPOLATOR, val);
             mListViewInterpolator.setSummary(getListInterpolatorName(val));
         } else if (preference == mExcludedAppsPref) {
             storeExcludedApps((Set<String>) objValue);
         } else if (preference == mListViewDuration) {
             int val = ((Integer)objValue).intValue();
-            Settings.PAC.putInt(mResolver,
+            Settings.CPA.putInt(mResolver,
                     Settings.CPA.LISTVIEW_DURATION,
                     val);
         } else {
@@ -208,7 +208,7 @@ public class ListViewAnimationInterfaceSettings extends SettingsPreferenceFragme
             mString = Settings.CPA.LISTVIEW_DURATION;
         }
 
-        Settings.PAC.putInt(mContext.getContentResolver(), mString, val);
+        Settings.CPA.putInt(mContext.getContentResolver(), mString, val);
     }
 
     private String getProperVal(Preference preference) {
@@ -221,7 +221,7 @@ public class ListViewAnimationInterfaceSettings extends SettingsPreferenceFragme
             mString = Settings.CPA.LISTVIEW_INTERPOLATOR;
         }
 
-        return Settings.PAC.getString(mContext.getContentResolver(), mString);
+        return Settings.CPA.getString(mContext.getContentResolver(), mString);
     }
 
     private String getListAnimationName(int index) {
@@ -240,7 +240,7 @@ public class ListViewAnimationInterfaceSettings extends SettingsPreferenceFragme
     }
 
     private Set<String> getExcludedApps() {
-        String excluded = Settings.PAC.getString(getContentResolver(),
+        String excluded = Settings.CPA.getString(getContentResolver(),
                 Settings.CPA.LISTVIEW_ANIMATION_EXCLUDED_APPS);
         if (TextUtils.isEmpty(excluded))
             return null;
@@ -256,7 +256,7 @@ public class ListViewAnimationInterfaceSettings extends SettingsPreferenceFragme
             builder.append(value);
             delimiter = "|";
         }
-        Settings.PAC.putString(getContentResolver(),
+        Settings.CPA.putString(getContentResolver(),
                 Settings.CPA.LISTVIEW_ANIMATION_EXCLUDED_APPS, builder.toString());
     }
 

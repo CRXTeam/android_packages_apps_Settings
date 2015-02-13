@@ -99,7 +99,7 @@ public class SystemAnimationInterfaceSettings extends SettingsPreferenceFragment
         }
 
         mAnimNoOverride = (SwitchPreference) prefSet.findPreference(ANIMATION_NO_OVERRIDE);
-        mAnimNoOverride.setChecked(Settings.PAC.getInt(mResolver,
+        mAnimNoOverride.setChecked(Settings.CPA.getInt(mResolver,
                 Settings.CPA.ANIMATION_CONTROLS_NO_OVERRIDE, 0) == 1);
         mAnimNoOverride.setOnPreferenceChangeListener(this);
 
@@ -193,7 +193,7 @@ public class SystemAnimationInterfaceSettings extends SettingsPreferenceFragment
         mWallpaperIntraClose.setEntries(mAnimationsStrings);
         mWallpaperIntraClose.setEntryValues(mAnimationsNum);
 
-        int defaultDuration = Settings.PAC.getInt(mResolver,
+        int defaultDuration = Settings.CPA.getInt(mResolver,
                 Settings.CPA.ANIMATION_CONTROLS_DURATION, 0);
         mAnimationDuration = (SeekBarPreferenceCham) prefSet.findPreference(ANIMATION_DURATION);
         mAnimationDuration.setValue(defaultDuration);
@@ -284,60 +284,60 @@ public class SystemAnimationInterfaceSettings extends SettingsPreferenceFragment
     public boolean onPreferenceChange(Preference preference, Object objValue) {
         if (preference == mAnimNoOverride) {
             boolean value = (Boolean) objValue;
-            Settings.PAC.putInt(mResolver, Settings.CPA.ANIMATION_CONTROLS_NO_OVERRIDE, value ? 1 : 0);
+            Settings.CPA.putInt(mResolver, Settings.CPA.ANIMATION_CONTROLS_NO_OVERRIDE, value ? 1 : 0);
         } else if (preference == mActivityOpenPref) {
             int val = Integer.parseInt((String) objValue);
-            Settings.PAC.putInt(mResolver,
+            Settings.CPA.putInt(mResolver,
                     Settings.CPA.ACTIVITY_ANIMATION_CONTROLS[0], val);
             mActivityOpenPref.setSummary(getProperSummary(mActivityOpenPref));
         } else if (preference == mActivityClosePref) {
             int val = Integer.parseInt((String) objValue);
-            Settings.PAC.putInt(mResolver,
+            Settings.CPA.putInt(mResolver,
                     Settings.CPA.ACTIVITY_ANIMATION_CONTROLS[1], val);
             mActivityClosePref.setSummary(getProperSummary(mActivityClosePref));
         } else if (preference == mTaskOpenPref) {
             int val = Integer.parseInt((String) objValue);
-            Settings.PAC.putInt(mResolver,
+            Settings.CPA.putInt(mResolver,
                     Settings.CPA.ACTIVITY_ANIMATION_CONTROLS[2], val);
             mTaskOpenPref.setSummary(getProperSummary(mTaskOpenPref));
         } else if (preference == mTaskClosePref) {
             int val = Integer.parseInt((String) objValue);
-            Settings.PAC.putInt(mResolver,
+            Settings.CPA.putInt(mResolver,
                     Settings.CPA.ACTIVITY_ANIMATION_CONTROLS[3], val);
             mTaskClosePref.setSummary(getProperSummary(mTaskClosePref));
         } else if (preference == mTaskMoveToFrontPref) {
             int val = Integer.parseInt((String) objValue);
-            Settings.PAC.putInt(mResolver,
+            Settings.CPA.putInt(mResolver,
                     Settings.CPA.ACTIVITY_ANIMATION_CONTROLS[4], val);
             mTaskMoveToFrontPref.setSummary(getProperSummary(mTaskMoveToFrontPref));
         } else if (preference == mTaskMoveToBackPref) {
             int val = Integer.parseInt((String) objValue);
-            Settings.PAC.putInt(mResolver,
+            Settings.CPA.putInt(mResolver,
                     Settings.CPA.ACTIVITY_ANIMATION_CONTROLS[5], val);
             mTaskMoveToBackPref.setSummary(getProperSummary(mTaskMoveToBackPref));
         } else if (preference == mWallpaperOpen) {
             int val = Integer.parseInt((String) objValue);
-            Settings.PAC.putInt(mResolver,
+            Settings.CPA.putInt(mResolver,
                     Settings.CPA.ACTIVITY_ANIMATION_CONTROLS[6], val);
             mWallpaperOpen.setSummary(getProperSummary(mWallpaperOpen));
         } else if (preference == mWallpaperClose) {
             int val = Integer.parseInt((String) objValue);
-            Settings.PAC.putInt(mResolver,
+            Settings.CPA.putInt(mResolver,
                     Settings.CPA.ACTIVITY_ANIMATION_CONTROLS[7], val);
             mWallpaperClose.setSummary(getProperSummary(mWallpaperClose));
         } else if (preference == mWallpaperIntraOpen) {
             int val = Integer.parseInt((String) objValue);
-            Settings.PAC.putInt(mResolver,
+            Settings.CPA.putInt(mResolver,
                     Settings.CPA.ACTIVITY_ANIMATION_CONTROLS[8], val);
             mWallpaperIntraOpen.setSummary(getProperSummary(mWallpaperIntraOpen));
         } else if (preference == mWallpaperIntraClose) {
             int val = Integer.parseInt((String) objValue);
-            Settings.PAC.putInt(mResolver,
+            Settings.CPA.putInt(mResolver,
                     Settings.CPA.ACTIVITY_ANIMATION_CONTROLS[9], val);
             mWallpaperIntraClose.setSummary(getProperSummary(mWallpaperIntraClose));
         } else if (preference == mAnimationDuration) {
             int val = ((Integer)objValue).intValue();
-            Settings.PAC.putInt(mResolver,
+            Settings.CPA.putInt(mResolver,
                     Settings.CPA.ANIMATION_CONTROLS_DURATION,
                     val);
         } else {
@@ -370,7 +370,7 @@ public class SystemAnimationInterfaceSettings extends SettingsPreferenceFragment
             mString = Settings.CPA.ACTIVITY_ANIMATION_CONTROLS[9];
         }
 
-        Settings.PAC.putInt(mResolver, mString, val);
+        Settings.CPA.putInt(mResolver, mString, val);
     }
 
     private String getProperSummary(Preference preference) {
@@ -397,7 +397,7 @@ public class SystemAnimationInterfaceSettings extends SettingsPreferenceFragment
             mString = Settings.CPA.ACTIVITY_ANIMATION_CONTROLS[9];
         }
 
-        String mNum = Settings.PAC.getString(mResolver, mString);
+        String mNum = Settings.CPA.getString(mResolver, mString);
         return AwesomeAnimationHelper.getProperName(mContext.getResources(), Integer.valueOf(mNum));
     }
 
@@ -425,7 +425,7 @@ public class SystemAnimationInterfaceSettings extends SettingsPreferenceFragment
             mString = Settings.CPA.ACTIVITY_ANIMATION_CONTROLS[9];
         }
 
-        return Settings.PAC.getString(mResolver, mString);
+        return Settings.CPA.getString(mResolver, mString);
     }
 
 }

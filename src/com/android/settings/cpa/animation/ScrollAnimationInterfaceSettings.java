@@ -73,29 +73,29 @@ public class ScrollAnimationInterfaceSettings extends SettingsPreferenceFragment
         mResolver = mContext.getContentResolver();
 
         mAnimNoScroll = (SwitchPreference) prefSet.findPreference(ANIMATION_NO_SCROLL);
-        mAnimNoScroll.setChecked(Settings.PAC.getInt(mResolver,
+        mAnimNoScroll.setChecked(Settings.CPA.getInt(mResolver,
                 Settings.CPA.ANIMATION_CONTROLS_NO_SCROLL, 0) == 1);
         mAnimNoScroll.setOnPreferenceChangeListener(this);
 
-        float defaultScroll = Settings.PAC.getFloat(mResolver,
+        float defaultScroll = Settings.CPA.getFloat(mResolver,
                 Settings.CPA.CUSTOM_SCROLL_FRICTION, ViewConfiguration.DEFAULT_SCROLL_FRICTION);
         mAnimationScroll = (SeekBarPreferenceCham) prefSet.findPreference(ANIMATION_SCROLL_FRICTION);
         mAnimationScroll.setValue((int) (defaultScroll * MULTIPLIER_SCROLL_FRICTION));
         mAnimationScroll.setOnPreferenceChangeListener(this);
 
-        int defaultFling = Settings.PAC.getInt(mResolver,
+        int defaultFling = Settings.CPA.getInt(mResolver,
                 Settings.CPA.CUSTOM_FLING_VELOCITY, ViewConfiguration.DEFAULT_MAXIMUM_FLING_VELOCITY);
         mAnimationFling = (SeekBarPreferenceCham) prefSet.findPreference(ANIMATION_FLING_VELOCITY);
         mAnimationFling.setValue(defaultFling);
         mAnimationFling.setOnPreferenceChangeListener(this);
 
-        int defaultOverScroll = Settings.PAC.getInt(mResolver,
+        int defaultOverScroll = Settings.CPA.getInt(mResolver,
                 Settings.CPA.CUSTOM_OVERSCROLL_DISTANCE, ViewConfiguration.DEFAULT_OVERSCROLL_DISTANCE);
         mAnimationOverScroll = (SeekBarPreferenceCham) prefSet.findPreference(ANIMATION_OVERSCROLL_DISTANCE);
         mAnimationOverScroll.setValue(defaultOverScroll);
         mAnimationOverScroll.setOnPreferenceChangeListener(this);
 
-        int defaultOverFling = Settings.PAC.getInt(mResolver,
+        int defaultOverFling = Settings.CPA.getInt(mResolver,
                 Settings.CPA.CUSTOM_OVERFLING_DISTANCE, ViewConfiguration.DEFAULT_OVERFLING_DISTANCE);
         mAnimationOverFling = (SeekBarPreferenceCham) prefSet.findPreference(ANIMATION_OVERFLING_DISTANCE);
         mAnimationOverFling.setValue(defaultOverFling);
@@ -147,7 +147,7 @@ public class ScrollAnimationInterfaceSettings extends SettingsPreferenceFragment
 
     private void resetAllSettings() {
         setProperVal(mAnimationFling, ViewConfiguration.DEFAULT_MAXIMUM_FLING_VELOCITY);
-        Settings.PAC.putFloat(mResolver,
+        Settings.CPA.putFloat(mResolver,
                    Settings.CPA.CUSTOM_SCROLL_FRICTION, ViewConfiguration.DEFAULT_SCROLL_FRICTION);
         setProperVal(mAnimationOverScroll, ViewConfiguration.DEFAULT_OVERSCROLL_DISTANCE);
         setProperVal(mAnimationOverFling, ViewConfiguration.DEFAULT_OVERFLING_DISTANCE);
@@ -163,25 +163,25 @@ public class ScrollAnimationInterfaceSettings extends SettingsPreferenceFragment
     public boolean onPreferenceChange(Preference preference, Object objValue) {
         if (preference == mAnimNoScroll) {
             boolean value = (Boolean) objValue;
-            Settings.PAC.putInt(mResolver, Settings.CPA.ANIMATION_CONTROLS_NO_SCROLL, value ? 1 : 0);
+            Settings.CPA.putInt(mResolver, Settings.CPA.ANIMATION_CONTROLS_NO_SCROLL, value ? 1 : 0);
         } else if (preference == mAnimationScroll) {
             int val = ((Integer)objValue).intValue();
-            Settings.PAC.putFloat(mResolver,
+            Settings.CPA.putFloat(mResolver,
                    Settings.CPA.CUSTOM_SCROLL_FRICTION,
                    ((float) (val / MULTIPLIER_SCROLL_FRICTION)));
         } else if (preference == mAnimationFling) {
             int val = ((Integer)objValue).intValue();
-            Settings.PAC.putInt(mResolver,
+            Settings.CPA.putInt(mResolver,
                     Settings.CPA.CUSTOM_FLING_VELOCITY,
                     val);
         } else if (preference == mAnimationOverScroll) {
             int val = ((Integer)objValue).intValue();
-            Settings.PAC.putInt(mResolver,
+            Settings.CPA.putInt(mResolver,
                     Settings.CPA.CUSTOM_OVERSCROLL_DISTANCE,
                     val);
         } else if (preference == mAnimationOverFling) {
             int val = ((Integer)objValue).intValue();
-            Settings.PAC.putInt(mResolver,
+            Settings.CPA.putInt(mResolver,
                     Settings.CPA.CUSTOM_OVERFLING_DISTANCE,
                     val);
         } else {
@@ -202,7 +202,7 @@ public class ScrollAnimationInterfaceSettings extends SettingsPreferenceFragment
             mString = Settings.CPA.CUSTOM_OVERFLING_DISTANCE;
         }
 
-        Settings.PAC.putInt(mResolver, mString, val);
+        Settings.CPA.putInt(mResolver, mString, val);
     }
 
 }

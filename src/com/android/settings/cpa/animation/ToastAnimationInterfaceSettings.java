@@ -53,7 +53,7 @@ public class ToastAnimationInterfaceSettings extends SettingsPreferenceFragment 
         mResolver = mContext.getContentResolver();
 
         mToastAnimation = (ListPreference) prefSet.findPreference(PREF_TOAST_ANIMATION);
-        mToastAnimation.setValue(Integer.toString(Settings.PAC.getInt(mResolver,
+        mToastAnimation.setValue(Integer.toString(Settings.CPA.getInt(mResolver,
              Settings.CPA.ANIMATION_TOAST, 1)));
         mToastAnimation.setSummary(mToastAnimation.getEntry());
         mToastAnimation.setOnPreferenceChangeListener(this);
@@ -76,7 +76,7 @@ public class ToastAnimationInterfaceSettings extends SettingsPreferenceFragment 
         if (preference == mToastAnimation) {
             int val = Integer.parseInt((String) objValue);
             int index = mToastAnimation.findIndexOfValue((String) objValue);
-            Settings.PAC.putInt(mResolver,
+            Settings.CPA.putInt(mResolver,
                     Settings.CPA.ANIMATION_TOAST, val);
             mToastAnimation.setSummary(mToastAnimation.getEntries()[index]);
         } else {
