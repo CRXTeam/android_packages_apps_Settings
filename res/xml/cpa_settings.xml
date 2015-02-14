@@ -58,14 +58,6 @@
             android:summary="@string/cpa_cpustates_summary"
             android:fragment="com.android.settings.cpa.cpustats.TimeInState"
            />
-           
-        <!-- Superuser -->
-        <PreferenceScreen
-            android:id="@+id/superuser_settings"
-            android:title="@string/cpa_superuser_title"
-            android:summary="@string/cpa_superuser_summary"
-            android:fragment="com.android.settings.cyanogenmod.superuser.PolicyNativeFragment"
-            />
 
 </PreferenceScreen>
 
