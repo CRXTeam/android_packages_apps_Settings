@@ -60,14 +60,6 @@
             android:fragment="com.android.settings.cyanogenmod.PrivacySettings"
             />
 
-        <!-- CPU Time in state -->
-        <PreferenceScreen
-            android:key="cpustat_menu"
-            android:title="@string/cpa_cpustates_title"
-            android:summary="@string/cpa_cpustates_summary"
-            android:fragment="com.android.settings.cpa.cpustats.TimeInState"
-           />
-
 </PreferenceScreen>
 
 

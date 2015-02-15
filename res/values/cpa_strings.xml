@@ -25,16 +25,22 @@
     <string name="cpa_animation_title">Animations</string>
     <string name="cpa_lockscreen_shortcuts_title">Shortcuts</string>
     <string name="cpa_clock_title">Clock settings</string>
+<<<<<<< HEAD
     <string name="cpa_cpustates_title">CPU Time in state</string>
     <string name="cpa_privacy_settings_title">Privacy</string>
     <string name="cpa_partition_info_title">Partition info</string>
+=======
+>>>>>>> parent of 6bad8bc... CPU Time in States
     <!-- CPA Summary -->
     <string name="cpa_animation_summary">Animations control</string>
     <string name="cpa_status_bar_summary">Status bar settings</string>
     <string name="cpa_notification_drawer_summary">Notification drawer options</string>
     <string name="cpa_lockscreen_shortcuts_summary">Configurable lockscreen shortcuts</string>
+<<<<<<< HEAD
     <string name="cpa_cpustates_summary">CPU States</string>
     <string name="cpa_privacy_settings_summary">CyanogenMod Privacy Settings</string>
+=======
+>>>>>>> parent of 6bad8bc... CPU Time in States
     <!-- CPA Version -->
     <string name="cpa_version">CrystalPA2 version</string>
     <string name="cpa_version_default">Unknown</string>
@@ -217,16 +223,6 @@
     <string name="status_bar_am_pm_normal">Normal</string>
     <string name="status_bar_am_pm_small">Small</string>
     <string name="status_bar_am_pm_hidden">Hidden (default)</string>
-
-    <!-- CPU Time in States -->
-    <string name="mt_refresh">Refresh</string>
-    <string name="mt_reset">Reset</string>
-    <string name="mt_restore">Restore</string>
-    <string name="time_in_state">TIME IN STATE</string>
-    <string name="unused_cpu_states">UNUSED CPU STATES</string>
-    <string name="total_state_time">TOTAL STATE TIME</string>
-    <string name="no_states_file_found">No states file found. Are you sure your phone is compatible?\n\nIf you are running a custom ROM or kernel, try contacting its developer to inform him that the states file is not readable.</string>
-    <string name="deep_sleep">"Deep Sleep"</string> 
 
     <!-- Lockscreen shortcuts -->
     <string name="lockscreen_settings_title">Lock screen</string>
