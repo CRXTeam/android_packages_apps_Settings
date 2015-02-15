@@ -51,6 +51,16 @@
             android:title="@string/io_scheds_title" />
     </PreferenceCategory>
 
+    <!-- Partition info -->
+        <Preference
+            android:icon="@drawable/ic_tab_selected_sdcard"
+            android:title="@string/cpa_partition_info_title">
+        <intent
+            android:action="com.android.action.MAIN"
+            android:targetPackage="com.android.settings"
+            android:targetClass="com.android.settings.PartitionInfo" />
+        </Preference>
+
     <PreferenceCategory
         android:key="perf_graphics_prefs"
         android:title="@string/graphics_title">

@@ -15,7 +15,7 @@
 -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-        android:title="@string/partition_info_title">
+        android:title="@string/cpa_partition_info_title">
 
     <!-- /System info -->
     <Preference android:key="system_part_info" 
@@ -38,6 +38,12 @@
     <!-- SDCard info (fat) -->
     <Preference android:key="sdcard_part_info_fat" 
         android:title="@string/partition_info_sdcard"
+        android:summary="@string/status_unavailable"
+        />
+
+    <!-- SDCard1 info (fat) -->
+    <Preference android:key="sdcard1_part_info_fat" 
+        android:title="@string/partition_info_sdcard1"
         android:summary="@string/status_unavailable"
         />
 		

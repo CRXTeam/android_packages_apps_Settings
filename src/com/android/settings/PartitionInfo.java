@@ -48,12 +48,14 @@ public class PartitionInfo extends PreferenceActivity {
     private static final String DATA_PART_SIZE = "data_part_info";
     private static final String CACHE_PART_SIZE = "cache_part_info";
     private static final String SDCARDFAT_PART_SIZE = "sdcard_part_info_fat";
+    private static final String SDCARD1FAT_PART_SIZE = "sdcard1_part_info_fat";
     private static final String SDCARDEXT_PART_SIZE = "sdcard_part_info_ext";
 
     private Preference mSystemPartSize;
     private Preference mDataPartSize;
     private Preference mCachePartSize;
     private Preference mSDCardPartFATSize;
+    private Preference mSDCard1PartFATSize;
     private Preference mSDCardPartEXTSize;
     private Preference mDeviceName;
 
@@ -71,6 +73,7 @@ public class PartitionInfo extends PreferenceActivity {
     	mDataPartSize          = (Preference) prefSet.findPreference(DATA_PART_SIZE);
     	mCachePartSize         = (Preference) prefSet.findPreference(CACHE_PART_SIZE);
     	mSDCardPartFATSize     = (Preference) prefSet.findPreference(SDCARDFAT_PART_SIZE);
+    	mSDCard1PartFATSize    = (Preference) prefSet.findPreference(SDCARD1FAT_PART_SIZE);
     	mSDCardPartEXTSize     = (Preference) prefSet.findPreference(SDCARDEXT_PART_SIZE);
 
         if (fileExists("/dev/block/mmcblk0p2") == true) {
@@ -84,6 +87,7 @@ public class PartitionInfo extends PreferenceActivity {
     	    mDataPartSize.setSummary(ObtainFSPartSize      ("/data"));
     	    mCachePartSize.setSummary(ObtainFSPartSize     ("/cache"));
     	    mSDCardPartFATSize.setSummary(ObtainFSPartSize ("/storage/sdcard0"));
+    	    mSDCard1PartFATSize.setSummary(ObtainFSPartSize ("/storage/sdcard1"));
 
     	    if (extfsIsMounted == true) {
                 mSDCardPartEXTSize.setSummary(ObtainFSPartSize ("/sd-ext"));

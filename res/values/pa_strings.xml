@@ -19,15 +19,6 @@
     <string name="pa_version">ParanoidAndroid version</string>
     <string name="pa_version_default">Unknown</string>
 
-    <!-- Partition Info -->
-    <string name="partition_info_title">Partition info</string>
-    <string name="partition_info_system">/system</string>
-    <string name="partition_info_data">/data</string>
-    <string name="partition_info_cache">/cache</string>
-    <string name="partition_info_sdcard">/sdcard (FAT)</string>
-    <string name="partition_info_sdext">/sd-ext (EXT)</string>
-    <string name="partition_info_used_of">/</string>
-
     <!-- Sound & notification > Other sounds: Title for the option enabling sound on volume slide adjust. [CHAR LIMIT=30] -->
     <string name="volume_adjust_sound_title">Volume slider sound</string>
 
