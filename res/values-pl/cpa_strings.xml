@@ -252,7 +252,7 @@
     <string name="privacy_guard_switch_label">Włącz ochronę prywatności</string>
     <string name="privacy_guard_dlg_title">Włączyć ochronę prywatności?</string>
     <string name="privacy_guard_dlg_text">Kiedy Strażnik Prywatności jest włączony, aplikacja nie będzie w stanie uzyskać dostęp do danych osobowych, takich jak kontakty, wiadomości czy dziennik połączeń.</string>
-    <string name="privacy_guard_dlg_system_app_text">Kiedy użyjemy Strażnika do oryginalnie preinstalowanych aplikacji, nie będą one w stanie uzyskać dostępu do danych osobych. Może to wywołać nieprawidłowe działanie.</string>
+    <string name="privacy_guard_dlg_system_app_text">Kiedy użyjemy Strażnika do systemowych aplikacji, nie będą one w stanie uzyskać dostępu do danych osobych. Może to wywołać ich nieprawidłowe działanie.</string>
     <string name="privacy_guard_default_title">Włączone domyślnie</string>
     <string name="privacy_guard_default_summary">Włączone domyślnie dla nowo zainstalowanych aplikacji</string>
     <string name="privacy_guard_manager_title">Strażnik Prywatności</string>
@@ -261,8 +261,8 @@
     <string name="privacy_guard_help_title">Pomoc</string>
     <string name="privacy_guard_reset_title">Reset</string>
     <string name="privacy_guard_reset_text">Zresetować uprawnienia?</string>
-    <string name="privacy_guard_help_text">Możesz wybrać które aplikacja mają być aktywne ze Strażnikiem Prywatności po prostu na nie klikając.  Wybrane aplikacje nie będą w stanie uzyskać dostępu do Twoich danych osobowych, takich jak kontakty, wiadomości i dziennik połączeń. Długie przytrzymanie palca na aplikacje spowoduje pokazanie szczegółów.\n\nPreinstalowane oryginalnie aplikacje nie są wyświetlane, ale można je wyświetlić wybierając odpowiednią opcję z menu.</string>
-    <string name="privacy_guard_manager_show_system_apps">Pokazuj preinstalowane aplikacje</string>
+    <string name="privacy_guard_help_text">Możesz wybrać które aplikacja mają być aktywne ze Strażnikiem Prywatności po prostu na nie klikając.  Wybrane aplikacje nie będą w stanie uzyskać dostępu do Twoich danych osobowych, takich jak kontakty, wiadomości i dziennik połączeń. Długie przytrzymanie palca na aplikacje spowoduje pokazanie szczegółów.\n\nSystemowe aplikacje nie są wyświetlane, ale można je wyświetlić wybierając odpowiednią opcję z menu.</string>
+    <string name="privacy_guard_manager_show_system_apps">Pokazuj aplikacje systemowe</string>
     <string name="privacy_guard_advanced_settings_title">Zaawansowane</string>
     
     <!-- Partition Info -->
