@@ -25,22 +25,14 @@
     <string name="cpa_animation_title">Animations</string>
     <string name="cpa_lockscreen_shortcuts_title">Shortcuts</string>
     <string name="cpa_clock_title">Clock settings</string>
-<<<<<<< HEAD
-    <string name="cpa_cpustates_title">CPU Time in state</string>
     <string name="cpa_privacy_settings_title">Privacy</string>
     <string name="cpa_partition_info_title">Partition info</string>
-=======
->>>>>>> parent of 6bad8bc... CPU Time in States
     <!-- CPA Summary -->
     <string name="cpa_animation_summary">Animations control</string>
     <string name="cpa_status_bar_summary">Status bar settings</string>
     <string name="cpa_notification_drawer_summary">Notification drawer options</string>
     <string name="cpa_lockscreen_shortcuts_summary">Configurable lockscreen shortcuts</string>
-<<<<<<< HEAD
-    <string name="cpa_cpustates_summary">CPU States</string>
     <string name="cpa_privacy_settings_summary">CyanogenMod Privacy Settings</string>
-=======
->>>>>>> parent of 6bad8bc... CPU Time in States
     <!-- CPA Version -->
     <string name="cpa_version">CrystalPA2 version</string>
     <string name="cpa_version_default">Unknown</string>
