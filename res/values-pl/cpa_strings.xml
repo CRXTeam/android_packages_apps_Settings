@@ -54,11 +54,11 @@
 
     <!-- QS -->
     <string name="qs_brightness_slider_title">Pokaż pasek jasności ekranu</string>
-    <string name="qs_order_title">Wybierz i dodaj płytki</string>
-    <string name="add_qs">Dodaj nową płytkę</string>
+    <string name="qs_order_title">Wybierz i dodaj kafelki</string>
+    <string name="add_qs">Dodaj nowy kafelek</string>
     <string name="qs_action_delete">Usuń</string>
     <string name="qs_action_add">Dodaj</string>
-    <string name="qs_action_no_more_tiles">Nie ma więcej płytek</string>
+    <string name="qs_action_no_more_tiles">Nie ma więcej kafelków</string>
     <string name="qs_tile_wifi">Wi\u2011Fi</string>
     <string name="qs_tile_bluetooth">Bluetooth</string>
     <string name="qs_tile_display_inversion">Odwrócenie kolorów</string>
@@ -73,9 +73,9 @@
     <string name="qs_tile_compass">Kompas</string>
     <string name="qs_tile_lockscreen">Ekran blokady</string>
     <string name="qs_main_tiles_title">Powiększ pierwszy wiersz</string>
-    <string name="qs_main_tiles_summary_on">Dwie płytki w pierwszym wierszu</string>
-    <string name="qs_main_tiles_summary_off">Trzy płytki w pierwszym wierszu</string>
-    <string name="qs_four_columns_title">Pokaż cztery płytki w rzędzie</string>
+    <string name="qs_main_tiles_summary_on">Dwa kafelki w pierwszym wierszu</string>
+    <string name="qs_main_tiles_summary_off">Trzy kafelki w pierwszym wierszu</string>
+    <string name="qs_four_columns_title">Pokaż cztery kafelki w rzędzie</string>
     <string name="qs_screenshot_tile">Zrzut ekranu</string>
 	
     <!-- Animation Controls -->
