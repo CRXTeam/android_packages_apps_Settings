@@ -51,15 +51,13 @@
     <string name="status_bar_battery_percentage_text_inside">Inside the icon</string>
     <string name="status_bar_battery_percentage_text_next">Next to the icon</string>
 
-    <!-- Notification drawer -->
+    <!-- QS -->
     <string name="qs_brightness_slider_title">Show brightness slider</string>
     <string name="qs_order_title">Select and order tiles</string>
     <string name="add_qs">Add new tile</string>
-
     <string name="qs_action_delete">Delete</string>
     <string name="qs_action_add">Add</string>
     <string name="qs_action_no_more_tiles">No more tiles available</string>
-
     <string name="qs_tile_wifi">Wi\u2011Fi</string>
     <string name="qs_tile_bluetooth">Bluetooth</string>
     <string name="qs_tile_display_inversion">Color inversion</string>
@@ -76,6 +74,7 @@
     <string name="qs_main_tiles_title">Enlarge first row</string>
     <string name="qs_main_tiles_summary_on">Two main tiles on the first row</string>
     <string name="qs_main_tiles_summary_off">Three tiles on each row</string>
+    <string name="qs_screenshot_tile">Screenshot</string>
 	
     <!-- Animation Controls -->
     <string name="animation_settings_reset_message">Reset all animation settings to default?</string>
