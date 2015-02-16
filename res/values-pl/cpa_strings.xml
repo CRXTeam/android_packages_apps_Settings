@@ -22,17 +22,17 @@
     <string name="cpa_battery_icon_title">Opcje ikony baterii</string>
     <string name="cpa_qs_title">Szybkie ustawienia</string>
     <string name="cpa_notification_drawer_title">Powiadomienia</string>
-    <string name="cpa_animation_title">Animacje</string>
+    <string name="cpa_animation_title">Niestandardowe animacje</string>
     <string name="cpa_lockscreen_shortcuts_title">Skróty</string>
     <string name="cpa_clock_title">Ustawienia zegara</string>
     <string name="cpa_privacy_settings_title">Prywatność</string>
     <string name="cpa_partition_info_title">Informacje o partycji</string>
     <!-- CPA Summary -->
-    <string name="cpa_animation_summary">Kontrola animacji</string>
+    <string name="cpa_animation_summary">Kontrola niestandardowych animacji</string>
     <string name="cpa_status_bar_summary">Ustawienia paska stanu</string>
     <string name="cpa_notification_drawer_summary">Ustawienia powiadomień</string>
     <string name="cpa_lockscreen_shortcuts_summary">Konfigurowalne skróty ekranu blokady</string>
-    <string name="cpa_cpustates_summary">Statystyki CPU</string>
+    <string name="cpa_privacy_settings_summary">Ustawienia prywatności Cyanogenmod'a</string>
     <!-- CPA Version -->
     <string name="cpa_version">Wersja CrystalPA2</string>
     <string name="cpa_version_default">Nieznana</string>
@@ -80,7 +80,6 @@
 	
     <!-- Animation Controls -->
     <string name="animation_settings_reset_message">Przywrócić ustawienia domyślne dla animacji?</string>
-    <string name="animation_controls_title">Ustawienia animacji</string>
     <string name="activity_open_title">Animacja otwierania w aplikacji</string>
     <string name="activity_close_title">Animacja zamykania w aplikacji</string>
     <string name="task_open_title">Animacja polecenia \'uruchom przez\'</string>
@@ -163,15 +162,15 @@
 
     <!-- Scrolling Animation Controls -->
     <string name="scrolling_title">Przewijanie</string>
-    <string name="animation_fling_velocity_title">Fling Velocity</string>
-    <string name="animation_scroll_friction_title">Scroll Friction</string>
-    <string name="animation_overscroll_distance_title">Overscroll Distance</string>
-    <string name="animation_overfling_distance_title">Overfling Distance</string>
-    <string name="animation_duration_summary">Ustaw czas trwania</string>
+    <string name="animation_fling_velocity_title">Prędkość wejścia</string>
+    <string name="animation_scroll_friction_title">Opór przewijania</string>
+    <string name="animation_overscroll_distance_title">Odległość overscroll</string>
+    <string name="animation_overfling_distance_title">Odległość overfling</string>
+    <string name="animation_duration_summary">Ustaw długość</string>
     <string name="animation_no_scroll_title">Dostosowywanie przewijania</string>
-    <string name="animation_no_scroll_summary_on">Włączone</string>
-    <string name="animation_no_scroll_summary_off">Wyłączone</string>	
-	
+    <string name="animation_no_scroll_summary_on">Włączono</string>
+    <string name="animation_no_scroll_summary_off">Wyłączono</string>
+
     <!-- Shortcut picker -->
     <string name="use_custom_app_title">Użyj niestandardowej aplikacji</string>
     <string name="use_custom_app_summary">Użyj niestandardowej aplikacji, zamiast okna dialogowego ostatnich aplikacji</string>
@@ -179,24 +178,24 @@
     <string name="group_applications">Aplikacje</string>
 
     <!-- Toast Animations -->
-    <string name="toast_animation_title">Animacje Toast</string>
+    <string name="toast_animation_title">Animacje dymka z komunikatami</string>
     <string name="toast_choose_animation">Wybierz animację</string>
     <string name="toast_none_animation">Brak</string>
     <string name="toast_default_animation">Domyślne</string>
-    <string name="toast_fade_animation">Animacja Fade</string>
-    <string name="toast_SlideRight_animation">Animacja Slide-Right</string>
-    <string name="toast_SlideLeft_animation">Animacja Slide-Left</string>
-    <string name="toast_Xylon_animation">Animacja Xylon</string>
-    <string name="toast_Toko_animation">Animacja Toko</string>
-    <string name="toast_Tn_animation">Animacja Tn</string>
-    <string name="toast_Honami_animation">Animacja Honami</string>
-    <string name="toast_FastFade_animation">Animacja Fast-Fade</string>
-    <string name="toast_GrowFade_animation">Animacja Grow-Fade</string>
-    <string name="toast_GrowFadeCenter_animation">Animacja Grow-Fade-Center</string>
-    <string name="toast_GrowFadeBottom_animation">Animacja Grow-Fade-Bottom</string>
-    <string name="toast_Translucent_animation">Animacja Translucent</string>
-    <string name="toast_Random_animation">Losowo</string>
-    <string name="toast_test_animation">Testuj animacje Toast</string>
+    <string name="toast_fade_animation">ZANIKANIE</string>
+    <string name="toast_SlideRight_animation">Przesuń od prawej</string>
+    <string name="toast_SlideLeft_animation">Przesuń od lewej</string>
+    <string name="toast_Xylon_animation">Xylon</string>
+    <string name="toast_Toko_animation">Toko</string>
+    <string name="toast_Tn_animation">Tn</string>
+    <string name="toast_Honami_animation">Honami</string>
+    <string name="toast_FastFade_animation">Szybkie zanikanie</string>
+    <string name="toast_GrowFade_animation">Rosnące zanikanie</string>
+    <string name="toast_GrowFadeCenter_animation">Rosnące zanikanie od środka</string>
+    <string name="toast_GrowFadeBottom_animation">Rosnące zanikanie od dołu</string>
+    <string name="toast_Translucent_animation">Przezroczyste</string>
+    <string name="toast_Random_animation">Losowe</string>
+    <string name="toast_test_animation">Test animacji</string>
 
     <!-- General -->
     <string name="ok">OK</string>
