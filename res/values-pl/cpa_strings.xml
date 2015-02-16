@@ -79,21 +79,22 @@
     <string name="qs_screenshot_tile">Zrzut ekranu</string>
 	
     <!-- Animation Controls -->
-    <string name="animation_settings_reset_message">Czy chcesz zresetować wszystkie ustawienia animacji do domyślnych?</string>
-    <string name="activity_open_title">Open In-App Activity Animation</string>
-    <string name="activity_close_title">Close In-App Activity Animation</string>
-    <string name="task_open_title">Uruchom z aplikacji animacji</string>
-    <string name="task_close_title">Powrót do poprzedniej animacji</string>
-    <string name="task_move_to_front_title">Przenieś do frontowej animacji</string>
-    <string name="task_move_to_back_title">Move To Back Animation</string>
-    <string name="wallpaper_open_title">Return To Homescreen Animation</string>
-    <string name="wallpaper_close_title">Launch From Homescreen Animation</string>
-    <string name="wallpaper_intra_open_title">Recents Page Open Animation</string>
-    <string name="wallpaper_intra_close_title">Recents Page Close Animation</string>
-    <string name="animation_duration_title">Czas trwania animacji</string>
-    <string name="animation_no_override_title">Prevent App Overrides</string>
-    <string name="animation_no_override_summary_on">Prevent apps from overriding transitions.</string>
-    <string name="animation_no_override_summary_off">Apps can overriding transitions.</string>
+    <string name="animation_settings_reset_message">Przywrócić ustawienia domyślne dla animacji?</string>
+    <string name="animation_controls_title">Ustawienia animacji</string>
+    <string name="activity_open_title">Animacja otwierania w aplikacji</string>
+    <string name="activity_close_title">Animacja zamykania w aplikacji</string>
+    <string name="task_open_title">Animacja polecenia \'uruchom przez\'</string>
+    <string name="task_close_title">Animacja dla \'cofnij\'</string>
+    <string name="task_move_to_front_title">Animacja dla \'Dalej\'</string>
+    <string name="task_move_to_back_title">Animacja dla \'Cofnij\'</string>
+    <string name="wallpaper_open_title">Animacja dla \'Cofnij do ekranu domowego\'</string>
+    <string name="wallpaper_close_title">Animacja dla \'Uruchom z ekranu domowego\'</string>
+    <string name="wallpaper_intra_open_title">Animacja otwierania okna z ostatnio uruchamianymi aplikacjami</string>
+    <string name="wallpaper_intra_close_title">Animacja zamykania okna z ostatnio uruchamianymi aplikacjami</string>
+    <string name="animation_duration_title">Długość animacji</string>
+    <string name="animation_no_override_title">Zapobiegaj zmianom animacji przez aplikacje</string>
+    <string name="animation_no_override_summary_on">Nie pozwala aplikacjom używać własnych przejść.</string>
+    <string name="animation_no_override_summary_off">Aplikacje mogą używać własnych przejść.</string>
 
     <!-- Animation Strings -->
     <string name="animation_default">Domyślne</string>
