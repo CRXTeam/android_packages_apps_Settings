@@ -45,4 +45,15 @@
 
     <!-- Gestures -->
     <string name="gesture_title">Gestures</string>
+
+    <!-- Per app controls for LP keyguard notifications -->
+    <string name="app_notification_show_on_keyguard_title">Show on lockscreen</string>
+    <string name="app_notification_show_on_keyguard_summary">Show notifications from this app on the lockscreen</string>
+    <string name="app_notification_no_ongoing_on_keyguard_title">Disable ongoing on lockscreen</string>
+    <string name="app_notification_no_ongoing_on_keyguard_summary">Never show ongoing notifications from this app on the lockscreen</string>
+
+    <!-- Hardware tunables - Vibrator intensity -->
+    <string name="vibrator_intensity_title">Vibrator intensity</string>
+    <string name="vibrator_warning">Values higher than %1$d are not recommended</string>
+
 </resources>
