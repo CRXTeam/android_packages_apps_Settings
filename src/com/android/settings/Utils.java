@@ -19,7 +19,6 @@ package com.android.settings;
 import static android.content.Intent.EXTRA_USER;
 
 import android.annotation.Nullable;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.AlertDialog;
@@ -54,10 +53,8 @@ import android.os.RemoteException;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.preference.Preference;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceFrameLayout;
 import android.preference.PreferenceGroup;
-import android.preference.PreferenceScreen;
 import android.provider.ContactsContract.CommonDataKinds;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.Data;
@@ -218,14 +215,9 @@ public final class Utils {
      *      {@link #META_DATA_PREFERENCE_SUMMARY}
      */
     public static boolean updatePreferenceToSpecificActivityFromMetaDataOrRemove(Context context,
-            Object parentPreferenceGroup, String preferenceKey) {
+            PreferenceGroup parentPreferenceGroup, String preferenceKey) {
 
-        Preference preference = null;
-        if (parentPreferenceGroup instanceof PreferenceScreen) {
-            preference = ((PreferenceScreen) parentPreferenceGroup).findPreference(preferenceKey);
-        } else if (parentPreferenceGroup instanceof PreferenceCategory) {
-            preference = ((PreferenceCategory) parentPreferenceGroup).findPreference(preferenceKey);
-        }
+        Preference preference = parentPreferenceGroup.findPreference(preferenceKey);
         if (preference == null) {
             return false;
         }
@@ -282,17 +274,13 @@ public final class Utils {
                             resolveInfo.activityInfo.packageName,
                             resolveInfo.activityInfo.name));
 
-                    return true;
+                   return true;
                 }
             }
         }
 
         // Did not find a matching activity, so remove the preference
-        if (parentPreferenceGroup instanceof PreferenceScreen) {
-            ((PreferenceScreen) parentPreferenceGroup).removePreference(preference);
-        } else  {
-            ((PreferenceCategory) parentPreferenceGroup).removePreference(preference);
-        }
+        parentPreferenceGroup.removePreference(preference);
 
         return false;
     }

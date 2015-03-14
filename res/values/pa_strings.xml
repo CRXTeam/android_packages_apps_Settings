@@ -43,9 +43,6 @@
     <string name="reset_user_preferences_summary">Restores user interface preferences to default values</string>
     <string name="reset_user_preferences_dialog">Are you sure you want to reset your preferences?</string>
 
-    <!-- Gestures -->
-    <string name="gesture_title">Gestures</string>
-
     <!-- Per app controls for LP keyguard notifications -->
     <string name="app_notification_show_on_keyguard_title">Show on lockscreen</string>
     <string name="app_notification_show_on_keyguard_summary">Show notifications from this app on the lockscreen</string>
@@ -55,5 +52,8 @@
     <!-- Hardware tunables - Vibrator intensity -->
     <string name="vibrator_intensity_title">Vibrator intensity</string>
     <string name="vibrator_warning">Values higher than %1$d are not recommended</string>
+
+    <!-- Gesture Settings -->
+    <string name="gesture_settings_title">Gestures</string>
 
 </resources>

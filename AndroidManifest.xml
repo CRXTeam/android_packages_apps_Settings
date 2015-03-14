@@ -860,8 +860,9 @@
 
         <activity android:name="Settings$AppOpsSummaryActivity"
                 android:label="@string/app_ops_settings"
-                android:taskAffinity=""
-                android:excludeFromRecents="true">
+                android:taskAffinity="com.android.settings"
+                android:parentActivityName="Settings"
+                android:excludeFromRecents="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.settings.APP_OPS_SETTINGS" />
@@ -870,7 +871,7 @@
                 <category android:name="com.android.settings.SHORTCUT" />
             </intent-filter>
             <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
-                android:value="com.android.settings.applications.AppOpsSummary" />
+                android:value="com.android.settings.applications.AppOpsCategory" />
             <meta-data android:name="com.android.settings.TOP_LEVEL_HEADER_ID"
                 android:resource="@id/application_settings" />
         </activity>
@@ -1986,6 +1987,8 @@
 
         <activity android:name=".cyanogenmod.PrivacySettings" />
         <activity android:name=".cyanogenmod.PerformanceSettings" />
+        <activity android:name=".notificationlight.NotificationLightSettings" />
+        <activity android:name=".notificationlight.BatteryLightSettings" />
 
         <receiver android:name=".widget.SettingsAppWidgetProvider"
                 android:label="@string/gadget_title"

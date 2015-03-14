@@ -577,13 +577,6 @@
         <item>auto</item>
     </string-array>
 
-    <!-- App ops permissions -->
-    <string-array name="app_ops_permissions">
-        <item>Allowed</item>
-        <item>Ignored</item>
-        <item>Always ask</item>
-    </string-array>
-
     <!-- Names of categories of app ops tabs -->
     <string-array name="app_ops_categories">
         <item>Location</item>
@@ -979,7 +972,9 @@
     <!-- Titles for window animation scale preference. [CHAR LIMIT=35] -->
     <string-array name="window_animation_scale_entries">
         <item>Animation off</item>
+        <item>Animation scale .25x</item>
         <item>Animation scale .5x</item>
+        <item>Animation scale .75x</item>
         <item>Animation scale 1x</item>
         <item>Animation scale 1.5x</item>
         <item>Animation scale 2x</item>
@@ -990,7 +985,9 @@
     <!-- Values for window animation scale preference. -->
     <string-array name="window_animation_scale_values" translatable="false" >
         <item>0</item>
+        <item>.25</item>
         <item>.5</item>
+        <item>.75</item>
         <item>1</item>
         <item>1.5</item>
         <item>2</item>
@@ -1001,7 +998,9 @@
     <!-- Titles for transition animation scale preference. [CHAR LIMIT=35] -->
     <string-array name="transition_animation_scale_entries">
         <item>Animation off</item>
+        <item>Animation scale .25x</item>
         <item>Animation scale .5x</item>
+        <item>Animation scale .75x</item>
         <item>Animation scale 1x</item>
         <item>Animation scale 1.5x</item>
         <item>Animation scale 2x</item>
@@ -1012,7 +1011,9 @@
     <!-- Values for transition animation scale preference. -->
     <string-array name="transition_animation_scale_values" translatable="false" >
         <item>0</item>
+        <item>.25</item>
         <item>.5</item>
+        <item>.75</item>
         <item>1</item>
         <item>1.5</item>
         <item>2</item>
@@ -1023,7 +1024,9 @@
     <!-- Titles for animator duration scale preference. [CHAR LIMIT=35] -->
     <string-array name="animator_duration_scale_entries">
         <item>Animation off</item>
+        <item>Animation scale .25x</item>
         <item>Animation scale .5x</item>
+        <item>Animation scale .75x</item>
         <item>Animation scale 1x</item>
         <item>Animation scale 1.5x</item>
         <item>Animation scale 2x</item>
@@ -1034,7 +1037,9 @@
     <!-- Values for animator duration scale preference. -->
     <string-array name="animator_duration_scale_values" translatable="false" >
         <item>0</item>
+        <item>.25</item>
         <item>.5</item>
+        <item>.75</item>
         <item>1</item>
         <item>1.5</item>
         <item>2</item>
@@ -1300,5 +1305,40 @@
         <item>Cached (activity)</item>
         <item>Cached (activity client)</item>
         <item>Cached (empty)</item>
+    </string-array>
+
+    <!-- Values for the notification light pulse spinners -->
+    <string-array name="notification_pulse_length_entries" translatable="false">
+        <item>@string/pulse_length_always_on</item>
+        <item>@string/pulse_length_very_short</item>
+        <item>@string/pulse_length_short</item>
+        <item>@string/pulse_length_normal</item>
+        <item>@string/pulse_length_long</item>
+        <item>@string/pulse_length_very_long</item>
+    </string-array>
+
+    <string-array name="notification_pulse_length_values" translatable="false">
+        <item>1</item>
+        <item>250</item>
+        <item>500</item>
+        <item>1000</item>
+        <item>2500</item>
+        <item>5000</item>
+    </string-array>
+
+    <string-array name="notification_pulse_speed_entries" translatable="false">
+        <item>@string/pulse_speed_very_fast</item>
+        <item>@string/pulse_speed_fast</item>
+        <item>@string/pulse_speed_normal</item>
+        <item>@string/pulse_speed_slow</item>
+        <item>@string/pulse_speed_very_slow</item>
+    </string-array>
+
+    <string-array name="notification_pulse_speed_values" translatable="false">
+        <item>250</item>
+        <item>500</item>
+        <item>1000</item>
+        <item>2500</item>
+        <item>5000</item>
     </string-array>
 </resources>
