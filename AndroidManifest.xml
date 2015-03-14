@@ -860,9 +860,8 @@
 
         <activity android:name="Settings$AppOpsSummaryActivity"
                 android:label="@string/app_ops_settings"
-                android:taskAffinity="com.android.settings"
-                android:parentActivityName="Settings"
-                android:excludeFromRecents="true" >
+                android:taskAffinity=""
+                android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.settings.APP_OPS_SETTINGS" />
