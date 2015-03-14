@@ -238,7 +238,6 @@ public class SettingsActivity extends Activity
             R.id.nfc_payment_settings,
             R.id.home_settings,
             R.id.dashboard,
-            R.id.gesture_settings,
             R.id.privacy_settings_cyanogenmod
     };
 
@@ -304,7 +303,6 @@ public class SettingsActivity extends Activity
             OtherSoundSettings.class.getName(),
             QuickLaunchSettings.class.getName(),
             ApnSettings.class.getName(),
-            GestureSettings.class.getName(),
             com.android.settings.cyanogenmod.PrivacySettings.class.getName()
     };
 
